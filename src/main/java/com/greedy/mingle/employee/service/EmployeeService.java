@@ -31,10 +31,8 @@ public class EmployeeService {
 		this.employeeRepository = employeeRepository;
 		this.departmentRepository = departmentRepository;
 		this.modelMapper = modelMapper;
-		
-		
 	}
-	
+    
 	/* 1. 교번으로 교직원 목록 조회 - 페이징 */
 	public Page<EmployeeDTO> selectEmployeeList(int page) {
 		
@@ -44,11 +42,10 @@ public class EmployeeService {
 		Page<Employee> employeeList = employeeRepository.findAll(pageable);
 		Page<EmployeeDTO> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
 		
-		
-		return employeeDtoList;
-	
-	}
-	
+		return modelMapper.map(employee, EmployeeDTO.class);
+
+  }
+  
 	/* 2. 교직원 목록 조회 - 소속 기준, 페이징 */
 	public Page<EmployeeDTO> selectEmployeeListByDepartment(int page, Long deptCode) {
 

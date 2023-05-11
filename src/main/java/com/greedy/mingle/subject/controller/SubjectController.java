@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/subject")
+/* 과목 관리 컨트롤러 */
 public class SubjectController {
 	
 	private final SubjectService subjectService;

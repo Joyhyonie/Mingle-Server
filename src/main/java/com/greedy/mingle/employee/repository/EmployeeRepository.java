@@ -13,10 +13,9 @@ import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.subject.entity.Department;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
-	
+
 	/* 1. 교번으로 교직원 목록 조회 - 페이징 */
 	Page<Employee> findAll(Pageable pageable);
-
 	
 	/* 2. 교직원 목록 조회 - 소속 기준, 페이징 */
 	Page<Employee> findByDepartment(Pageable pageable, Department department);
