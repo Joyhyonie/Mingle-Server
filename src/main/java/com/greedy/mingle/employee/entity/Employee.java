@@ -1,5 +1,4 @@
 package com.greedy.mingle.employee.entity;
-
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -11,11 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.DynamicInsert;
-
 import com.greedy.mingle.subject.entity.Department;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -73,6 +68,25 @@ public class Employee {
 	
 	@Column(name="EMP_ANNUAL")
 	private Long empAnnual;
+	
+	public void update(String empName, String empNameEn, String empEmail, String empPhone, String empAddress, String empProfile, Date empEntDate, 
+			Date empAbDate, Date empLeaveDate, String empStatus, Department department, String empPwd, String empSsn, Long empAnnual) {
+		this.empName = empName;
+		this.empNameEn = empNameEn;
+		this.empEmail = empEmail;
+		this.empPhone = empPhone;
+		this.empAddress = empAddress;
+		this.empProfile = empProfile;
+		this.empEntDate = empEntDate;
+		this.empAbDate = empAbDate;
+		this.empLeaveDate = empLeaveDate;
+		this.empStatus = empStatus;
+		this.department = department;
+		this.empPwd = empPwd;
+		this.empSsn = empSsn;
+		this.empAnnual = empAnnual;
+		
+	}
 	
 	/*
 	 * EMP_CODE	NUMBER

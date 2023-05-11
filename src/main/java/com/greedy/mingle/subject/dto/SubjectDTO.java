@@ -1,5 +1,6 @@
 package com.greedy.mingle.subject.dto;
 
+import com.greedy.mingle.subject.entity.Department;
 import lombok.Data;
 
 @Data
@@ -14,4 +15,5 @@ public class SubjectDTO {
 	private int score;
 	
 	private DepartmentDTO department;
+
 }
