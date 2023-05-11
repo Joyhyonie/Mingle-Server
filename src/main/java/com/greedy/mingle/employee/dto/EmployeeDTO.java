@@ -6,12 +6,12 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.greedy.mingle.employee.entity.Department;
+import com.greedy.mingle.subject.entity.Department;
 
 import lombok.Data;
 
 @Data
-public class EmployeeDto {
+public class EmployeeDTO {
 	
 private Long empCode;
 	
