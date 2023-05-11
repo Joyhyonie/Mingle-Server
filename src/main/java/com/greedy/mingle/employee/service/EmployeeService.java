@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.greedy.mingle.configuration.exception.UserNotFoundException;
-import com.greedy.mingle.employee.dto.EmployeeDto;
+import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.employee.repository.EmployeeRepository;
 
@@ -24,7 +24,7 @@ public class EmployeeService {
 		
 	}
 	
-	public EmployeeDto selectInfo(Long empCode) {
+	public EmployeeDTO selectInfo(Long empCode) {
 		
 		log.info("[MemberService] selectInfo start =========================== ");
 		log.info("[MemberService] employeeCode : {}", empCode);
@@ -33,7 +33,7 @@ public class EmployeeService {
 				.orElseThrow(() -> new UserNotFoundException(empCode + "를 찾을 수 없습니다."));
 		
 		log.info("[MemberService] selectInfo start =========================== ");
-		return modelMapper.map(employee, EmployeeDto.class);
+		return modelMapper.map(employee, EmployeeDTO.class);
 	
 	}
 }

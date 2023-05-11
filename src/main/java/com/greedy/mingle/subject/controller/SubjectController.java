@@ -17,7 +17,7 @@ import com.greedy.mingle.common.ResponseDTO;
 import com.greedy.mingle.common.paging.Pagenation;
 import com.greedy.mingle.common.paging.PagingButtonInfo;
 import com.greedy.mingle.common.paging.ResponseDTOWithPaging;
-import com.greedy.mingle.subject.dto.SubjectDto;
+import com.greedy.mingle.subject.dto.SubjectDTO;
 import com.greedy.mingle.subject.service.SubjectService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @RequestMapping("/subject")
+/* 과목 관리 컨트롤러 */
 public class SubjectController {
 	
 	private final SubjectService subjectService;
@@ -36,7 +37,7 @@ public class SubjectController {
 	@GetMapping("/list")
 	public ResponseEntity<ResponseDTO> selectSubjectList(@RequestParam(name="page", defaultValue="1") int page){
 		
-		Page<SubjectDto> subjectDtoList = subjectService.selectSubjectList(page);
+		Page<SubjectDTO> subjectDtoList = subjectService.selectSubjectList(page);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(subjectDtoList);
 		
@@ -53,7 +54,7 @@ public class SubjectController {
 	public ResponseEntity<ResponseDTO> selectSubjectListByDepartment(
 			@RequestParam(name="page", defaultValue="1") int page, @PathVariable Long deptCode){
 		
-		Page<SubjectDto> subjectDtoList = subjectService.selectSubjectListByDepartment(page, deptCode);
+		Page<SubjectDTO> subjectDtoList = subjectService.selectSubjectListByDepartment(page, deptCode);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(subjectDtoList);
 		
@@ -70,7 +71,7 @@ public class SubjectController {
 	public ResponseEntity<ResponseDTO> selectSubjectListBySubjectName(
 	@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String sbjName){
 		
-		Page<SubjectDto> subjectDtoList = subjectService.selectSubjectListBySubjectName(page,sbjName);
+		Page<SubjectDTO> subjectDtoList = subjectService.selectSubjectListBySubjectName(page,sbjName);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(subjectDtoList);
 		
@@ -84,7 +85,7 @@ public class SubjectController {
 	}
 	
 	@PutMapping("/modify")
-	public ResponseEntity<ResponseDTO> updateSubject(@ModelAttribute SubjectDto subjectDto){
+	public ResponseEntity<ResponseDTO> updateSubject(@ModelAttribute SubjectDTO subjectDto){
 		
 		subjectService.updateSubject(subjectDto);
 		
@@ -92,7 +93,7 @@ public class SubjectController {
 	}
 	
 	@PostMapping("/insert")
-	public ResponseEntity<ResponseDTO> insertSubject(@ModelAttribute SubjectDto subjectDto){
+	public ResponseEntity<ResponseDTO> insertSubject(@ModelAttribute SubjectDTO subjectDto){
 		
 		subjectService.insertSubject(subjectDto);
 		

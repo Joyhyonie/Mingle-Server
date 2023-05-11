@@ -14,6 +14,8 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.DynamicInsert;
 
+import com.greedy.mingle.subject.entity.Department;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,13 +23,12 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="TBL_EMPLOYEE")
-@SequenceGenerator(name="EMP_SEQ_GENERATOR", sequenceName="SEQ_EMP_CODE", initialValue=1, allocationSize=1)
-@DynamicInsert
 public class Employee {
 	
 	@Id
 	@Column(name="EMP_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="EMP_SEQ_GENERATOR")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_EMP_CODE")
+	@SequenceGenerator(name="SEQ_EMP_CODE", sequenceName="SEQ_EMP_CODE", allocationSize=1)
 	private Long empCode;
 	
 	@Column(name="EMP_NAME")
@@ -62,7 +63,7 @@ public class Employee {
 	
 	@ManyToOne
 	@JoinColumn(name="DEPT_CODE")
-	private Department deptCode;
+	private Department department;
 	
 	@Column(name="EMP_PWD")
 	private String empPwd;

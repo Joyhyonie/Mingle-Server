@@ -3,7 +3,7 @@ package com.greedy.mingle.subject.dto;
 import lombok.Data;
 
 @Data
-public class DepartmentDto {
+public class DepartmentDTO {
 
 	private Long deptCode;
 	
