@@ -5,7 +5,7 @@ import com.greedy.mingle.subject.entity.Department;
 import lombok.Data;
 
 @Data
-public class SubjectDto {
+public class SubjectDTO {
 
 	private Long sbjCode;
 	

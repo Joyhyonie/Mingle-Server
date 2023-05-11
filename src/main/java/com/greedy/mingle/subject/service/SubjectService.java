@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.greedy.mingle.subject.dto.SubjectDto;
+import com.greedy.mingle.subject.dto.SubjectDTO;
 import com.greedy.mingle.subject.entity.Department;
 import com.greedy.mingle.subject.entity.Subject;
 import com.greedy.mingle.subject.repository.DepartmentRepository;
@@ -28,16 +28,16 @@ public class SubjectService {
 		this.modelMapper = modelMapper;
 	}
 
-	public Page<SubjectDto> selectSubjectList(int page) {
+	public Page<SubjectDTO> selectSubjectList(int page) {
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("sbjCode").descending());
 		Page<Subject> subjectList = subjectRepository.findAll(pageable);
-		Page<SubjectDto> subjectDtoList = subjectList.map(subject -> modelMapper.map(subject, SubjectDto.class));
+		Page<SubjectDTO> subjectDtoList = subjectList.map(subject -> modelMapper.map(subject, SubjectDTO.class));
 		
 		return subjectDtoList;
 	}
 
-	public Page<SubjectDto> selectSubjectListByDepartment(int page, Long deptCode) {
+	public Page<SubjectDTO> selectSubjectListByDepartment(int page, Long deptCode) {
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("sbjCode").descending());
 		
@@ -45,22 +45,22 @@ public class SubjectService {
 									.orElseThrow(()-> new IllegalArgumentException("해당 학과 없습니다. deptCode = "+ deptCode));
 		
 		Page<Subject> subjectList = subjectRepository.findByDepartment(pageable,findDepartment);
-		Page<SubjectDto> subjectDtoList = subjectList.map(subject -> modelMapper.map(subject, SubjectDto.class));
+		Page<SubjectDTO> subjectDtoList = subjectList.map(subject -> modelMapper.map(subject, SubjectDTO.class));
 		
 		return subjectDtoList;
 	}
 
-	public Page<SubjectDto> selectSubjectListBySubjectName(int page, String sbjName) {
+	public Page<SubjectDTO> selectSubjectListBySubjectName(int page, String sbjName) {
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("sbjCode").descending());
 		
 		Page<Subject> subjectList = subjectRepository.findBySbjName(pageable,sbjName);
-		Page<SubjectDto> subjectDtoList = subjectList.map(subject -> modelMapper.map(subject, SubjectDto.class));
+		Page<SubjectDTO> subjectDtoList = subjectList.map(subject -> modelMapper.map(subject, SubjectDTO.class));
 		return subjectDtoList;
 	}
 
 	@Transactional
-	public void updateSubject(SubjectDto subjectDto) {
+	public void updateSubject(SubjectDTO subjectDto) {
 		
 		Subject findSubject = subjectRepository.findById(subjectDto.getSbjCode())
 					.orElseThrow(()-> new IllegalArgumentException("해당 학과 없습니다. SubjectCode = "+ subjectDto.getSbjCode()));
@@ -74,7 +74,7 @@ public class SubjectService {
 	}
 
 	@Transactional
-	public void insertSubject(SubjectDto subjectDto) {
+	public void insertSubject(SubjectDTO subjectDto) {
 		
 		subjectRepository.save(modelMapper.map(subjectDto, Subject.class));
 		

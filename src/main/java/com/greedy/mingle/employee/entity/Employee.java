@@ -69,6 +69,25 @@ public class Employee {
 	@Column(name="EMP_ANNUAL")
 	private Long empAnnual;
 	
+	public void update(String empName, String empNameEn, String empEmail, String empPhone, String empAddress, String empProfile, Date empEntDate, 
+			Date empAbDate, Date empLeaveDate, String empStatus, Department department, String empPwd, String empSsn, Long empAnnual) {
+		this.empName = empName;
+		this.empNameEn = empNameEn;
+		this.empEmail = empEmail;
+		this.empPhone = empPhone;
+		this.empAddress = empAddress;
+		this.empProfile = empProfile;
+		this.empEntDate = empEntDate;
+		this.empAbDate = empAbDate;
+		this.empLeaveDate = empLeaveDate;
+		this.empStatus = empStatus;
+		this.department = department;
+		this.empPwd = empPwd;
+		this.empSsn = empSsn;
+		this.empAnnual = empAnnual;
+		
+	}
+	
 	/*
 	 * EMP_CODE	NUMBER
 		EMP_NAME	VARCHAR2(100 BYTE)
