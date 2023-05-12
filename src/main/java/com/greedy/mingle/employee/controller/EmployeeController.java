@@ -1,10 +1,6 @@
 package com.greedy.mingle.employee.controller;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,20 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greedy.mingle.employee.dto.EmployeeDTO;
-import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.employee.service.EmployeeService;
-import com.greedy.mingle.subject.dto.SubjectDTO;
-import com.greedy.mingle.subject.entity.Department;
-import com.greedy.mingle.subject.repository.DepartmentRepository;
 
-import lombok.extern.slf4j.Slf4j;
 
 import com.greedy.mingle.common.ResponseDTO;
 import com.greedy.mingle.common.paging.Pagenation;
 import com.greedy.mingle.common.paging.PagingButtonInfo;
 import com.greedy.mingle.common.paging.ResponseDTOWithPaging;
 
-@Slf4j
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -55,7 +45,6 @@ public class EmployeeController {
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(employeeDtoList.getContent());
 		
-		log.info("[EmployeeController] : selectEmployeeList end ============================== ");
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 
@@ -85,10 +74,6 @@ public class EmployeeController {
 	@GetMapping("/search")
 	public ResponseEntity<ResponseDTO> selectEmployeeListByEmpName(
 			@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String empName) {
-		
-		log.info("[EmployeeController] : selectEmployeeListByEmpName start ============================== ");
-		log.info("[ProductController] : page : {}", page);
-		log.info("[ProductController] : productName : {}", empName);
 
 		
 		Page<EmployeeDTO> employeeDtoList = employeeService.selectEmployeeListByEmpName(page, empName);
@@ -98,8 +83,6 @@ public class EmployeeController {
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(employeeDtoList.getContent());
-
-		log.info("[EmployeeController : responseDtoWithPaging : {}", responseDtoWithPaging);
 
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 		
