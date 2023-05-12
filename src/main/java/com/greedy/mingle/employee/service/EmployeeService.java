@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.greedy.mingle.configuration.exception.UserNotFoundException;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.employee.repository.EmployeeRepository;
@@ -96,7 +95,7 @@ public class EmployeeService {
 	public void updateEmployee(EmployeeDTO employeeDto) {
 		
 		Employee findEmployee = employeeRepository.findById(employeeDto.getEmpCode())
-					.orElseThrow(()-> new IllegalArgumentException(employeeDto.getEmpCode() + " 에 해당하는 학과를 조회할 수 없습니다."));
+					.orElseThrow(()-> new IllegalArgumentException(employeeDto.getEmpCode() + " 에 해당하는 부서를 조회할 수 없습니다."));
 		
 		findEmployee.update(
 				employeeDto.getEmpName(),

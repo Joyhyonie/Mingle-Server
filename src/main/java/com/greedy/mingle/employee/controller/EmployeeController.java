@@ -109,7 +109,7 @@ public class EmployeeController {
 	
 	/* 6. 교직원 정보 수정 */
 	@PutMapping("/modify")
-	public ResponseEntity<ResponseDTO> modifyEmployee(@ModelAttribute EmployeeDTO employeeDto) {
+	public ResponseEntity<ResponseDTO> updateEmployee(@ModelAttribute EmployeeDTO employeeDto) {
 
 		employeeService.updateEmployee(employeeDto);
 

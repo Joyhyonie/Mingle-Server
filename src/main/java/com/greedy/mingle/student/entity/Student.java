@@ -73,7 +73,28 @@ public class Student {
 	
 	@ManyToOne
 	@JoinColumn(name="DEPT_CODE")
-	private Department deptCode;
+	private Department department;
+
+	public void update(String stdNameEn, String stdPwd, String stdName, String stdEmail,
+			String stdPhone, String stdAddress, String stdProfile, Date stdEntDate, Date stdAbDate,
+			Date stdDropDate, Date stdLeaveDate, String stdStatus, Long stdLevel, String stdSsn, Department department) {
+		
+		this.stdNameEn = stdNameEn;
+		this.stdPwd = stdPwd;
+		this.stdName = stdName;
+		this.stdEmail = stdEmail;
+		this.stdPhone = stdPhone;
+		this.stdAddress = stdAddress;
+		this.stdProfile = stdProfile;
+		this.stdEntDate = stdEntDate;
+		this.stdAbDate = stdAbDate;
+		this.stdDropDate = stdDropDate;
+		this.stdLeaveDate = stdLeaveDate;
+		this.stdStatus = stdStatus;
+		this.stdLevel = stdLevel;
+		this.stdSsn = stdSsn;
+		this.department = department;
+	}
 	
 	/* STD_CODE	NUMBER
 	STD_NAME_EN	VARCHAR2(100 BYTE)
