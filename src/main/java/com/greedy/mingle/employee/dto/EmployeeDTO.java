@@ -13,36 +13,36 @@ import lombok.Data;
 
 @Data
 public class EmployeeDTO {
-	
-private Long empCode;
-	
+
+	private Long empCode;
+
 	private String empName;
-	
+
 	private String empNameEn;
-	
+
 	private String empEmail;
-	
+
 	private String empPhone;
-	
+
 	private String empAddress;
-	
+
 	private String empProfile;
-	
+
 	private Date empEntDate;
-	
+
 	private Date empAbDate;
-	
+
 	private Date empLeaveDate;
-	
+
 	private String empStatus;
-	
+
 	private Department deptCode;
-	
+
 	private String empPwd;
-	
+
 	private String empSsn;
-	
+
 	private Long empAnnual;
-	
+
 	private SubjectDTO subjectDto;
 }

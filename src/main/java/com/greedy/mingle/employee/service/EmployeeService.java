@@ -13,10 +13,7 @@ import com.greedy.mingle.configuration.exception.UserNotFoundException;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.employee.repository.EmployeeRepository;
-import com.greedy.mingle.subject.dto.DepartmentDTO;
-import com.greedy.mingle.subject.dto.SubjectDTO;
 import com.greedy.mingle.subject.entity.Department;
-import com.greedy.mingle.subject.entity.Subject;
 import com.greedy.mingle.subject.repository.DepartmentRepository;
 
 
@@ -49,7 +46,7 @@ public class EmployeeService {
 	/* 2. 교직원 목록 조회 - 소속 기준, 페이징 */
 	public Page<EmployeeDTO> selectEmployeeListByDepartment(int page, Long deptCode) {
 
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("productCode").descending());
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
 
 		/* 전달할 카테고리 엔티티를 먼저 조회한다. */
 		Department findDepartment = departmentRepository.findById(deptCode)
