@@ -108,7 +108,7 @@ public class EmployeeService {
 				employeeDto.getEmpAbDate(),
 				employeeDto.getEmpLeaveDate(),
 				employeeDto.getEmpStatus(),
-				modelMapper.map(employeeDto.getSubjectDto().getDepartment(), Department.class),
+				modelMapper.map(employeeDto.getDepartment(), Department.class),
 				employeeDto.getEmpPwd(),
 				employeeDto.getEmpSsn(),
 				employeeDto.getEmpAnnual()

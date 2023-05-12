@@ -23,7 +23,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	Page<Employee> findByEmpName(Pageable pageable, String empName);
 
 	/* 4. 교직원 상세 조회 - empCode로 교직원 1명 조회 */
-	@Query("SELECT e.empCode" +
+	@Query("SELECT e " +
 			" FROM Employee e " +
 			"WHERE e.empCode = :empCode ")
 	Optional<Employee> findByEmpCode(@Param("empCode") Long empCode);
