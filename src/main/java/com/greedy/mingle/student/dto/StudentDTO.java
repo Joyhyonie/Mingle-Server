@@ -2,7 +2,6 @@ package com.greedy.mingle.student.dto;
 
 import java.util.Date;
 
-import com.greedy.mingle.subject.dto.SubjectDTO;
 import com.greedy.mingle.subject.entity.Department;
 
 import lombok.Data;
@@ -25,6 +24,5 @@ public class StudentDTO {
 	private String stdStatus;
 	private Long stdLevel;
 	private String stdSsn;
-	private Department deptCode;
-	private SubjectDTO subjectDto;
+	private Department department;
 }

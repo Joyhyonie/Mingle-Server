@@ -108,7 +108,7 @@ public class StudentService {
 				studentDto.getStdStatus(),
 				studentDto.getStdLevel(),
 				studentDto.getStdSsn(),
-				modelMapper.map(studentDto.getSubjectDto().getDepartment(), Department.class)
+				modelMapper.map(studentDto.getDepartment(), Department.class)
 				);
 	}
 

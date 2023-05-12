@@ -22,10 +22,8 @@ public class EmployeeDTO {
 	private Date empAbDate;
 	private Date empLeaveDate;
 	private String empStatus;
-	private DepartmentDTO department;
-	private Department deptCode;
+	private Department department;
 	private String empPwd;
 	private String empSsn;
 	private Long empAnnual;
-	private SubjectDTO subjectDto;
 }
