@@ -2,6 +2,7 @@ package com.greedy.mingle.employee.dto;
 
 import java.util.Date;
 
+import com.greedy.mingle.subject.dto.DepartmentDTO;
 import com.greedy.mingle.subject.dto.SubjectDTO;
 import com.greedy.mingle.subject.entity.Department;
 
@@ -21,6 +22,7 @@ public class EmployeeDTO {
 	private Date empAbDate;
 	private Date empLeaveDate;
 	private String empStatus;
+	private DepartmentDTO department;
 	private Department deptCode;
 	private String empPwd;
 	private String empSsn;

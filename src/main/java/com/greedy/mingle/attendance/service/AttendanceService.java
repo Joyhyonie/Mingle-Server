@@ -39,9 +39,6 @@ public class AttendanceService {
 			
 		return attendanceDTOList;
 	}
-	
-	/* 12시가 되면 자동으로 행 추가 */
-	
 
 	/* 근태 수정 */
 	@Transactional
@@ -53,24 +50,26 @@ public class AttendanceService {
 				attendanceDto.getAtdEndTime(),attendanceDto.getAtdStatus(),
 				attendanceDto.getAtdEtc());
 	}
-
+	
+	/* 12시가 되면 자동으로 행 추가 */
 	@Transactional
 	public void addAttendanceRecord() {
-		
-		System.out.println("살려줘");
+	    System.out.println("살려줘");
 
-		LocalDateTime now = LocalDateTime.now();
-		if(now.getHour() == 12) {
-			List<Employee> employeeList = employeeRepository.findAll();
-			for(Employee employee : employeeList) {
-				Attendance attendance = new Attendance();
-				attendance.setAtdDate(now.toLocalDate().toString());
-				attendance.setAtdStartTime(now.toLocalTime().toString());
-				attendance.setAtdStatus("결근");
-				attendance.setEmployee(employee);
-				attendanceRepository.save(attendance);
-			}
-		}
+	    LocalDateTime now = LocalDateTime.now();
+	    List<Employee> employeeList = employeeRepository.findAll();
+	    for(Employee employee : employeeList) {
+	        Attendance attendance = attendanceRepository.findByEmployeeAndAtdDate(employee, now.toLocalDate().toString());
+	        if (attendance == null) {
+	            attendance = new Attendance();
+	            attendance.setAtdDate(now.toLocalDate().toString());
+	            java.sql.Date timestamp = java.sql.Date.valueOf(now.toLocalDate());
+	            attendance.setAtdStartTime(timestamp.toString());
+	            attendance.setAtdStatus("결근");
+	            attendance.setEmployee(employee);
+	            attendanceRepository.save(attendance);
+	        }
+	    }
 	}
 
 }
