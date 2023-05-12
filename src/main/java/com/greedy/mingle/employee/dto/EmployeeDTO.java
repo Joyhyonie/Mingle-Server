@@ -2,6 +2,8 @@ package com.greedy.mingle.employee.dto;
 
 import java.util.Date;
 
+import com.greedy.mingle.subject.dto.DepartmentDTO;
+import com.greedy.mingle.subject.dto.SubjectDTO;
 import com.greedy.mingle.subject.entity.Department;
 
 import lombok.Data;

@@ -65,8 +65,6 @@ public class EmployeeService {
 		Page<Employee> employeeList = employeeRepository.findByEmpName(pageable, empName);
 		Page<EmployeeDTO> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
 
-		
-		
 		return employeeDtoList;
 	}
 	
