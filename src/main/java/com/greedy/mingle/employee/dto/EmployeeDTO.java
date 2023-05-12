@@ -2,12 +2,7 @@ package com.greedy.mingle.employee.dto;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import com.greedy.mingle.subject.dto.SubjectDTO;
-import com.greedy.mingle.subject.entity.Department;
+import com.greedy.mingle.subject.dto.DepartmentDTO;
 
 import lombok.Data;
 
@@ -36,7 +31,7 @@ private Long empCode;
 	
 	private String empStatus;
 	
-	private Department deptCode;
+	private DepartmentDTO department;
 	
 	private String empPwd;
 	
@@ -44,5 +39,4 @@ private Long empCode;
 	
 	private Long empAnnual;
 	
-	private SubjectDTO subjectDto;
 }
