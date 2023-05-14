@@ -1,5 +1,6 @@
 package com.greedy.mingle.employee.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -39,5 +40,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	/* 9. 조직도 교직원 조회 - 소속 기준 */
 
 	/* 10. 조직도 교직원 조회 - 교직원명 검색 기준 */
+	
+	/* 11. 교수인 교직원 조회 - 소속코드 기준 deptCode(11)로 교직원 조회 */
+	List<Employee> findByDepartmentRefDeptCode(Long refDeptCode);
 	
 }
