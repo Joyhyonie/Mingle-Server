@@ -1,5 +1,8 @@
 package com.greedy.mingle.subject.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -10,11 +13,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.greedy.mingle.subject.dto.SubjectDTO;
+import com.greedy.mingle.subject.dto.SubjectNameDTO;
 import com.greedy.mingle.subject.entity.Department;
 import com.greedy.mingle.subject.entity.Subject;
 import com.greedy.mingle.subject.repository.DepartmentRepository;
 import com.greedy.mingle.subject.repository.SubjectRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class SubjectService {
 	
@@ -75,15 +82,28 @@ public class SubjectService {
 
 	@Transactional
 	public void insertSubject(SubjectDTO subjectDto) {
-		
+
 		subjectRepository.save(modelMapper.map(subjectDto, Subject.class));
-		
+
 	}
 
 	@Transactional
 	public void deleteSubject(Long sbjCode) {
-		
+
 		subjectRepository.deleteById(sbjCode);
+	}
+
+	/* 7 교과목 이름 조회해오기 */
+	public List<SubjectNameDTO> sujectName() {
+
+		List<Subject> subject2 = subjectRepository.findAll();
+		
+		log.info("subjectService.subject2",subject2);
+		
+		List<SubjectNameDTO> subjectNameList = subject2.stream()
+				.map(Subject -> modelMapper.map(subject2, SubjectNameDTO.class)).collect(Collectors.toList());
+		return subjectNameList;
+
 	}
 
 }
