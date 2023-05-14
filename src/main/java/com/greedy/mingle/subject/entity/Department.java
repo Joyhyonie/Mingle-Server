@@ -22,7 +22,7 @@ public class Department {
 	private String deptName;
 	
 	@Column(name="REF_DEPT_CODE")
-	private String refDeptCode;
+	private Long refDeptCode;
 	
 	
 	
