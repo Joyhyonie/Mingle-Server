@@ -130,15 +130,7 @@ public class EmployeeController {
 	
 	/* 9. 조직도 교직원 조회 - 소속 기준 */
 	
-	/* 10. 조직도 교직원 조회 - 교직원명 검색 기준 */
-	@GetMapping("/professor")
-	public ResponseEntity<ResponseDTO> professorEmployee(){
-		
-		
-		return ResponseEntity
-				.ok()
-				.body(new ResponseDTO(HttpStatus.OK, "조회 성공", employeeService.professorEmployee()));
-	}
+	
 
 	
 	

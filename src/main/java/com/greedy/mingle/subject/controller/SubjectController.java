@@ -108,16 +108,6 @@ public class SubjectController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "삭제 성공"));
 	}
 	
-	/*교과목 이름 조회해오기(미완성 조회가 null로 나옴)*/
-	@GetMapping("/nameList")
-	public ResponseEntity<ResponseDTO> subjectNameList(){
-		
-		
-		
-		return ResponseEntity
-				.ok()
-				.body(new ResponseDTO(HttpStatus.OK, "조회 성공",subjectService.sujectName()));
-				
-	}
+	
 
 }

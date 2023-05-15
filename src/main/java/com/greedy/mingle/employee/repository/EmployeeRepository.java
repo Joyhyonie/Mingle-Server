@@ -41,7 +41,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	/* 10. 조직도 교직원 조회 - 교직원명 검색 기준 */
 	
-	/* 11. 교수인 교직원 조회 - 소속코드 기준 deptCode(11)로 교직원 조회 */
-	List<Employee> findByDepartmentRefDeptCode(Long refDeptCode);
+	/* 11. 특정 학과의 교수인 교직원 조회 - 소속코드 기준 deptCode로 교직원 조회 */
+	List<Employee> findByDepartmentDeptCode(Long deptCode);
 	
 }

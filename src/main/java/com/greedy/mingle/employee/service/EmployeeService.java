@@ -130,27 +130,6 @@ public class EmployeeService {
 
 	/* 10. 조직도 교직원 조회 - 교직원명 검색 기준 */
 	
-	/* 11. 교수인 교직원 조회 - 소속코드 기준 deptCode(11)로 교직원 조회 */
-	public List<EmpoloyeeProfessorNameDTO> professorEmployee() {
-		
-		Long refDeptCode = (long) 11;
-		
-		
-		List<Employee> professorList = employeeRepository.findByDepartmentRefDeptCode(refDeptCode);
-		List<EmpoloyeeProfessorNameDTO> professorDTOList = professorList.stream()
-			    .map(employee -> modelMapper.map(employee, EmpoloyeeProfessorNameDTO.class))
-			    .collect(Collectors.toList());
-		
-		
-		 
-				
-		
-		
-				
-
-
-		return professorDTOList;
-	}
 	
 	
 	
