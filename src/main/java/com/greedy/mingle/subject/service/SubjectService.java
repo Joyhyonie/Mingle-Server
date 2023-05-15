@@ -93,17 +93,6 @@ public class SubjectService {
 		subjectRepository.deleteById(sbjCode);
 	}
 
-	/* 7 교과목 이름 조회해오기 */
-	public List<SubjectNameDTO> sujectName() {
-
-		List<Subject> subject2 = subjectRepository.findAll();
-		
-		log.info("subjectService.subject2",subject2);
-		
-		List<SubjectNameDTO> subjectNameList = subject2.stream()
-				.map(Subject -> modelMapper.map(subject2, SubjectNameDTO.class)).collect(Collectors.toList());
-		return subjectNameList;
-
-	}
+	
 
 }
