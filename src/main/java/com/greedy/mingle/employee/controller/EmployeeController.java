@@ -17,12 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.service.EmployeeService;
 
+import lombok.extern.slf4j.Slf4j;
 
 import com.greedy.mingle.common.ResponseDTO;
 import com.greedy.mingle.common.paging.Pagenation;
 import com.greedy.mingle.common.paging.PagingButtonInfo;
 import com.greedy.mingle.common.paging.ResponseDTOWithPaging;
 
+@Slf4j
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
@@ -47,14 +49,20 @@ public class EmployeeController {
 	@GetMapping("/list")
 	public ResponseEntity<ResponseDTO> selectEmployeeList(@RequestParam(name="page", defaultValue="1") int page) {
 		
+		log.info("[EmployeeController] : selectEmployeeList start ==================================== ");
+		log.info("[EmployeeController] : page : {}", page);
 		
 		Page<EmployeeDTO> employeeDtoList = employeeService.selectEmployeeList(page);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
 		
+		log.info("[EmployeeController] : pageInfo : {}", pageInfo);
+		
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(employeeDtoList.getContent());
+		
+		log.info("[EmployeeController] : selectEmployeeList end ==================================== ");
 		
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
