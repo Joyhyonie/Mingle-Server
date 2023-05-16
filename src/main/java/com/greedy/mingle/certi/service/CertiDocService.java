@@ -1,8 +1,5 @@
 package com.greedy.mingle.certi.service;
 
-import java.time.LocalDate;
-import java.util.Date;
-
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -43,8 +40,6 @@ public class CertiDocService {
 
 		CertiDoc certiDoc = certiDocRepository.findById(certiDocDto.getCertiDocCode())
 				.orElseThrow(()-> new IllegalArgumentException("증명서 코드가 없습니다."));
-		LocalDate now = LocalDate.now();
-		certiDocDto.setSignDate(now.toString());
 		certiDoc.update(
 				certiDocDto.getCertiApplyDate(),
 				certiDocDto.getSignDate(),
@@ -55,6 +50,15 @@ public class CertiDocService {
 				modelMapper.map(certiDocDto.getCertiForm(), CertiForm.class),
 				certiDocDto.getCertiUse()
 		);
+	}
+
+	public Page<CertiDocDTO> selectEmployeeCerti(int page, String empCode) {
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("certiDocCode").descending());
+		Page<CertiDoc> certiList = certiDocRepository.findByApplyerEmpCode(pageable,empCode);
+		Page<CertiDocDTO> certiDtoList = certiList.map(certi -> modelMapper.map(certi, CertiDocDTO.class));
+
+		return certiDtoList;
 	}
 
 }
