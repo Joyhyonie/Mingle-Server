@@ -96,7 +96,7 @@ public class AttendanceController {
 	
 	/* 상세조회 */
 	@GetMapping("/list-management/{empCode}")
-	public ResponseEntity<ResponseDTO> selectEmployee(@PathVariable Long empCode){
+	public ResponseEntity<ResponseDTO> selectEmployee(@PathVariable String empCode){
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"조회성공", attendanceService.selectEmpForAdmin(empCode)));
 	}

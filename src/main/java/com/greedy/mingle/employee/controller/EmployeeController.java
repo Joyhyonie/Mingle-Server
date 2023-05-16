@@ -3,6 +3,7 @@ package com.greedy.mingle.employee.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,6 +34,16 @@ public class EmployeeController {
 	public EmployeeController(EmployeeService employeeService) {
 		this.employeeService = employeeService;
 	}
+	
+	
+	@GetMapping("/employees")
+	public ResponseEntity<ResponseDTO> selectMyInfo(@AuthenticationPrincipal EmployeeDTO employee){
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK,"조회 완료",employeeService.selectInfo(employee.getEmpCode())));
+	}
+	
+	
 	
 	/* 1. 교직원 목록 조회 - 페이징 */
 	@GetMapping("/list")
@@ -98,7 +109,7 @@ public class EmployeeController {
 	
 	/* 4. 교직원 상세 조회 - empCode로 교직원 1명 조회 */
 	@GetMapping("/{empCode}")
-	public ResponseEntity<ResponseDTO> selectEmployeeDetail(@PathVariable Long empCode) {
+	public ResponseEntity<ResponseDTO> selectEmployeeDetail(@PathVariable String empCode) {
 		
 		return ResponseEntity
 						.ok()
@@ -126,7 +137,7 @@ public class EmployeeController {
 	
 	/* 7. 교직원 정보 삭제 */
 	@DeleteMapping("/delete/{empCode}")
-	public ResponseEntity<ResponseDTO> deleteEmployee(@PathVariable Long empCode){
+	public ResponseEntity<ResponseDTO> deleteEmployee(@PathVariable String empCode){
 		
 		employeeService.deleteEmployee(empCode);
 		

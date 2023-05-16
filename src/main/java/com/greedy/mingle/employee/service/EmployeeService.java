@@ -12,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.greedy.mingle.configuration.exception.UserNotFoundException;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
+import com.greedy.mingle.employee.dto.EmployeeRoleDTO;
 import com.greedy.mingle.employee.dto.EmpoloyeeProfessorNameDTO;
 import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.employee.repository.EmployeeRepository;
@@ -81,8 +83,9 @@ public class EmployeeService {
 	}
 
 	/* 4. 교직원 상세 조회 - empCode로 교직원 1명 조회 */
-	public EmployeeDTO selectEmployee(Long empCode) {
 
+	public EmployeeDTO selectEmployee(String empCode) {
+		
 		Employee employee = employeeRepository.findByEmpCode(empCode)
 				.orElseThrow(() -> new IllegalArgumentException(empCode + " 에 해당하는 교직원이 없습니다."));
 
@@ -115,11 +118,28 @@ public class EmployeeService {
 
 	/* 7. 교직원 정보 삭제 */
 	@Transactional
-	public void deleteEmployee(Long empCode) {
-
+	public void deleteEmployee(String empCode) {
+		
 		employeeRepository.deleteById(empCode);
 	}
 
+	public EmployeeDTO selectInfo(String empCode) {
+  
+	  Employee employee = employeeRepository.findByEmpCode(empCode)
+	            .orElseThrow(() -> new UserNotFoundException(empCode + "를 찾을 수 없습니다."));
+
+	    EmployeeDTO employeeDTO = modelMapper.map(employee, EmployeeDTO.class);
+
+	    List<EmployeeRoleDTO> employeeRoleDTOList = employee.getEmpRole().stream()
+	            .map(role -> modelMapper.map(role, EmployeeRoleDTO.class))
+	            .collect(Collectors.toList());
+
+	    employeeDTO.setEmpRole(employeeRoleDTOList);
+
+	    return employeeDTO;
+  
+  }
+	
 	/* 8. 조직도 교직원 조회 - 스크롤 */
 
 	/* 9. 조직도 교직원 조회 - 소속 기준 */
