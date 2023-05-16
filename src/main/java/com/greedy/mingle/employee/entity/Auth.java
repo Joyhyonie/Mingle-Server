@@ -3,10 +3,14 @@ package com.greedy.mingle.employee.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+@ToString
+@Getter
+@Setter
 @Entity
 @Table(name="TBL_AUTH")
 public class Auth {
@@ -19,8 +23,6 @@ public class Auth {
 	private String authName;
 	
 	@Column(name="AUTH_INFO")
-	private String authInfo; 
-	
-	
-	
+	private String authInfo;
+
 }

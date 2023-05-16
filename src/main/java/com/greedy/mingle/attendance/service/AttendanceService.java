@@ -29,7 +29,7 @@ public class AttendanceService {
 	}
 
 	/* 상세 조회 */
-	public List<AttendanceDTO> selectEmpForAdmin(Long empCode) {
+	public List<AttendanceDTO> selectEmpForAdmin(String empCode) {
 		
 		List<Attendance> attendance = attendanceRepository.findByEmployeeEmpCode(empCode);
 
