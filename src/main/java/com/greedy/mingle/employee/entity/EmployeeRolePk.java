@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
+import lombok.ToString;
+@ToString
 @Embeddable
 public class EmployeeRolePk implements Serializable {
 	

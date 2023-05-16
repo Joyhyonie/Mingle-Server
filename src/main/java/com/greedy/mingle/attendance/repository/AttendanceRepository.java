@@ -9,7 +9,7 @@ import com.greedy.mingle.employee.entity.Employee;
 
 public interface AttendanceRepository extends JpaRepository<Attendance,Long>{
 
-	List<Attendance> findByEmployeeEmpCode(Long empCode);
+	List<Attendance> findByEmployeeEmpCode(String empCode);
 
 	
 	Attendance findByEmployeeAndAtdDate(Employee employee, String string);

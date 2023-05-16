@@ -10,7 +10,7 @@ import lombok.Data;
 public class EmpoloyeeProfessorNameDTO {
 	
 		
-		private Long empCode;
+		private String empCode;
 		private String empName;
 
 }
