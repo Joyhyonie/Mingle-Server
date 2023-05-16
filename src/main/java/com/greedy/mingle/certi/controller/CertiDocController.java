@@ -1,8 +1,11 @@
 package com.greedy.mingle.certi.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,6 +19,7 @@ import com.greedy.mingle.common.ResponseDTO;
 import com.greedy.mingle.common.paging.Pagenation;
 import com.greedy.mingle.common.paging.PagingButtonInfo;
 import com.greedy.mingle.common.paging.ResponseDTOWithPaging;
+import com.greedy.mingle.employee.dto.EmployeeDTO;
 
 @RestController
 @RequestMapping("/certi")
@@ -48,6 +52,21 @@ public class CertiDocController {
 		certiDocService.updateCertiDoc(certiDocDto);
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "수정 성공"));
+	}
+	
+	@GetMapping("/myCerti")
+	public ResponseEntity<ResponseDTO> selectMemberCerti(@RequestParam(name="page",defaultValue="1") int page,
+			@AuthenticationPrincipal EmployeeDTO employee){
+				
+		Page<CertiDocDTO> certiDocDTO = certiDocService.selectEmployeeCerti(page,employee.getEmpCode());
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(certiDocDTO);
+		
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(certiDocDTO.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"조회 성공",responseDtoWithPaging));
 	}
 
 }
