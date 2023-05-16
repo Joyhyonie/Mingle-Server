@@ -1,9 +1,5 @@
 package com.greedy.mingle.employee.dto;
 
-
-
-
-
 import lombok.Data;
 
 @Data

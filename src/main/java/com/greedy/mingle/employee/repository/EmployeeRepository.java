@@ -18,7 +18,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	Page<Employee> findAll(Pageable pageable);
 	
 	/* 2. 교직원 목록 조회 - 소속 기준, 페이징 */
-	Page<Employee> findByDepartment(Pageable pageable, Department department);
+	Page<Employee> findByDepartment(Pageable pageable, Department findDepartment);
 	
 	/* 3. 교직원 목록 조회 - 교직원명 검색 기준, 페이징 */
 	Page<Employee> findByEmpName(Pageable pageable, String empName);
