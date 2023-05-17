@@ -1,5 +1,9 @@
 package com.greedy.mingle.employee.controller;
 
+import java.util.UUID;
+
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,15 +11,18 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.service.EmployeeService;
+import com.greedy.mingle.util.FileUploadUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -154,8 +161,26 @@ public class EmployeeController {
 	
 	/* 9. 조직도 교직원 조회 - 소속 기준 */
 	
+	/* 자신의 마이페이지 조회 */
+	@GetMapping("/myemployees")
+	public ResponseEntity<ResponseDTO> selectMyInfo(@AuthenticationPrincipal EmployeeDTO employee){
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK,"조회 완료",employeeService.selectInfo(employee.getEmpCode())));
+	}
+
+	/* 마이페이지 수정 수정 */
+	@PatchMapping("/putmypage/{empCode}")
+	public ResponseEntity<ResponseDTO> updateEmp(@PathVariable("empCode") String code, @RequestBody EmployeeDTO employeeDTO) {
+		
+		employeeService.updateEmp(employeeDTO);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "상품 수정 성공"));
+		
+	}
 	
 
-	
 	
 }

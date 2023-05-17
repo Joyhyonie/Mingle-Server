@@ -1,11 +1,14 @@
 package com.greedy.mingle.employee.service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,11 +18,12 @@ import org.springframework.stereotype.Service;
 import com.greedy.mingle.configuration.exception.UserNotFoundException;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.dto.EmployeeRoleDTO;
-import com.greedy.mingle.employee.dto.EmpoloyeeProfessorNameDTO;
 import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.employee.repository.EmployeeRepository;
 import com.greedy.mingle.subject.entity.Department;
 import com.greedy.mingle.subject.repository.DepartmentRepository;
+import com.greedy.mingle.util.FileUploadUtils;
+
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,6 +35,11 @@ public class EmployeeService {
 	private final DepartmentRepository departmentRepository;
 	private final ModelMapper modelMapper;
 
+	@Value("${image.image-url}")
+	private String IMAGE_URL;
+	@Value("${image.image-dir}")
+	private String IMAGE_DIR;
+	
 	public EmployeeService(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository,
 			ModelMapper modelMapper) {
 		this.employeeRepository = employeeRepository;
@@ -122,13 +131,15 @@ public class EmployeeService {
 		
 		employeeRepository.deleteById(empCode);
 	}
-
+	/* 자신의 마이페이지 조회 */
+	
 	public EmployeeDTO selectInfo(String empCode) {
   
 	  Employee employee = employeeRepository.findByEmpCode(empCode)
 	            .orElseThrow(() -> new UserNotFoundException(empCode + "를 찾을 수 없습니다."));
 
 	    EmployeeDTO employeeDTO = modelMapper.map(employee, EmployeeDTO.class);
+	    employeeDTO.setEmpProfile(IMAGE_URL + employeeDTO.getEmpProfile());
 
 	    List<EmployeeRoleDTO> employeeRoleDTOList = employee.getEmpRole().stream()
 	            .map(role -> modelMapper.map(role, EmployeeRoleDTO.class))
@@ -145,5 +156,38 @@ public class EmployeeService {
 	/* 9. 조직도 교직원 조회 - 소속 기준 */
 
 	/* 10. 조직도 교직원 조회 - 교직원명 검색 기준 */
-
+	
+	/* 마이페이지 이미지 변경 */
+	@Transactional
+	public void updateEmp(EmployeeDTO employeeDTO) {
+		log.info("[ProductService] insertProduct start ============================== ");
+		log.info("[ProductService] employeeDTO : {}", employeeDTO);
+		
+		Employee originMypage = employeeRepository.findById(employeeDTO.getEmpCode())
+				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 상품이 없습니다. EmpCode=" + employeeDTO.getEmpCode()));
+		
+		log.info("[ProductService] getEmpCode : {}", originMypage);
+		
+			/* 이미지를 변경하는 경우 */
+			
+			
+			/* 이미지를 변경하지 않는 경우에는 별도의 처리가 필요 없음 */
+			
+			/* 조회했던 기존 엔티티의 내용을 수정 -> 별도의 수정 메소드를 정의해서 사용하면 다른 방식의 수정을 막을 수 있다. */
+			originMypage.setEmpName(employeeDTO.getEmpName());
+			originMypage.setEmpNameEn(employeeDTO.getEmpNameEn());
+			originMypage.setEmpPhone(employeeDTO.getEmpPhone());
+			originMypage.setEmpEmail(employeeDTO.getEmpEmail());
+			originMypage.setEmpAddress(employeeDTO.getEmpAddress());
+			
+			employeeRepository.save(originMypage);
+			
+			
+			
+	
+		
+		log.info("[ProductService] insertProduct end ============================== ");
+	}
+	
+	
 }

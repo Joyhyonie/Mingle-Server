@@ -6,7 +6,9 @@ import java.util.List;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.greedy.mingle.subject.dto.DepartmentDTO;
 import com.greedy.mingle.subject.entity.Department;
 
@@ -36,6 +38,11 @@ public class EmployeeDTO implements UserDetails{
 			private List<EmployeeRoleDTO> empRole;
 			private Department department;
 		
+			/* DB 컬럼으로 존재하지는 않지만(entity의 필드로 선언하지 않는다) 
+			 * 클라이언트에서 넘겨주는 상품 이미지 파일을 저장할 수 있는 필드 선언 */
+			@JsonIgnore
+			private MultipartFile empImage;
+			
 			private Collection<? extends GrantedAuthority> authorities;
 	
 	@Override
@@ -78,6 +85,8 @@ public class EmployeeDTO implements UserDetails{
 	public boolean isEnabled() {		
 		return true;
 	}
+
+	
 
 
 

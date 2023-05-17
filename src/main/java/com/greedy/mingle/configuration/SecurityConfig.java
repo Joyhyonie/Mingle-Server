@@ -41,6 +41,11 @@ public class SecurityConfig {
 	}
 	
 	
+	// 외부에서 이미지 파일에 접근 가능 하도록 설정
+		@Bean
+		public WebSecurityCustomizer configure() {
+			return (web) -> web.ignoring().antMatchers("/productimgs/**");
+		}
 	
 	// 비밀번호 암호화를 위한 빈 등록
 	@Bean
