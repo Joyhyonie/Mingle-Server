@@ -1,5 +1,7 @@
 package com.greedy.mingle.certi.service;
 
+import java.util.Date;
+
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -11,8 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.greedy.mingle.certi.dto.CertiDocDTO;
 import com.greedy.mingle.certi.entity.CertiDoc;
-import com.greedy.mingle.certi.entity.CertiForm;
 import com.greedy.mingle.certi.repository.CertiDocRepository;
+import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.entity.Employee;
 
 @Service
@@ -35,23 +37,6 @@ public class CertiDocService {
 		return certiDtoList;
 	}
 
-	@Transactional
-	public void updateCertiDoc(CertiDocDTO certiDocDto) {
-
-		CertiDoc certiDoc = certiDocRepository.findById(certiDocDto.getCertiDocCode())
-				.orElseThrow(()-> new IllegalArgumentException("증명서 코드가 없습니다."));
-		certiDoc.update(
-				certiDocDto.getCertiApplyDate(),
-				certiDocDto.getSignDate(),
-				certiDocDto.getDocStatus(),
-				certiDocDto.getReason(),
-				modelMapper.map(certiDocDto.getApplyer(), Employee.class),
-				modelMapper.map(certiDocDto.getAccepter(), Employee.class),
-				modelMapper.map(certiDocDto.getCertiForm(), CertiForm.class),
-				certiDocDto.getCertiUse()
-		);
-	}
-
 	public Page<CertiDocDTO> selectEmployeeCerti(int page, String empCode) {
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("certiDocCode").descending());
@@ -60,5 +45,32 @@ public class CertiDocService {
 
 		return certiDtoList;
 	}
+
+	@Transactional
+	public void updateCertiDoc(Long certiDocCOde, CertiDocDTO certiDocDto) {
+		
+		java.time.LocalDateTime localDateTime = java.time.LocalDateTime.now();
+		java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(localDateTime);
+
+		CertiDoc certiDoc = certiDocRepository.findById(certiDocCOde)
+				.orElseThrow(() -> new NullPointerException("해당 아이디가 존재하지 않습니다."));
+		
+		certiDoc.setAccepter(modelMapper.map(certiDocDto.getAccepter(),Employee.class));
+		certiDoc.setSignDate(timestamp.toString());
+		certiDoc.setDocStatus("승인");
+		
+		certiDocRepository.save(certiDoc);
+	}
+
+	public CertiDocDTO selectCertiDoc(Long certiDocCode) {
+
+		CertiDoc certiDoc = certiDocRepository.findById(certiDocCode)
+				.orElseThrow(() -> new NullPointerException("해당 증명서가 존재하지 않습니다."));
+		
+		CertiDocDTO certiDocDTO = modelMapper.map(certiDoc, CertiDocDTO.class);
+		
+		return certiDocDTO;
+	}
+
 
 }
