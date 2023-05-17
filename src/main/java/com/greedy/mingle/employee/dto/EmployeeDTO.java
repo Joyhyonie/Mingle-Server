@@ -12,6 +12,7 @@ import com.greedy.mingle.subject.entity.Department;
 
 import lombok.Data;
 
+@SuppressWarnings("serial")
 @Data
 public class EmployeeDTO implements UserDetails{
 	

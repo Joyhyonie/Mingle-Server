@@ -36,17 +36,9 @@ public class EmployeeController {
 	}
 	
 	
-	@GetMapping("/employees")
-	public ResponseEntity<ResponseDTO> selectMyInfo(@AuthenticationPrincipal EmployeeDTO employee){
-		return ResponseEntity
-				.ok()
-				.body(new ResponseDTO(HttpStatus.OK,"조회 완료",employeeService.selectInfo(employee.getEmpCode())));
-	}
-	
-	
 	
 	/* 1. 교직원 목록 조회 - 페이징 */
-	@GetMapping("/list")
+	@GetMapping("/employees")
 	public ResponseEntity<ResponseDTO> selectEmployeeList(@RequestParam(name="page", defaultValue="1") int page) {
 		
 		log.info("[EmployeeController] : selectEmployeeList start ==================================== ");
@@ -71,18 +63,24 @@ public class EmployeeController {
 	}
 	
 	/* 2. 교직원 목록 조회 - 소속 기준, 페이징 */
-	@GetMapping("/department/{deptCode}")
+	@GetMapping("/employees/department/{deptCode}")
 	public ResponseEntity<ResponseDTO> selectEmployeeListByDepartment(
 			@RequestParam(name="page", defaultValue="1") int page, @PathVariable Long deptCode){
+		
+		log.info("[EmployeeController] : selectEmployeeListByDepartment start ==================================== ");
+		log.info("[EmployeeController] : page : {}", page);
 		
 		Page<EmployeeDTO> employeeDtoList = employeeService.selectEmployeeListByDepartment(page, deptCode);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
 		
+		log.info("[ProductController] : pageInfo : {}", pageInfo);
 		
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(employeeDtoList.getContent());
+		
+		log.info("[EmployeeController] : selectEmployeeListByDepartment end ==================================== ");
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
@@ -90,25 +88,32 @@ public class EmployeeController {
 
 	
 	/* 3. 교직원 목록 조회 - 교직원명 검색 기준, 페이징 */
-	@GetMapping("/search")
+	@GetMapping("/employees/search")
 	public ResponseEntity<ResponseDTO> selectEmployeeListByEmpName(
 			@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String empName) {
-
+		
+		log.info("[EmployeeController] : selectEmployeeListByEmpName start ==================================== ");
+		log.info("[EmployeeController] : page : {}", page);
+		log.info("[EmployeeController] : employeeName : {}", empName);
 		
 		Page<EmployeeDTO> employeeDtoList = employeeService.selectEmployeeListByEmpName(page, empName);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
+		
+		log.info("[EmployeeController] : pageInfo : {}", pageInfo);
 
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(employeeDtoList.getContent());
+		
+		log.info("[EmployeeController] : selectEmployeeListByEmpName end ==================================== ");
 
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 		
 	}
 	
 	/* 4. 교직원 상세 조회 - empCode로 교직원 1명 조회 */
-	@GetMapping("/{empCode}")
+	@GetMapping("employees/{empCode}")
 	public ResponseEntity<ResponseDTO> selectEmployeeDetail(@PathVariable String empCode) {
 		
 		return ResponseEntity
