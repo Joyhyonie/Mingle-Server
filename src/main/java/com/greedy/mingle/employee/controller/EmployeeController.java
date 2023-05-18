@@ -157,6 +157,9 @@ public class EmployeeController {
 	/* 자신의 마이페이지 조회 */
 	@GetMapping("/myemployees")
 	public ResponseEntity<ResponseDTO> selectMyInfo(@AuthenticationPrincipal EmployeeDTO employee) {
+		
+		log.info("[확인용] {}", employee);
+		
 		return ResponseEntity.ok()
 				.body(new ResponseDTO(HttpStatus.OK, "조회 완료", employeeService.selectInfo(employee.getEmpCode())));
 	}
@@ -164,11 +167,13 @@ public class EmployeeController {
 	/* 마이페이지 수정 */
 	@PatchMapping("/putmypage")
 	public ResponseEntity<ResponseDTO> updateEmp(@RequestBody EmployeeDTO employeeDTO) {
-
-		employeeService.updateEmp(employeeDTO);
-
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "정보 수정 성공"));
-
+		  log.info("[확인용] {}", employeeDTO);
+	    employeeService.updateEmp(employeeDTO);
+	
+	    
+	    
+	    return ResponseEntity.ok()
+	            .body(new ResponseDTO(HttpStatus.OK, "정보 수정 성공"));
 	}
 
 }
