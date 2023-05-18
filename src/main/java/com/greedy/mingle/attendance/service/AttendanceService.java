@@ -7,6 +7,10 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.greedy.mingle.attendance.dto.AttendanceDTO;
@@ -29,15 +33,13 @@ public class AttendanceService {
 	}
 
 	/* 상세 조회 */
-	public List<AttendanceDTO> selectEmpForAdmin(Long empCode) {
+	public Page<AttendanceDTO> selectEmpForAdmin(int page,Long empCode) {
 		
-		List<Attendance> attendance = attendanceRepository.findByEmployeeEmpCode(empCode);
-
-		List<AttendanceDTO> attendanceDTOList = attendance.stream()
-		        .map(data -> modelMapper.map(data, AttendanceDTO.class))
-		        .collect(Collectors.toList());
-			
-		return attendanceDTOList;
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("atdCode").descending());
+		Page<Attendance> attendance = attendanceRepository.findByEmployeeEmpCode(pageable,empCode);
+		Page<AttendanceDTO> attendanceDTO = attendance.map(attend -> modelMapper.map(attend, AttendanceDTO.class));
+				
+		return attendanceDTO;
 	}
 
 	/* 근태 수정 */

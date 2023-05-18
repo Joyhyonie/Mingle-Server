@@ -96,9 +96,16 @@ public class AttendanceController {
 	
 	/* 상세조회 */
 	@GetMapping("/list-management/{empCode}")
-	public ResponseEntity<ResponseDTO> selectEmployee(@PathVariable Long empCode){
+	public ResponseEntity<ResponseDTO> selectEmployee(@RequestParam(name="page", defaultValue="1") int page,@PathVariable Long empCode){
 		
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"조회성공", attendanceService.selectEmpForAdmin(empCode)));
+		Page<AttendanceDTO> attendanceDetail = attendanceService.selectEmpForAdmin(page,empCode); 
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(attendanceDetail);
+		
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(attendanceDetail.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"조회성공",responseDtoWithPaging));
 	}
 	
 	/* 근태 수정 */
