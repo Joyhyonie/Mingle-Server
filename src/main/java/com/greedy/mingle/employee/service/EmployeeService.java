@@ -34,11 +34,6 @@ public class EmployeeService {
 	private final DepartmentRepository departmentRepository;
 	private final ModelMapper modelMapper;
 
-	@Value("${image.image-url}")
-	private String IMAGE_URL;
-	@Value("${image.image-dir}")
-	private String IMAGE_DIR;
-
 	public EmployeeService(EmployeeRepository employeeRepository, DepartmentRepository departmentRepository,
 			ModelMapper modelMapper) {
 		this.employeeRepository = employeeRepository;
