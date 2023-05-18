@@ -1,6 +1,7 @@
 package com.greedy.mingle.schedule.repository;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,10 +14,11 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 	
 	/* 1. 선택한 날짜의 나의 일정 조회 */
 	@Query("SELECT s "
-			+ "FROM Schedule s "
-			+ "WHERE :selectedDate BETWEEN s.scheStartDate AND s.scheEndDate "
-			+ "AND s.employee.empCode = :empCode")
-	Optional<Schedule> findMyScheduleBySelectedDate(@Param("selectedDate")Date selectedDate, @Param("empCode")Long empCode);
+	        + "FROM Schedule s "
+	        + "JOIN fetch s.employee "
+	        + "WHERE :selectedDate BETWEEN s.scheStartDate AND s.scheEndDate "
+	        + "AND s.employee.empCode = :empCode")
+	List<Schedule> findMyScheduleBySelectedDate(@Param("selectedDate")Date selectedDate, @Param("empCode")Long empCode);
 	
 	/* 2. 완료된 나의 일정 체크 */
 	
