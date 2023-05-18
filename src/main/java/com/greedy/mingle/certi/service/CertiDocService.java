@@ -72,5 +72,11 @@ public class CertiDocService {
 		return certiDocDTO;
 	}
 
+	@Transactional
+	public void registCertiDoc(CertiDocDTO certiDocDTO) {
+		
+		certiDocRepository.save(modelMapper.map(certiDocDTO, CertiDoc.class));
+	}
+
 
 }
