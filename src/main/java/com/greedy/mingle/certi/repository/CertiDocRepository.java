@@ -8,6 +8,6 @@ import com.greedy.mingle.certi.entity.CertiDoc;
 
 public interface CertiDocRepository extends JpaRepository <CertiDoc,Long>{
 
-	Page<CertiDoc> findByApplyerEmpCode(Pageable pageable, String empCode);
+	Page<CertiDoc> findByApplyerEmpCode(Pageable pageable, Long empCode);
 
 }
