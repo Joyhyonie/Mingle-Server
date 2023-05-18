@@ -88,6 +88,7 @@ public class Employee {
 	@OneToMany
 	@JoinColumn(name="EMP_CODE")
 	private List<EmployeeRole> empRole;
+
 	/*
 	 * EMP_CODE	NUMBER
 		EMP_NAME	VARCHAR2(100 BYTE)

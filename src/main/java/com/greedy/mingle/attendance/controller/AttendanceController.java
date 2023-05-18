@@ -41,7 +41,7 @@ public class AttendanceController {
 		this.employeeService = employeeService;
 	}
 	
-	/* 모든 직원 조회 */
+	/* 모든 직원 조회 */	
 	@GetMapping("/list")
 	public ResponseEntity<ResponseDTO> selectEmployeeList(@RequestParam(name="page",defaultValue="1") int page){
 
@@ -96,9 +96,16 @@ public class AttendanceController {
 	
 	/* 상세조회 */
 	@GetMapping("/list-management/{empCode}")
-	public ResponseEntity<ResponseDTO> selectEmployee(@PathVariable String empCode){
+	public ResponseEntity<ResponseDTO> selectEmployee(@RequestParam(name="page", defaultValue="1") int page,@PathVariable Long empCode){
 		
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"조회성공", attendanceService.selectEmpForAdmin(empCode)));
+		Page<AttendanceDTO> attendanceDetail = attendanceService.selectEmpForAdmin(page,empCode); 
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(attendanceDetail);
+		
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(attendanceDetail.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"조회성공",responseDtoWithPaging));
 	}
 	
 	/* 근태 수정 */

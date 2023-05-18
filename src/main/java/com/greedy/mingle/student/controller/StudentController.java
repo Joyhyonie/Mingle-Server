@@ -34,8 +34,11 @@ public class StudentController {
 	}
 
 	/* 1. 학번으로 학생 목록 조회 - 페이징 */
-	@GetMapping("/list")
+	@GetMapping("/students")
 	public ResponseEntity<ResponseDTO> selectStudentList(@RequestParam(name = "page", defaultValue = "1") int page) {
+		
+		log.info("[StudentController] : selectStudentList start ==================================== ");
+		log.info("[StudentController] : page : {}", page);
 
 		Page<StudentDTO> studentDtoList = studentService.selectStudentList(page);
 
@@ -52,7 +55,7 @@ public class StudentController {
 	}
 
 	/* 2. 학생 목록 조회 - 학과 기준, 페이징 */
-	@GetMapping("/department/{deptCode}")
+	@GetMapping("/students/department/{deptCode}")
 	public ResponseEntity<ResponseDTO> selectStudentListByDepartment(
 			@RequestParam(name = "page", defaultValue = "1") int page, @PathVariable Long deptCode) {
 
@@ -68,7 +71,7 @@ public class StudentController {
 	}
 
 	/* 3. 학생 목록 조회 - 학생명 검색 기준, 페이징 */
-	@GetMapping("/search")
+	@GetMapping("/students/search")
 	public ResponseEntity<ResponseDTO> selectStudentListByStdName(
 			@RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "search") String stdName) {
 
@@ -85,7 +88,7 @@ public class StudentController {
 	}
 
 	/* 4. 학생 상세 조회 - stdCode로 학생 1명 조회 */
-	@GetMapping("/{stdCode}")
+	@GetMapping("/students/{stdCode}")
 	public ResponseEntity<ResponseDTO> selectStudentDetail(@PathVariable Long stdCode) {
 		
 		return ResponseEntity
