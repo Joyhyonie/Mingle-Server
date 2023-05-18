@@ -74,7 +74,8 @@ public class SecurityConfig {
 		             /* 클라이언트가 외부 도메인을 요청하는 경우 웹 브라우저에서 자체적으로 사전 요청(preflight)이 일어남 
 		              * 이 때 OPTIONS 메서드로 서버에 사전 요청을 보내 요청 권한이 있는지 확인 */
 		             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-		             .antMatchers("/auth/**").permitAll()		           
+		             .antMatchers("/auth/**").permitAll()
+		             .antMatchers(HttpMethod.GET, "/employee/putmypage/**").permitAll()
 		             .antMatchers("/api/**").hasAnyRole("PROF", "ADMIN","PROVOST")  // 나머지 API 는 전부 인증 필요
 		         .and()
 		         	.cors()
