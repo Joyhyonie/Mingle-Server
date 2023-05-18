@@ -59,7 +59,7 @@ public class AuthService {
 	  log.info("[AuthService] employeeDto : {}", employeeDto);
 	  
 	  // 1, 아이디로 DB에서 해당 유저가 있는지 조회
-	  Employee employee = employeeRepository.findByEmpCode(employeeDto.getEmpCode()) 
+	  Employee employee = employeeRepository.findByEmpId(employeeDto.getEmpId()) 
 			  .orElseThrow(()-> new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.")); 
 	  
 	  // 2. 비밀번호 매칭 확인	  

@@ -19,8 +19,8 @@ import lombok.Data;
 public class EmployeeDTO implements UserDetails{
 	
 
-	
-			private String empCode;
+			private Long empCode;
+			private String empId;
 			private String empName;
 			private String empNameEn;
 			private String empEmail;
@@ -61,7 +61,7 @@ public class EmployeeDTO implements UserDetails{
 	@Override
 	public String getUsername() {
 	
-		return empCode;
+		return empId;
 	}
 
 	@Override

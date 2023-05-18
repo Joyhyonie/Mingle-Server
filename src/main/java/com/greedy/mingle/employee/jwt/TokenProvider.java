@@ -48,7 +48,7 @@ public class TokenProvider {
 		log.info("[TokenProvider] generateTokenDto Start =====================================");
 		
 		//Claims라고 불리우는 JWT body(payload)에 정보 담기
-		Claims claims = Jwts.claims().setSubject(employee.getEmpCode());
+		Claims claims = Jwts.claims().setSubject(employee.getEmpId());
 		// 권한도 claims에 담기
 		 List<String> roles = Collections.emptyList(); // 기본적으로 빈 리스트로 초기화
 		    
@@ -67,7 +67,7 @@ public class TokenProvider {
 				.signWith(key, SignatureAlgorithm.HS512)
 				.compact();
 		
-		return new TokenDTO(BEARER_TYPE, employee.getEmpCode(), accessToken, accessTokenExpiresIn.getTime());
+		return new TokenDTO(BEARER_TYPE, employee.getEmpId(), accessToken, accessTokenExpiresIn.getTime());
 	}
 	
 	public boolean validateToken(String jwt) {
