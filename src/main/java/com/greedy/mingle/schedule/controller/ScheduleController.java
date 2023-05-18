@@ -2,6 +2,8 @@ package com.greedy.mingle.schedule.controller;
 
 import java.sql.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,13 +29,18 @@ public class ScheduleController {
 	}
 	
 	/* 1. 선택한 날짜의 나의 일정 조회 */
-//	@GetMapping("/mine") 
-//	public ResponseEntity<ResponseDTO> selectMySchedule(@PathVariable Date selectedDate, @AuthenticationPrincipal EmployeeDTO employee) {
-//
-//		return ResponseEntity
-//				.ok()
-//				.body(new ResponseDTO(HttpStatus.OK, "선택한 날짜의 나의 일정 조회 성공", scheduleService.selectMySchedule(selectedDate, employee.getEmpCode())));
-//	}
+	@GetMapping("/mine/{selectedDate}") 
+	public ResponseEntity<ResponseDTO> selectMySchedule(@PathVariable Date selectedDate, @AuthenticationPrincipal EmployeeDTO employeeDto) {
+
+		
+		log.info("[ScheduleController] selectedDate : {}", selectedDate);	
+		log.info("[ScheduleController] employeeDto : {}", employeeDto);	
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "선택한 날짜의 나의 일정 조회 성공", scheduleService.selectMySchedule(selectedDate, employeeDto.getEmpCode())));
+	
+	}
 	
 	/* 2. 완료된 나의 일정 체크 */
 	

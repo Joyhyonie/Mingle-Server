@@ -1,6 +1,8 @@
 package com.greedy.mingle.schedule.service;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -24,12 +26,17 @@ public class ScheduleService {
 	}
 	
 	/* 1. 선택한 날짜의 나의 일정 조회 */
-	public ScheduleDTO selectMySchedule(Date selectedDate, Long empCode) {
+	public List<ScheduleDTO> selectMySchedule(Date selectedDate, Long empCode) {
 		
-		Schedule schedule = scheduleRepository.findMyScheduleBySelectedDate(selectedDate, empCode)
-				.orElse(new Schedule()); // 해당 날짜의 일정이 없을 경우 빈 객체 반환
+		List<Schedule> scheduleList = scheduleRepository.findMyScheduleBySelectedDate(selectedDate, empCode);
+		List<ScheduleDTO> scheduleDTOList = scheduleList.stream()
+		            .map(schedule -> modelMapper.map(schedule, ScheduleDTO.class))
+		            .collect(Collectors.toList());
 		
-		return modelMapper.map(schedule, ScheduleDTO.class);
+		log.info("[ScheduleService] scheduleDTOList : {}", scheduleDTOList);
+		log.info("[ScheduleService] empCode : {}", empCode);
+		
+		return scheduleDTOList;
 	}
 	
 	/* 2. 완료된 나의 일정 체크 */

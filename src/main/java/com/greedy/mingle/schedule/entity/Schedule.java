@@ -22,7 +22,8 @@ import lombok.Setter;
 @Entity
 @Table(name="TBL_SCHEDULE")
 @SequenceGenerator(name="SCHEDULE_SEQ_GENERATOR",
-				   sequenceName="SEQ_SCHE_CODE")
+				   sequenceName="SEQ_SCHE_CODE",
+				   initialValue=1, allocationSize=1)
 public class Schedule {
 	
 	@Id
