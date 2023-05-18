@@ -2,6 +2,7 @@ package com.greedy.mingle.employee.repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,9 +12,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.greedy.mingle.employee.entity.Employee;
+import com.greedy.mingle.employee.entity.EmployeeRole;
 import com.greedy.mingle.subject.entity.Department;
 
-public interface EmployeeRepository extends JpaRepository<Employee, String> {
+public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	/* 1. 교번으로 교직원 목록 조회 - 페이징 */
 	Page<Employee> findAll(Pageable pageable);
@@ -29,7 +31,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 			" FROM Employee e " +
 			"WHERE e.empCode = :empCode ")
 	@EntityGraph(attributePaths= {"department","empRole", "empRole.auth"})
-	Optional<Employee> findByEmpCode(@Param("empCode") String empCode);
+	Optional<Employee> findByEmpCode(@Param("empCode") Long empCode);
+	
+	Optional<Employee> findByEmpId(String userId);
 	
 	/* 5. 교직원 신규 등록 */
 
@@ -46,6 +50,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, String> {
 	/* 11. 특정 학과의 교수인 교직원 조회 - 소속코드 기준 deptCode로 교직원 조회 */
 	List<Employee> findByDepartmentDeptCode(Long deptCode);
 
+	
+	
+	
+	
+
+
+	
 	
 
 	

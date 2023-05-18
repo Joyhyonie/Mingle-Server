@@ -31,10 +31,15 @@ import lombok.ToString;
 @DynamicInsert
 public class Employee {
 	
+	
+	
 	@Id
 	@Column(name="EMP_CODE")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="EMP_SEQ_GENERATOR")
-	private String empCode;
+	private Long empCode;
+	
+	@Column(name="EMP_ID")
+	private String empId;
 	
 	@Column(name="EMP_NAME")
 	private String empName;
@@ -120,12 +125,26 @@ public class Employee {
 		this.empAnnual = empAnnual;
 
 	}
-		
-		
+
+
+
+
+
+
+
+
+
+
 		
 		
 		
 	}
+		
+		
+		
+		
+		
+	
 
 	
 	

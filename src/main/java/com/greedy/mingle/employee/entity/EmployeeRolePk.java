@@ -11,7 +11,7 @@ import lombok.ToString;
 public class EmployeeRolePk implements Serializable {
 	
 		@Column(name = "EMP_CODE")
-	    private String empCode;
+	    private Long empCode;
 	 
 	    @Column(name = "AUTH_CODE")
 	    private Long authCode;

@@ -44,7 +44,7 @@ public class CustomUserDetailService implements UserDetailsService{
            throw new RuntimeException("No active transaction found");
        }
 	
-	return employeeRepository.findByEmpCode(userId)
+	return employeeRepository.findByEmpId(userId)
 			.map(user -> addAuthorities(user))
 			.orElseThrow(() -> new RuntimeException(userId + "를 찾을 수 없습니다."));
 	
