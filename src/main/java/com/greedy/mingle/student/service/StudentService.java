@@ -15,6 +15,9 @@ import com.greedy.mingle.student.repository.StudentRepository;
 import com.greedy.mingle.subject.entity.Department;
 import com.greedy.mingle.subject.repository.DepartmentRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class StudentService {
 
@@ -32,11 +35,17 @@ public class StudentService {
 
 	/* 1. 교번으로 교직원 목록 조회 - 페이징 */
 	public Page<StudentDTO> selectStudentList(int page) {
+		
+		log.info("[StudentService] selectStudentList start ============================== ");
 
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("stdCode").descending());
 
 		Page<Student> studentList = studentRepository.findAll(pageable);
 		Page<StudentDTO> studentDtoList = studentList.map(student -> modelMapper.map(student, StudentDTO.class));
+		
+		log.info("[StudentService] studentDtoList.getContent() : {}", studentDtoList.getContent());
+
+		log.info("[StudentService] selectStudentList end ============================== ");
 
 		return studentDtoList;
 
