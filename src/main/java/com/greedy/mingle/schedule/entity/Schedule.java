@@ -1,6 +1,6 @@
 package com.greedy.mingle.schedule.entity;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.DynamicInsert;
 
 import com.greedy.mingle.employee.entity.Employee;
 
@@ -24,6 +26,7 @@ import lombok.Setter;
 @SequenceGenerator(name="SCHEDULE_SEQ_GENERATOR",
 				   sequenceName="SEQ_SCHE_CODE",
 				   initialValue=1, allocationSize=1)
+@DynamicInsert
 public class Schedule {
 	
 	@Id
@@ -55,6 +58,7 @@ public class Schedule {
 	
 	@Column(name="SCHE_CONTENT")
 	private String scheContent;
+	
 	
 	
 	/* 나의 일정 수정용 메소드 */
