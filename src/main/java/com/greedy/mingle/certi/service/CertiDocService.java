@@ -37,8 +37,10 @@ public class CertiDocService {
 		return certiDtoList;
 	}
 
-	public Page<CertiDocDTO> selectEmployeeCerti(int page, Long empCode) {
-		
+
+
+	public Page<CertiDocDTO> selectEmployeeCerti(int page, long empCode) {
+
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("certiDocCode").descending());
 		Page<CertiDoc> certiList = certiDocRepository.findByApplyerEmpCode(pageable,empCode);
 		Page<CertiDocDTO> certiDtoList = certiList.map(certi -> modelMapper.map(certi, CertiDocDTO.class));
