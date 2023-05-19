@@ -84,7 +84,7 @@ public class CertiDocController {
 		certiDocDTO.setApplyer(employee);
 		certiDocService.registCertiDoc(certiDocDTO);		
 		
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"조회 성공"));
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"등록 성공"));
 	}
 
 }
