@@ -3,11 +3,14 @@ package com.greedy.mingle.attendance.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -134,12 +137,24 @@ public class AttendanceController {
 	}
 	
 	/* 휴가 신청 내여 조회 후 상태 변경 */
-	@PutMapping("/leave/modify")
-	public ResponseEntity<ResponseDTO> updateLeave(@ModelAttribute LeaveDocDTO leaveDocDto){
+	@PatchMapping("/update/{leaveDocCode}")
+	public ResponseEntity<ResponseDTO> updateLeave(@PathVariable Long leaveDocCode,@RequestBody LeaveDocDTO leaveDocDTO,@AuthenticationPrincipal EmployeeDTO employee){
 		
-		leaveDocService.updateLeave(leaveDocDto);
+		leaveDocDTO.setAccepter(employee);
+		leaveDocService.updateLeaveDoc(leaveDocCode, leaveDocDTO);
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "수정 성공"));
+	}
+	
+	/* 휴가 신청 */
+	@PostMapping("/regist")
+	public ResponseEntity<ResponseDTO> registLeave(@AuthenticationPrincipal EmployeeDTO employee,
+			@ModelAttribute LeaveDocDTO leaveDocDTO){
+		
+		leaveDocDTO.setLeaveApplyer(employee);
+		leaveDocService.registLeaveDoc(leaveDocDTO);
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"등록 성공"));
 	}
 	
 	

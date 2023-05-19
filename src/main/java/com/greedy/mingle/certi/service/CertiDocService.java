@@ -55,7 +55,7 @@ public class CertiDocService {
 		java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(localDateTime);
 
 		CertiDoc certiDoc = certiDocRepository.findById(certiDocCOde)
-				.orElseThrow(() -> new NullPointerException("해당 아이디가 존재하지 않습니다."));
+				.orElseThrow(() -> new NullPointerException("해당 문서가 존재하지 않습니다."));
 		
 		certiDoc.setAccepter(modelMapper.map(certiDocDto.getAccepter(),Employee.class));
 		certiDoc.setSignDate(timestamp.toString());
