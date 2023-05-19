@@ -10,7 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.greedy.mingle.subject.dto.DepartmentDTO;
-import com.greedy.mingle.subject.entity.Department;
 
 import lombok.Data;
 
@@ -35,8 +34,11 @@ public class EmployeeDTO implements UserDetails{
 			private String empSsn;
 			private Long empAnnual;
 			
+			@JsonIgnore
+			private MultipartFile myPageImage;
+			
 			private List<EmployeeRoleDTO> empRole;
-			private Department department;
+			private DepartmentDTO department;
 		
 			/* DB 컬럼으로 존재하지는 않지만(entity의 필드로 선언하지 않는다) 
 			 * 클라이언트에서 넘겨주는 상품 이미지 파일을 저장할 수 있는 필드 선언 */

@@ -167,9 +167,20 @@ public class EmployeeService {
 
 		log.info("[EmployeeService] getEmpCode : {}", originMypage);
 
-		/* 이미지를 변경하는 경우 */
-
-		/* 이미지를 변경하지 않는 경우에는 별도의 처리가 필요 없음 */
+		try {
+			/* 이미지를 변경하는 경우 */
+			if(employeeDTO.getMyPageImage() != null) {
+				
+				/* 새로 입력 된 이미지 저장 */
+				String imageName = UUID.randomUUID().toString().replace("-", "");
+				String replaceFileName = FileUploadUtils.saveFile(IMAGE_DIR, imageName, employeeDTO.getMyPageImage());
+				
+				/* 기존에 저장 된 이미지 삭제 */
+				FileUploadUtils.deleteFile(IMAGE_DIR, originMypage.getEmpProfile());
+				
+				/* DB에 저장 될 imageUrl 값을 수정 */
+				originMypage.setEmpProfile(replaceFileName);
+			}
 
 		/* 조회했던 기존 엔티티의 내용을 수정 -> 별도의 수정 메소드를 정의해서 사용하면 다른 방식의 수정을 막을 수 있다. */
 		
@@ -179,8 +190,12 @@ public class EmployeeService {
 		originMypage.setEmpEmail(employeeDTO.getEmpEmail());
 		originMypage.setEmpAddress(employeeDTO.getEmpAddress());
 
-		employeeRepository.save(originMypage);
-
+		
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		log.info("[ProductService] insertProduct end ============================== ");
 		log.info("[ProductService] insertProduct end ============================== ");
 	}
 
