@@ -8,7 +8,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.greedy.mingle.configuration.exception.DuplicatedUserEmailException;
+import com.greedy.mingle.configuration.exception.IdsearchFailedException;
 import com.greedy.mingle.configuration.exception.LoginFailedException;
+import com.greedy.mingle.configuration.exception.UserNotFoundException;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.dto.TokenDTO;
 import com.greedy.mingle.employee.entity.Employee;
@@ -75,6 +77,32 @@ public class AuthService {
 	
 	  }
 
-//회가
+
+	
+
+	   /* 아이디 찾기 */
+	   public EmployeeDTO idSearch(EmployeeDTO employeeDTO) {
+	      
+	      Employee employee = employeeRepository.findByEmpNameAndEmpPhone(employeeDTO.getEmpName(), employeeDTO.getEmpPhone())
+	            .orElseThrow(() -> new IdsearchFailedException("입력하신 정보와 일치하는 아이디가 존재하지 않습니다."));
+	      
+	            
+	      return modelMapper.map(employee, EmployeeDTO.class);
+	   }
+
+	   /* 비밀번호 찾기 */
+	   public EmployeeDTO findById(EmployeeDTO employeeDTO) {
+
+	      Employee employee = employeeRepository.findByEmpId(employeeDTO.getEmpId())
+	            .orElseThrow(() -> new UserNotFoundException("해당 아이디와 일치하는 사용자가 없습니다."));
+
+	      if (employee.getEmpEmail().equals(employeeDTO.getEmpEmail())) {
+	         return modelMapper.map(employee, EmployeeDTO.class);
+	      } else {
+	         return null;
+	      }
+
+	   }
+	   
 
 }

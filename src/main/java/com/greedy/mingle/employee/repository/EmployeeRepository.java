@@ -33,7 +33,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@EntityGraph(attributePaths= {"department","empRole", "empRole.auth"})
 	Optional<Employee> findByEmpCode(@Param("empCode") Long empCode);
 	
-	Optional<Employee> findByEmpId(String userId);
+	
 	
 	/* 5. 교직원 신규 등록 */
 
@@ -50,13 +50,15 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	/* 11. 특정 학과의 교수인 교직원 조회 - 소속코드 기준 deptCode로 교직원 조회 */
 	List<Employee> findByDepartmentDeptCode(Long deptCode);
 
+	Optional<Employee> findByEmpNameAndEmpPhone(String empName, String empPhone);
+	 Employee findByEmpIdAndEmpEmail(String empId, String empEmail);
 	
-	
-	
-	
+	   List<Employee> findByEmpNameContains(String searchKeyword);
 
 
-	
+	   @EntityGraph(attributePaths = {"dept", "job", "empAuthList", "empAuthList.auth"})
+	   Optional<Employee> findByEmpId(String empId);
+
 	
 
 	
