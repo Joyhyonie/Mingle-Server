@@ -45,6 +45,7 @@ public class EmployeeService {
 	private String IMAGE_URL;
 	@Value("${image.image-dir}")
 	private String IMAGE_DIR;
+	
 
 	/* 1. 교번으로 교직원 목록 조회 - 페이징 */
 	public Page<EmployeeDTO> selectEmployeeList(int page) {
@@ -94,7 +95,7 @@ public class EmployeeService {
 		Page<EmployeeDTO> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
 		
 		/* 클라이언트 측에서 서버에 저장 된 이미지 요청 시 필요한 주소로 가공 */
-		employeeDtoList.forEach(employee -> employee.setEmpProfile(IMAGE_URL + employee.getEmpProfile()));
+//		employeeDtoList.forEach(employee -> employee.setEmpProfile(IMAGE_URL + employee.getEmpProfile()));
 		
 		return employeeDtoList;
 	}
