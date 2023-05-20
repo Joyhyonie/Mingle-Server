@@ -2,7 +2,6 @@ package com.greedy.mingle.attendance.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -11,7 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import com.greedy.mingle.employee.dto.EmployeeDTO;
+import org.hibernate.annotations.DynamicInsert;
+
 import com.greedy.mingle.employee.entity.Employee;
 
 import lombok.Getter;
@@ -21,6 +21,7 @@ import lombok.Setter;
 @Table(name="TBL_LEAVE_DOC")
 @Getter
 @Setter
+@DynamicInsert
 public class LeaveDoc {
 	
 	@Id

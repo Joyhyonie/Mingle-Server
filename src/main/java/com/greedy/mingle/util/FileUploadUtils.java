@@ -39,16 +39,10 @@ public class FileUploadUtils {
 	}
 
 	public static void deleteFile(String uploadDir, String fileName) throws IOException {
-		
-		Path uploadPath = Paths.get(uploadDir);
-		Path filePath = uploadPath.resolve(fileName);
-		
-		try {
-			Files.delete(filePath);
-		} catch (IOException e) {
-			throw new IOException("파일을 삭제하지 못 했어유👻 fileName : " + fileName);
-		}
-		
+	    Path uploadPath = Paths.get(uploadDir);
+	    Path filePath = uploadPath.resolve(fileName);
+	    
+	    Files.delete(filePath);
 	}
 
 

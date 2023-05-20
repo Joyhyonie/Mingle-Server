@@ -17,7 +17,7 @@ public class AttendanceScheduler {
 		this.attendanceService = attendanceService;
 	}
 	
-	@Scheduled(cron = "50 26 16 * * *")
+	@Scheduled(cron = "50 21 12 * * *")
 	public void addAttendanceRecord() {
 		log.info("ddd");
 		attendanceService.addAttendanceRecord();

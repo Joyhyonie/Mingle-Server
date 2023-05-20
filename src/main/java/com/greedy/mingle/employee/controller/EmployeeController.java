@@ -1,39 +1,33 @@
 package com.greedy.mingle.employee.controller;
 
-import java.util.UUID;
-
-import javax.transaction.Transactional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.greedy.mingle.employee.dto.EmployeeDTO;
-import com.greedy.mingle.employee.service.EmployeeService;
-import com.greedy.mingle.util.FileUploadUtils;
-
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.greedy.mingle.common.ResponseDTO;
 import com.greedy.mingle.common.paging.Pagenation;
 import com.greedy.mingle.common.paging.PagingButtonInfo;
 import com.greedy.mingle.common.paging.ResponseDTOWithPaging;
+import com.greedy.mingle.employee.dto.EmployeeDTO;
+import com.greedy.mingle.employee.service.EmployeeService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping("/employee")
+@RequestMapping("/employee" )
 public class EmployeeController {
 
 	private final EmployeeService employeeService;
@@ -165,8 +159,9 @@ public class EmployeeController {
 	}
 
 	/* 마이페이지 수정 */
-	@PatchMapping("/putmypage")
-	public ResponseEntity<ResponseDTO> updateEmp(@RequestBody EmployeeDTO employeeDTO) {
+	@PatchMapping(value = "/putmypage")
+	public ResponseEntity<ResponseDTO> updateEmp(@RequestParam("myPageImage") MultipartFile myPageImage, @AuthenticationPrincipal EmployeeDTO employeeDTO) {
+	    employeeDTO.setMyPageImage(myPageImage);
 		  log.info("[확인용] {}", employeeDTO);
 	    employeeService.updateEmp(employeeDTO);
 	

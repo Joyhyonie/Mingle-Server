@@ -36,12 +36,25 @@ public class LeaveDocService {
 	}
 
 	@Transactional
-	public void updateLeave(LeaveDocDTO leaveDocDto) {
+	public void updateLeaveDoc(Long leaveDocCode, LeaveDocDTO leaveDocDTO) {
+				
+		java.time.LocalDateTime localDateTime = java.time.LocalDateTime.now();
+		java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(localDateTime);
 		
-		LeaveDoc findleaveDoc = leaveDocRepository.findById(leaveDocDto.getLeaveDocCode()).orElseThrow(()-> new IllegalArgumentException("신청서 코드가 없습니다."));
-		findleaveDoc.update(leaveDocDto.getApplyDate(),leaveDocDto.getSignDate(),leaveDocDto.getDocStatus(),leaveDocDto.getReason(),modelMapper.map(leaveDocDto.getApplyForm(), ApplyForm.class)
-				,leaveDocDto.getStartDate(),leaveDocDto.getEndDate(),modelMapper.map(leaveDocDto.getLeaveApplyer(), Employee.class),modelMapper.map(leaveDocDto.getAccepter(), Employee.class)								
-				);				
+		LeaveDoc leaveDoc = leaveDocRepository.findById(leaveDocCode)
+				.orElseThrow(() -> new NullPointerException("해당 문서가 존재하지 않습니다."));
+		
+		leaveDoc.setAccepter(modelMapper.map(leaveDocDTO.getAccepter(), Employee.class));
+		leaveDoc.setSignDate(timestamp.toString());
+		leaveDoc.setDocStatus("승인");
+		
+		leaveDocRepository.save(leaveDoc);
+	}
+
+	@Transactional
+	public void registLeaveDoc(LeaveDocDTO leaveDocDTO) {
+		
+		leaveDocRepository.save(modelMapper.map(leaveDocDTO,LeaveDoc.class));		
 	}
 
 }
