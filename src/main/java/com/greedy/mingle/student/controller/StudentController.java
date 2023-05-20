@@ -1,5 +1,7 @@
 package com.greedy.mingle.student.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +39,7 @@ public class StudentController {
 	/* 1. 학번으로 학생 목록 조회 - 페이징 */
 	@GetMapping("/students")
 	public ResponseEntity<ResponseDTO> selectStudentList(@RequestParam(name = "page", defaultValue = "1") int page) {
-		
+
 		log.info("[StudentController] : selectStudentList start ==================================== ");
 		log.info("[StudentController] : page : {}", page);
 
@@ -90,18 +93,16 @@ public class StudentController {
 	/* 4. 학생 상세 조회 - stdCode로 학생 1명 조회 */
 	@GetMapping("/students/{stdCode}")
 	public ResponseEntity<ResponseDTO> selectStudentDetail(@PathVariable Long stdCode) {
-		
-		return ResponseEntity
-						.ok()
-						.body(new ResponseDTO(HttpStatus.OK, "조회 성공", studentService.selectStudent(stdCode)));
+
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", studentService.selectStudent(stdCode)));
 	}
 
 	/* 5. 학생 신규 등록 */
 	@PostMapping("/insert")
-	public ResponseEntity<ResponseDTO> insertStudent(@ModelAttribute StudentDTO studentDto){
-		
+	public ResponseEntity<ResponseDTO> insertStudent(@ModelAttribute StudentDTO studentDto) {
+
 		studentService.insertStudent(studentDto);
-		
+
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록 성공"));
 	}
 
@@ -115,22 +116,17 @@ public class StudentController {
 	}
 
 	/* 7. 학생 정보 삭제 */
-	@DeleteMapping("/delete/{stdCode}")
-	public ResponseEntity<ResponseDTO> deleteStudent(@PathVariable Long stdCode){
-		
-		studentService.deleteStudent(stdCode);
-		
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "삭제 성공"));
+	@DeleteMapping("/delete")
+	public ResponseEntity<ResponseDTO> deleteStudents(@RequestBody List<Long> stdCodes) {
+	    try {
+	        for (Long stdCode : stdCodes) {
+	            studentService.deleteStudent(stdCode);
+	        }
+	        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "삭제 성공"));
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "삭제 실패"));
+	    }
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }
