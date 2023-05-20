@@ -56,7 +56,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	   List<Employee> findByEmpNameContains(String searchKeyword);
 
 
-	   @EntityGraph(attributePaths = {"dept", "job", "empAuthList", "empAuthList.auth"})
+	
 	   Optional<Employee> findByEmpId(String empId);
 
 	
