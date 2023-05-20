@@ -25,5 +25,6 @@ public class BeanConfig {
 	    resolver.setMaxUploadSize(10485760); // 최대 업로드 크기 설정 (10MB)
 	    return resolver;
 	}
+
 	 
 }

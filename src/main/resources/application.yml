@@ -9,6 +9,14 @@ spring:
     url: jdbc:oracle:thin:@localhost:1521:xe
     username: C##MINGLE
     password: MINGLE
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: qwe030223  
+    password: qweqaz100400!
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: true 
     
 # jpa config
   jpa:
