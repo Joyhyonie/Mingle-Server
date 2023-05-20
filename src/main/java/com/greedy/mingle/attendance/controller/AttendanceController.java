@@ -1,12 +1,18 @@
 package com.greedy.mingle.attendance.controller;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -111,7 +117,7 @@ public class AttendanceController {
 	/* 근태 수정 */
 	@PutMapping("/modify")
 	public ResponseEntity<ResponseDTO> updateAttendance(@ModelAttribute AttendanceDTO attendanceDto){
-		
+
 		attendanceService.updateAttendance(attendanceDto);
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"수정 성공"));
@@ -141,7 +147,57 @@ public class AttendanceController {
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "수정 성공"));
 	}
+
+	/* 오늘의 출퇴근 기록 조회 */
+	@GetMapping("/today")
+	public ResponseEntity<ResponseDTO> selectTodayAttendance(@AuthenticationPrincipal EmployeeDTO employee) {
+		
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String todaysDate = now.format(timeFormat);
+		log.info("[AttendanceController] 현재 날짜 : {}", todaysDate);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "오늘의 출퇴근 여부 조회 성공", attendanceService.selectTodayAttendance(todaysDate, employee.getEmpCode())));
+	}
 	
+	/* 출근 시각 등록 */
+	@PostMapping("/record")
+	public ResponseEntity<ResponseDTO> recordStartTime(AttendanceDTO attendanceDTO, @AuthenticationPrincipal EmployeeDTO employee) {
+		
+		attendanceDTO.setEmployee(employee);
+		attendanceService.recordStartTime(attendanceDTO);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "출근 시각 등록 성공"));
+		
+	}
+	
+	/* 퇴근 시각 등록 */
+	@PatchMapping("/record")
+	public ResponseEntity<ResponseDTO> recordEndTime(@AuthenticationPrincipal EmployeeDTO employee) {
+		
+		LocalDateTime now = LocalDateTime.now();
+		
+		// 현재 날짜 포맷 (String)
+		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		String formattedDate = now.format(dateFormat);
+		
+		// 현재 시간 포맷 (String)
+		DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS");
+		String formattedTime = now.format(timeFormat);
+
+		log.info("[AttendanceController] 클라이언트에서 요청한 현재 시간 : {}", formattedTime);
+		log.info("[AttendanceController] 클라이언트가 요청한 날짜 : {}", formattedDate);
+		
+		attendanceService.recordEndTime(employee.getEmpCode(), formattedDate, formattedTime);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "퇴근 시각 등록 성공"));
+	}
 	
 
 }
