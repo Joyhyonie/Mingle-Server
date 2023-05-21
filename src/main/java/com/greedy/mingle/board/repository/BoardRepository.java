@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.greedy.mingle.board.entity.Board;
 
-public interface BoardRepository extends JpaRepository<Board, Long>{
+public interface BoardRepository extends JpaRepository<Board, Long> {
 	
 	/* 1. 최신 공지사항 7개 조회 */
 	List<Board> findTop7ByBoardStatusOrderByBoardWriteDateDesc(String boardStatus);
