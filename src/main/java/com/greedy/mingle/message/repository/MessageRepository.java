@@ -11,7 +11,7 @@ import com.greedy.mingle.message.entity.Message;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
-	/* 받은 쪽지함 조회 (최근 20개) */
+	/* 1. 받은 쪽지함 조회 (최근 20개) */
 	@Query(value="SELECT * " +
 				 "FROM ( SELECT * " + 
 						 "FROM TBL_MESSAGE " + 
@@ -23,10 +23,10 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 				 nativeQuery = true)
 	List<Message> findReceivedMessage(@Param("empCode")Long empCode);
 	
-	/* 받은 쪽지 클릭 시, 쪽지 읽음 표시 */
+	/* 2. 받은 쪽지 클릭 시, 쪽지 읽음 표시 */
 	// Entity에 정의한 readMessage()로 update
 	
-	/* 교직원명으로 쪽지 검색 후 조회 (받은 쪽지함) */
+	/* 3-1. 교직원명으로 쪽지 검색 후 조회 (받은 쪽지함) */
 	@Query(value="SELECT m " +
 				 "FROM Message m " +
 				 "JOIN fetch m.sender " +
@@ -37,7 +37,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 				 "AND m.sender.empName LIKE %:word%")
 	List<Message> findReceivedMessageBySender(@Param("empCode")Long empCode, @Param("word")String word);
 	
-	/* 내용으로 쪽지 검색 후 조회 (받은 쪽지함) */
+	/* 3-2. 내용으로 쪽지 검색 후 조회 (받은 쪽지함) */
 	@Query(value="SELECT m " +
 			 "FROM Message m " +
 			 "WHERE m.receiver.empCode = :empCode " +
@@ -46,7 +46,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 			 "AND m.msgContent LIKE %:word%")
 	List<Message> findReceivedMessageByContent(@Param("empCode")Long empCode, @Param("word")String word);
 
-	/* 보낸 쪽지함 조회 (최근 20개) */
+	/* 4. 보낸 쪽지함 조회 (최근 20개) */
 	@Query(value="SELECT * " +
 				 "FROM ( SELECT * " + 
 						 "FROM TBL_MESSAGE " + 
@@ -58,7 +58,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 				 nativeQuery = true)
 	List<Message> findSentMessage(@Param("empCode")Long empCode);
 
-	/* 교직원명으로 쪽지 검색 후 조회 (보낸 쪽지함) */
+	/* 4-1. 교직원명으로 쪽지 검색 후 조회 (보낸 쪽지함) */
 	@Query(value="SELECT m " +
 			 "FROM Message m " +
 			 "JOIN fetch m.receiver " +
@@ -69,7 +69,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 			 "AND m.receiver.empName LIKE %:word%")
 	List<Message> findSentMessageBySender(@Param("empCode")Long empCode, @Param("word")String word);
 
-	/* 내용으로 쪽지 검색 후 조회 (보낸 쪽지함) */
+	/* 4-2. 내용으로 쪽지 검색 후 조회 (보낸 쪽지함) */
 	@Query(value="SELECT m " +
 			 "FROM Message m " +
 			 "WHERE m.sender.empCode = :empCode " +
@@ -78,7 +78,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 			 "AND m.msgContent LIKE %:word%")
 	List<Message> findSentMessageByContent(@Param("empCode")Long empCode, @Param("word")String word);
 
-	/* 중요 쪽지함 조회 (전체) */
+	/* 5. 중요 쪽지함 조회 (전체) */
 	@Query(value="SELECT * " +
 				 "FROM TBL_MESSAGE " +
 				 "WHERE (MSG_SENDER = :empCode AND MSG_IMP_SENDER = 'Y' AND MSG_DEL_SENDER = 'N') " +
@@ -86,7 +86,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 				 nativeQuery = true)
 	List<Message> findLikedMessage(@Param("empCode")Long empCode);
 
-	/* 교직원명으로 쪽지 검색 후 조회 (중요 쪽지함) */
+	/* 5-1. 교직원명으로 쪽지 검색 후 조회 (중요 쪽지함) */
 	@Query(value="SELECT m " +
 				 "FROM Message m " +
 				 "JOIN fetch m.receiver " +
@@ -95,7 +95,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 				 "OR (m.receiver.empCode = :empCode AND m.msgImpReceiver = 'Y' AND m.msgDelReceiver = 'N' AND m.sender.empName LIKE %:word%)")
 	List<Message> findLikedMessageBySender(@Param("empCode")Long empCode, @Param("word")String word);
 
-	/* 내용으로 쪽지 검색 후 조회 (중요 쪽지함) */
+	/* 5-2. 내용으로 쪽지 검색 후 조회 (중요 쪽지함) */
 	@Query(value="SELECT m " +
 			 "FROM Message m " +
 			 "JOIN fetch m.receiver " +
@@ -105,18 +105,19 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 	List<Message> findLikedMessageByContent(Long empCode, String word);
 	
 	
-	/* 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
+	/* 6. 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
 	// save() 메소드 활용
 	
-	/* 상위 카테고리가 존재하는 소속 전체 조회 */
+	/* 7. 상위 카테고리가 존재하는 소속 전체 조회 */
 	// DepartmentRepository에서 findByRefDeptCodeIsNotNull() 쿼리메소드 사용
 	
-	/* 소속 선택 시, 해당 소속 교직원 조회 */
+	/* 8. 소속 선택 시, 해당 소속 교직원 조회 */
 	// EmployeeRepository에서 findByDepartmentDeptCode() 쿼리메소드 사용
 	
-	/* 쪽지 전송 */
+	/* 9. 쪽지 전송 */
 	// save() 메소드 활용
 	
-	/* 선택한 쪽지 삭제 */
+	/* 10. 선택한 쪽지 삭제 */
+	// save() 메소드 활용
 
 }

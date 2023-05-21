@@ -20,4 +20,6 @@ public class MessageDTO {
 	private String msgDelSender;
 	private String msgDelReceiver;
 	
+	// '12. 선택한 쪽지 삭제'를 위한 필드
+	private Long[] selectedMsgs;
 }

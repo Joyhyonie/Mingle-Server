@@ -1,6 +1,7 @@
 package com.greedy.mingle.message.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -37,7 +38,7 @@ public class MessageService {
 		this.modelMapper = modelMapper;
 	}
 
-	/* 받은 쪽지함 조회 (최근 20개) */
+	/* 1. 받은 쪽지함 조회 (최근 20개) */
 	public List<MessageDTO> selectReceivedMessage(Long empCode) {
 		
 		List<Message> messageList = messageRepository.findReceivedMessage(empCode);
@@ -49,7 +50,7 @@ public class MessageService {
 		return messageDTOList;
 	}
 
-	/* 받은 쪽지 클릭 시, 쪽지 읽음 표시 */
+	/* 2. 받은 쪽지 클릭 시, 쪽지 읽음 표시 */
 	@Transactional
 	public void readMessage(Long msgCode, Long empCode) {
 		
@@ -60,7 +61,7 @@ public class MessageService {
 		
 	}
 
-	/* 교직원명/내용으로 쪽지 검색 후 조회 (받은 쪽지함) */
+	/* 3. 교직원명/내용으로 쪽지 검색 후 조회 (받은 쪽지함) */
 	public Object searchReceivedMessage(Long empCode, String condition, String word) {
 		
 		if(condition.equals("empName")) {
@@ -86,7 +87,7 @@ public class MessageService {
 		}
 	}
 	
-	/* 보낸 쪽지함 조회 (최근 20개) */
+	/* 4. 보낸 쪽지함 조회 (최근 20개) */
 	public List<MessageDTO> selectSentMessage(Long empCode) {
 		
 		List<Message> messageList = messageRepository.findSentMessage(empCode);
@@ -98,7 +99,7 @@ public class MessageService {
 		return messageDTOList;
 	}
 
-	/* 교직원명/내용으로 쪽지 검색 후 조회 (보낸 쪽지함) */
+	/* 5. 교직원명/내용으로 쪽지 검색 후 조회 (보낸 쪽지함) */
 	public List<MessageDTO> searchSentMessage(Long empCode, String condition, String word) {
 		
 		if(condition.equals("empName")) {
@@ -124,7 +125,7 @@ public class MessageService {
 		}
 	}
 
-	/* 중요 쪽지함 조회 (전체) */
+	/* 6. 중요 쪽지함 조회 (전체) */
 	public List<MessageDTO> selectLikedMessage(Long empCode) {
 		
 		List<Message> messageList = messageRepository.findLikedMessage(empCode);
@@ -136,7 +137,7 @@ public class MessageService {
 		return messageDTOList;
 	}
 
-	/* 교직원명/내용으로 쪽지 검색 후 조회 (중요 쪽지함) */
+	/* 7. 교직원명/내용으로 쪽지 검색 후 조회 (중요 쪽지함) */
 	public List<MessageDTO> searchLikedMessage(Long empCode, String condition, String word) {
 		
 		if(condition.equals("empName")) {
@@ -163,7 +164,7 @@ public class MessageService {
 		
 	}
 
-	/* 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
+	/* 8. 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
 	@Transactional
 	public void likeToggleMessage(Long msgCode, Long empCode) {
 		
@@ -203,7 +204,7 @@ public class MessageService {
 		
 	}
 	
-	/* 상위 카테고리가 존재하는 소속 전체 조회 */
+	/* 9. 상위 카테고리가 존재하는 소속 전체 조회 */
 	public Object selectAllDepartment() {
 		
 		List<Department> departmentList = departmentRepository.findByRefDeptCodeIsNotNull();
@@ -215,7 +216,7 @@ public class MessageService {
 		return departmentDTOList;
 	}
 
-	/* 소속 선택 시, 해당 소속 교직원 조회 */
+	/* 10. 소속 선택 시, 해당 소속 교직원 조회 */
 	public List<EmployeeDTO> selectReceiverByDeptCode(Long deptCode) {
 		
 		List<Employee> employeeList = employeeRepository.findByDepartmentDeptCode(deptCode);
@@ -228,15 +229,41 @@ public class MessageService {
 		
 	}
 
-	/* 쪽지 전송 */
+	/* 11. 쪽지 전송 */
 	@Transactional
 	public void sendMessage(MessageDTO messageDTO) {
 		
 		messageRepository.save(modelMapper.map(messageDTO, Message.class));
 		
 	}
-	
-	/* 선택한 쪽지 삭제 */
-	
+
+	/* 12. 선택한 쪽지 삭제 */
+	public void removeMessage(Long[] selectedMsgs, Long empCode) {
+		
+		for (Long msgCode : selectedMsgs) {
+			
+			// 선택한 쪽지들이 존재하는지 확인
+			Message message = messageRepository.findById(msgCode)
+					.orElseThrow(() -> new IllegalArgumentException("해당 코드의 쪽지가 없습니다 🥲 msgCode : " + msgCode));
+			
+			// 현재 유저가 receiver/sender인지 판별하기 위해 현재 쪽지의 receiver/sender empCode 추출
+			Long receiverEmpCode = message.getReceiver().getEmpCode();
+			Long senderEmpCode = message.getSender().getEmpCode();
+			
+			// 해당 유저가 receiver일 경우,
+			if(receiverEmpCode.equals(empCode)) {
+				message.setMsgDelReceiver("Y");
+				messageRepository.save(message);
+				
+			// 해당 유저가 sender일 경우,
+			} else if(senderEmpCode.equals(empCode)) {
+				message.setMsgDelSender("Y");
+				messageRepository.save(message);
+			}
+			
+		} 
+			
+	}
+		
 	
 }
