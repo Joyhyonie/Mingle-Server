@@ -151,8 +151,47 @@ public class MessageService {
 		}
 		
 	}
-	
+
 	/* 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
+	@Transactional
+	public void likeToggleMessage(Long msgCode, Long empCode) {
+		
+		Message message = messageRepository.findById(msgCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 쪽지가 없습니다 🥲 msgCode : " + msgCode));
+		
+		// 현재 유저가 receiver/sender인지 판별하기 위해 현재 쪽지의 receiver/sender empCode 추출
+		Long receiverEmpCode = message.getReceiver().getEmpCode();
+		Long senderEmpCode = message.getSender().getEmpCode();
+		
+		// 해당 유저가 receiver일 경우,
+		if(receiverEmpCode.equals(empCode)) {
+			
+			String isLike = message.getMsgImpReceiver();
+			
+			if ("Y".equals(isLike.trim())) {
+				message.setMsgImpReceiver("N");
+				messageRepository.save(message);
+			} else {
+				message.setMsgImpReceiver("Y");
+				messageRepository.save(message);
+			}
+			
+		// 해당 유저가 sender일 경우,
+		} else if(senderEmpCode.equals(empCode)) {
+			
+			String isLike = message.getMsgImpSender();
+			
+			if ("Y".equals(isLike.trim())) {
+				message.setMsgImpSender("N");
+				messageRepository.save(message);
+			} else {
+				message.setMsgImpSender("Y");
+				messageRepository.save(message);
+			}
+		} 
+		
+	}
+	
 	
 	/* 소속 선택 시, 해당 소속 교직원 조회 */
 	

@@ -90,8 +90,8 @@ public class MessageController {
 	/* 교직원명/내용으로 쪽지 검색 후 조회 (중요 쪽지함) */
 	@GetMapping("/liked/search")
 	public ResponseEntity<ResponseDTO> searchLikedMessage(@AuthenticationPrincipal EmployeeDTO employee, 
-															 @RequestParam(name="condition")String condition, 
-															 @RequestParam(name="word")String word) {
+														  @RequestParam(name="condition")String condition, 
+														  @RequestParam(name="word")String word) {
 		return ResponseEntity
 				.ok()
 				.body(new ResponseDTO(HttpStatus.OK, "중요 쪽지함 검색 후 조회 성공", messageService.searchLikedMessage(employee.getEmpCode(), condition, word)));
@@ -99,6 +99,15 @@ public class MessageController {
 	}
 	
 	/* 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
+	@PatchMapping("/like/{msgCode}")
+	public ResponseEntity<ResponseDTO> likeToggleMessage(@PathVariable Long msgCode, @AuthenticationPrincipal EmployeeDTO employee) {
+		
+		messageService.likeToggleMessage(msgCode, employee.getEmpCode());
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "중요 쪽지함으로 이동/취소 성공"));
+	}
 	
 	/* 소속 선택 시, 해당 소속 교직원 조회 */
 	

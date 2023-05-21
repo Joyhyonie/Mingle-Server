@@ -105,9 +105,8 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 	List<Message> findLikedMessageByContent(Long empCode, String word);
 	
 	
-	
-	
 	/* 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
+	// save() 메소드 활용
 	
 	/* 소속 선택 시, 해당 소속 교직원 조회 */
 	
