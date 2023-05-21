@@ -8,9 +8,15 @@ import javax.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.greedy.mingle.employee.dto.EmployeeDTO;
+import com.greedy.mingle.employee.entity.Employee;
+import com.greedy.mingle.employee.repository.EmployeeRepository;
 import com.greedy.mingle.message.dto.MessageDTO;
 import com.greedy.mingle.message.entity.Message;
 import com.greedy.mingle.message.repository.MessageRepository;
+import com.greedy.mingle.subject.dto.DepartmentDTO;
+import com.greedy.mingle.subject.entity.Department;
+import com.greedy.mingle.subject.repository.DepartmentRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,10 +25,15 @@ import lombok.extern.slf4j.Slf4j;
 public class MessageService {
 
 	private final MessageRepository messageRepository;
+	private final DepartmentRepository departmentRepository;
+	private final EmployeeRepository employeeRepository;
 	private final ModelMapper modelMapper;
 	
-	public MessageService(MessageRepository messageRepository, ModelMapper modelMapper) {
+	
+	public MessageService(MessageRepository messageRepository, DepartmentRepository departmentRepository, EmployeeRepository employeeRepository, ModelMapper modelMapper) {
 		this.messageRepository = messageRepository;
+		this.departmentRepository = departmentRepository;
+		this.employeeRepository = employeeRepository;
 		this.modelMapper = modelMapper;
 	}
 
@@ -192,10 +203,38 @@ public class MessageService {
 		
 	}
 	
-	
+	/* 상위 카테고리가 존재하는 소속 전체 조회 */
+	public Object selectAllDepartment() {
+		
+		List<Department> departmentList = departmentRepository.findByRefDeptCodeIsNotNull();
+		
+		List<DepartmentDTO> departmentDTOList = departmentList.stream()
+				.map(department -> modelMapper.map(department, DepartmentDTO.class))
+				.collect(Collectors.toList());
+		
+		return departmentDTOList;
+	}
+
 	/* 소속 선택 시, 해당 소속 교직원 조회 */
-	
-	/* 받는 사람 선택 및 내용 작성 후 쪽지 전송 */
+	public List<EmployeeDTO> selectReceiverByDeptCode(Long deptCode) {
+		
+		List<Employee> employeeList = employeeRepository.findByDepartmentDeptCode(deptCode);
+		
+		List<EmployeeDTO> employeeDTOList = employeeList.stream()
+				.map(employee -> modelMapper.map(employee, EmployeeDTO.class))
+				.collect(Collectors.toList());
+		
+		return employeeDTOList;
+		
+	}
+
+	/* 쪽지 전송 */
+	@Transactional
+	public void sendMessage(MessageDTO messageDTO) {
+		
+		messageRepository.save(modelMapper.map(messageDTO, Message.class));
+		
+	}
 	
 	/* 선택한 쪽지 삭제 */
 	

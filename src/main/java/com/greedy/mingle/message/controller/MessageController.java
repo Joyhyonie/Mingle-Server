@@ -4,14 +4,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greedy.mingle.common.ResponseDTO;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
+import com.greedy.mingle.message.dto.MessageDTO;
 import com.greedy.mingle.message.service.MessageService;
 
 @RestController
@@ -109,11 +113,41 @@ public class MessageController {
 				.body(new ResponseDTO(HttpStatus.OK, "중요 쪽지함으로 이동/취소 성공"));
 	}
 	
-	/* 소속 선택 시, 해당 소속 교직원 조회 */
+	/* 상위 카테고리가 존재하는 소속 전체 조회 */
+	@GetMapping("/find/department")
+	public ResponseEntity<ResponseDTO> selectAllDepartment() {
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "현재 존재하는 소속 전체 조회 성공", messageService.selectAllDepartment()));
+		
+	}
 	
-	/* 받는 사람 선택 및 내용 작성 후 쪽지 전송 */
+	/* 소속 선택 시, 해당 소속 교직원 조회 */
+	@GetMapping("/find/employee/{deptCode}")
+	public ResponseEntity<ResponseDTO> selectReceiverByDeptCode(@PathVariable Long deptCode) {
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "소속 선택 시, 해당 소속 교직원 조회 성공", messageService.selectReceiverByDeptCode(deptCode)));
+		
+	}
+	
+	/* 쪽지 전송 */
+	@PostMapping("/send")
+	public ResponseEntity<ResponseDTO> sendMessage(@ModelAttribute MessageDTO messageDTO, @AuthenticationPrincipal EmployeeDTO sender) {
+		
+		messageDTO.setSender(sender);
+		messageService.sendMessage(messageDTO);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "쪽지 전송 성공"));
+		
+	}
 	
 	/* 선택한 쪽지 삭제 */
+
 	
 
 }

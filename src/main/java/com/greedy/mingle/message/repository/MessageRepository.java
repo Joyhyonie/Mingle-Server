@@ -108,9 +108,14 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 	/* 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
 	// save() 메소드 활용
 	
-	/* 소속 선택 시, 해당 소속 교직원 조회 */
+	/* 상위 카테고리가 존재하는 소속 전체 조회 */
+	// DepartmentRepository에서 findByRefDeptCodeIsNotNull() 쿼리메소드 사용
 	
-	/* 받는 사람 선택 및 내용 작성 후 쪽지 전송 */
+	/* 소속 선택 시, 해당 소속 교직원 조회 */
+	// EmployeeRepository에서 findByDepartmentDeptCode() 쿼리메소드 사용
+	
+	/* 쪽지 전송 */
+	// save() 메소드 활용
 	
 	/* 선택한 쪽지 삭제 */
 
