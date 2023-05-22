@@ -51,13 +51,17 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	List<Employee> findByDepartmentDeptCode(Long deptCode);
 
 	Optional<Employee> findByEmpNameAndEmpPhone(String empName, String empPhone);
+	
 	 Employee findByEmpIdAndEmpEmail(String empId, String empEmail);
 	
 	   List<Employee> findByEmpNameContains(String searchKeyword);
 
 
 	
-	   Optional<Employee> findByEmpId(String empId);
+
+	Optional<Employee> findByEmpNameAndEmpEmail(String empName, String empEmail);
+
+	Optional<Employee> findByEmpId(String empId);
 
 	
 
