@@ -40,5 +40,6 @@ public interface AttendanceRepository extends JpaRepository<Attendance,Long>{
 				 "AND EMP_ATD_DATE < TO_DATE(:date, 'YYYY-MM-DD') + 1",
 				 nativeQuery = true)
 	void updateEndTime(@Param("empCode")Long empCode, @Param("date")String formattedDate, @Param("endTime")String formattedTime);
+
 	
 }
