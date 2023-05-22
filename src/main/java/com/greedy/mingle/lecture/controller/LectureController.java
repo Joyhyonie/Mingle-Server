@@ -3,8 +3,9 @@ package com.greedy.mingle.lecture.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,18 +32,18 @@ public class LectureController {
 		
 	}
 	/*행정 직원 등록 페이지(교수, 과목 목록 조회)*/
-	@GetMapping("professorsAndLectures")
-	public ResponseEntity<ResponseDTO> getProfessorsAndLecturesInfo(Long deptCode){
+	@GetMapping("professorsAndLectures/{deptCode}")
+	public ResponseEntity<ResponseDTO> getProfessorsAndLecturesInfo(@PathVariable Long deptCode ){
 		
-		
+	
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", lectureService.getProfessorsAndLecturesInfo(deptCode)));
 
 		
 	}
 	
 	/*행정직원 등록3(입력)*/
-	@PostMapping("officerregistration")
-	public ResponseEntity<ResponseDTO> insertLecture (@ModelAttribute LectureOfficerDTO lectureOfficerDTO){
+	@PostMapping("/officerregistration")
+	public ResponseEntity<ResponseDTO> insertLecture (@RequestBody LectureOfficerDTO lectureOfficerDTO){
 		
 		
 		lectureService.insertLecture(lectureOfficerDTO);

@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.subject.entity.Subject;
 
@@ -21,6 +23,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name="TBL_LECTURE")
+@DynamicInsert
 @Getter
 @Setter
 public class Lecture {
@@ -53,7 +56,7 @@ public class Lecture {
 	private String lecBookSub; //부교재
 	
 	@Column(name="LEC_YEAR")
-	private Date lecYear;// 강의년도
+	private String lecYear;// 강의년도
 	
 	@Column(name="LEC_SEASON")
 	private Long lecSeason;// 강의 학기
