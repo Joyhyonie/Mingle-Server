@@ -2,6 +2,8 @@ package com.greedy.mingle.lecture.dto;
 
 import java.sql.Date;
 
+import com.greedy.mingle.subject.dto.SubjectDTO;
+
 import lombok.Data;
 
 @Data
@@ -21,7 +23,7 @@ public class LectureDTO {
 	private Date lecStartDate;// 강의 시작일
 	private Date LecEndDate; //강의 종료일
 	private Long lecCount; //총 수업 회차
-	private Long sbjCode; // 과목코드
+	private SubjectDTO sbjCode; // 과목코드
 	private Long lecPerFinal;// 평가기준_기말
 	private Long lecPerAtd;// 평가기준_출석
 	private Long lecperTask;//평과기준 _과제

@@ -2,12 +2,12 @@ package com.greedy.mingle.employee.service;
 
 
 
-import javax.transaction.Transactional;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.greedy.mingle.employee.dto.MailDTO;
 import com.greedy.mingle.employee.entity.Employee;
@@ -38,7 +38,7 @@ public class SendEmailService {
       MailDTO dto = new MailDTO();
       dto.setAddress(empEmail);
       dto.setTitle(empName + "님의 morethanus 임시비밀번호 안내 이메일 입니다.");
-      dto.setMessage("안녕하세요. morethanus 임시비밀번호 안내 관련 이메일 입니다." + "[" + empName + "]" + "님의 임시 비밀번호는 " + str + " 입니다.");
+      dto.setMessage("안녕하세요. Mingle 임시비밀번호 안내 관련 이메일 입니다." + "[" + empName + "]" + "님의 임시 비밀번호는 " + str + " 입니다.");
       String pwd = passwordEncoder.encode(str);
       Employee id = employeeRepository.findByEmpId(empId).orElseThrow(IllegalArgumentException::new);
       id.setEmpPwd(pwd);
@@ -68,7 +68,7 @@ public class SendEmailService {
       message.setSubject(mailDTO.getTitle());
       message.setText(mailDTO.getMessage());
 
-		/* mailSender.send(message); */
+		 mailSender.send(message); 
    }
 
 }

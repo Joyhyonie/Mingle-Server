@@ -23,6 +23,7 @@ import com.greedy.mingle.attendance.dto.AttendanceDTO;
 import com.greedy.mingle.attendance.dto.LeaveDocDTO;
 import com.greedy.mingle.attendance.service.AttendanceService;
 import com.greedy.mingle.attendance.service.LeaveDocService;
+import com.greedy.mingle.certi.dto.CertiDocDTO;
 import com.greedy.mingle.common.ResponseDTO;
 import com.greedy.mingle.common.paging.Pagenation;
 import com.greedy.mingle.common.paging.PagingButtonInfo;
@@ -159,6 +160,39 @@ public class AttendanceController {
 		leaveDocService.registLeaveDoc(leaveDocDTO);
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"등록 성공"));
+	}
+	
+	/* 내 휴가 신청 내역 조회 */
+	@GetMapping("/leave/myLeave")
+	public ResponseEntity<ResponseDTO> getMyLeave(@RequestParam(name="page",defaultValue="1") int page,
+			@AuthenticationPrincipal EmployeeDTO employee){
+		
+		Page<LeaveDocDTO> leaveDocDTO = leaveDocService.selectEmployeeLeave(page,employee.getEmpCode());
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(leaveDocDTO);
+		
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(leaveDocDTO.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"조회 성공",responseDtoWithPaging));
+	}
+	
+	/* 내 근태 내역 조회 */
+	@GetMapping("/myAttendance")
+	public ResponseEntity<ResponseDTO> getMyAttendance(@RequestParam(name="page",defaultValue="1") int page,
+			@AuthenticationPrincipal EmployeeDTO employee){
+		
+		Page<AttendanceDTO> attendanceDTO = attendanceService.getMyAttendance(page,employee.getEmpCode());
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(attendanceDTO);
+		
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(attendanceDTO.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"조회 성공",responseDtoWithPaging));
+		
 	}
 
 	/* 오늘의 출퇴근 기록 조회 */
