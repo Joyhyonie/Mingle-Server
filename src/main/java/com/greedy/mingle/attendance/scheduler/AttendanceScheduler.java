@@ -21,4 +21,5 @@ public class AttendanceScheduler {
 	public void addAttendanceRecord() {
 		attendanceService.addAttendanceRecord();
 	}
+
 }
