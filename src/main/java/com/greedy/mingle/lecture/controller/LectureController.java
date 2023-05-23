@@ -1,5 +1,8 @@
 package com.greedy.mingle.lecture.controller;
 
+
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,12 +10,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greedy.mingle.common.ResponseDTO;
+import com.greedy.mingle.common.paging.Pagenation;
+import com.greedy.mingle.common.paging.PagingButtonInfo;
+import com.greedy.mingle.common.paging.ResponseDTOWithPaging;
 import com.greedy.mingle.lecture.dto.LectureOfficerDTO;
 import com.greedy.mingle.lecture.service.LectureService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/lecture")
 public class LectureController {
@@ -31,7 +41,7 @@ public class LectureController {
 
 		
 	}
-	/*행정 직원 등록 페이지(교수, 과목 목록 조회)*/
+	/*행정 직원의 강의 등록을 위한 데이터 조회(교수, 과목 목록 조회)*/
 	@GetMapping("professorsAndLectures/{deptCode}")
 	public ResponseEntity<ResponseDTO> getProfessorsAndLecturesInfo(@PathVariable Long deptCode ){
 		
@@ -41,7 +51,7 @@ public class LectureController {
 		
 	}
 	
-	/*행정직원 등록3(입력)*/
+	/*행정직원의 강의등록(입력)*/
 	@PostMapping("/officerregistration")
 	public ResponseEntity<ResponseDTO> insertLecture (@RequestBody LectureOfficerDTO lectureOfficerDTO){
 		
@@ -52,6 +62,49 @@ public class LectureController {
 		
 	}
 	
-	
+	/*행정직원의 강의개설 리스트(게시판 리스트) */
+	@GetMapping("adminLectureList")
+	public ResponseEntity<ResponseDTO>getAdminLectureList(@RequestParam(name = "page", defaultValue = "1") int page){
+		
+		log.info("[LectureController] : selectLectureList start ==================================== ");
+		log.info("[LectureController] : page : {}", page);
+		
+		Page<LectureOfficerDTO> lectureDtoList = lectureService.lectureList(page);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(lectureDtoList);
+		log.info("[LectureController] : pageInfo : {}", pageInfo);
+		
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(lectureDtoList.getContent());
 
+		log.info("[LectureController] : selectEmployeeList end ==================================== ");
+		
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	}
+	
+//	/*행정직원의 강의개설 리스트(게시판 리스트)2 */
+//	@GetMapping("adminLectureList")
+//	public ResponseEntity<ResponseDTO>getAdminLectureList2(@RequestParam(name = "page", defaultValue = "1") int page){
+//		
+//		log.info("[LectureController] : selectLectureList start ==================================== ");
+//		log.info("[LectureController] : page : {}", page);
+//		
+//		Page<LectureOfficerDTO> lectureDtoList = lectureService.lectureList2(page);
+//		
+//		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(lectureDtoList);
+//		log.info("[LectureController] : pageInfo : {}", pageInfo);
+//		
+//		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+//		responseDtoWithPaging.setPageInfo(pageInfo);
+//		responseDtoWithPaging.setData(lectureDtoList.getContent());
+//
+//		log.info("[LectureController] : selectEmployeeList end ==================================== ");
+//		
+//		
+//		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+//	
+//	
+//	}
 }
