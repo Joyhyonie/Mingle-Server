@@ -1,5 +1,7 @@
 package com.greedy.mingle.employee.controller;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 
@@ -103,6 +105,34 @@ public class AuthService {
 	      }
 
 	   }
-	   
 
+	   public void updateEmployee(EmployeeDTO existingEmployee) {
+		    try {
+		        Employee employee = employeeRepository.findByEmpId(existingEmployee.getEmpId())
+		                .orElseThrow(() -> new UserNotFoundException("해당 아이디와 일치하는 사용자가 없습니다."));
+
+		        employee.setEmpPwd(existingEmployee.getEmpPwd());
+
+		        employeeRepository.save(employee);
+
+		        System.out.println("직원 정보가 업데이트되었습니다.");
+		    } catch (Exception e) {
+		        System.out.println("직원 정보 업데이트 중 오류가 발생했습니다: " + e.getMessage());
+		    }
+		}
+	public EmployeeDTO findByEmpId(String empId) {
+		
+		Optional<Employee> employeeOptional = employeeRepository.findByEmpId(empId);
+		    if (employeeOptional.isPresent()) {
+		        Employee employee = employeeOptional.get();
+		        return modelMapper.map(employee, EmployeeDTO.class);
+		    } else {
+		        return null;
+		    }
+		
+	}
+
+
+	
+	   
 }

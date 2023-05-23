@@ -159,10 +159,17 @@ public class EmployeeController {
 	}
 
 	/* 마이페이지 수정 */
-	@PatchMapping(value = "/putmypage")
-	public ResponseEntity<ResponseDTO> updateEmp(@RequestParam("myPageImage") MultipartFile myPageImage, @AuthenticationPrincipal EmployeeDTO employeeDTO) {
-	    employeeDTO.setMyPageImage(myPageImage);
-		  log.info("[확인용] {}", employeeDTO);
+	@PatchMapping("/putmypage")
+	public ResponseEntity<ResponseDTO> updateEmp(
+	        @RequestParam(value = "myPageImage", required = false) MultipartFile myPageImage,
+	        @ModelAttribute EmployeeDTO employeeDTO,
+	        @AuthenticationPrincipal EmployeeDTO loggedInEmployee) {
+	  
+		employeeDTO.setMyPageImage(myPageImage);
+		employeeDTO.setEmpCode(loggedInEmployee.getEmpCode()); // 로그인한 사용자의 코드를 설정
+	    employeeDTO.setEmpId(loggedInEmployee.getEmpId()); // 로그인한 사용자의 아이디를 설정
+		
+		log.info("[확인용] {}", employeeDTO);
 	    employeeService.updateEmp(employeeDTO);
 	
 	    
