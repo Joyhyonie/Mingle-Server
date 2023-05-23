@@ -24,7 +24,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	Page<Employee> findByDepartment(Pageable pageable, Department findDepartment);
 	
 	/* 3. 교직원 목록 조회 - 교직원명 검색 기준, 페이징 */
-	Page<Employee> findByEmpName(Pageable pageable, String empName);
+	Page<Employee> findByEmpName(Pageable pageable, String name);
+	
+	Page<Employee> findByDepartmentDeptName(Pageable pageable, String name);
 
 	/* 4. 교직원 상세 조회 - empCode로 교직원 1명 조회 */
 	@Query("SELECT e " +
@@ -51,13 +53,19 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	List<Employee> findByDepartmentDeptCode(Long deptCode);
 
 	Optional<Employee> findByEmpNameAndEmpPhone(String empName, String empPhone);
+	
 	 Employee findByEmpIdAndEmpEmail(String empId, String empEmail);
 	
 	   List<Employee> findByEmpNameContains(String searchKeyword);
 
 
 	
-	   Optional<Employee> findByEmpId(String empId);
+
+	Optional<Employee> findByEmpNameAndEmpEmail(String empName, String empEmail);
+
+	Optional<Employee> findByEmpId(String empId);
+
+	
 
 	
 

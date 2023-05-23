@@ -83,7 +83,7 @@ public class AuthService {
 	   /* 아이디 찾기 */
 	   public EmployeeDTO idSearch(EmployeeDTO employeeDTO) {
 	      
-	      Employee employee = employeeRepository.findByEmpNameAndEmpPhone(employeeDTO.getEmpName(), employeeDTO.getEmpPhone())
+	      Employee employee = employeeRepository.findByEmpNameAndEmpEmail(employeeDTO.getEmpName(), employeeDTO.getEmpEmail())
 	            .orElseThrow(() -> new IdsearchFailedException("입력하신 정보와 일치하는 아이디가 존재하지 않습니다."));
 	      
 	            

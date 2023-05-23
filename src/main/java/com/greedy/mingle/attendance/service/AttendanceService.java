@@ -1,8 +1,6 @@
 package com.greedy.mingle.attendance.service;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,13 +13,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import com.greedy.mingle.attendance.controller.AttendanceController;
 import com.greedy.mingle.attendance.dto.AttendanceDTO;
 import com.greedy.mingle.attendance.entity.Attendance;
+import com.greedy.mingle.attendance.entity.LeaveDoc;
 import com.greedy.mingle.attendance.repository.AttendanceRepository;
+import com.greedy.mingle.attendance.repository.LeaveDocRepository;
 import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.employee.repository.EmployeeRepository;
-import com.greedy.mingle.schedule.entity.Schedule;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,10 +29,12 @@ public class AttendanceService {
 	
 	private final AttendanceRepository attendanceRepository;
 	private final EmployeeRepository employeeRepository;
+	private final LeaveDocRepository leaveDocRepository;
 	private final ModelMapper modelMapper;
 	
-	public AttendanceService(AttendanceRepository attendanceRepository,ModelMapper modelMapper,EmployeeRepository employeeRepository) {
+	public AttendanceService(AttendanceRepository attendanceRepository,ModelMapper modelMapper,EmployeeRepository employeeRepository,LeaveDocRepository leaveDocRepository) {
 		this.attendanceRepository = attendanceRepository;
+		this.leaveDocRepository = leaveDocRepository;
 		this.employeeRepository = employeeRepository;
 		this.modelMapper = modelMapper;
 	}
@@ -63,20 +63,19 @@ public class AttendanceService {
 	/* 12시가 되면 자동으로 행 추가 */
 	@Transactional
 	public void addAttendanceRecord() {
-	    System.out.println("살려줘");
 
-	    LocalDateTime now = LocalDateTime.now();
-	    List<Employee> employeeList = employeeRepository.findAll();
-	    for(Employee employee : employeeList) {
-	        Attendance attendance = attendanceRepository.findByEmployeeAndAtdDate(employee, now.toLocalDate().toString());
-	        if (attendance == null) {
-	            attendance = new Attendance();
-	            attendance.setAtdDate(now.toLocalDate().toString());
-	            java.sql.Date timestamp = java.sql.Date.valueOf(now.toLocalDate());
-	            attendance.setAtdStartTime(timestamp.toString());
-	            attendance.setAtdStatus("결근");
-	            attendance.setEmployee(employee);
-	            attendanceRepository.save(attendance);
+	    LocalDateTime now = LocalDateTime.now();	    	        
+	        List<LeaveDoc> leaveDocList = leaveDocRepository.findAll();
+	        	 for(LeaveDoc leaveDoc : leaveDocList) {
+	        		 if (leaveDoc.getDocStatus().equals("승인") && leaveDoc.getStartDate().split(" ")[0].equals(now.toString().split("T")[0])) {
+	        			Attendance attendance = new Attendance();
+			            attendance.setAtdDate(now.toLocalDate().toString());
+			            java.sql.Date timestamp = java.sql.Date.valueOf(now.toLocalDate());
+			            attendance.setAtdStartTime(timestamp.toString());
+			            attendance.setAtdStatus("연차");
+			            attendance.setEmployee(leaveDoc.getLeaveApplyer());
+			            attendanceRepository.save(attendance);
+	        	
 	        }
 	    }
 	}
@@ -107,6 +106,29 @@ public class AttendanceService {
 		
 		attendanceRepository.updateEndTime(empCode, formattedDate, formattedTime);
 		
+	}
+	
+	/* 나의 근태 내역 조회 */
+	public Page<AttendanceDTO> getMyAttendance(int page, Long empCode) {
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("atdCode").descending());
+		Page<Attendance> attendanceList = attendanceRepository.findByEmployeeEmpCode(pageable,empCode);
+		Page<AttendanceDTO> attendanceDtoList = attendanceList.map(leave -> modelMapper.map(leave, AttendanceDTO.class));
+
+		return attendanceDtoList;
+	}
+
+	/* 근태 수정 */
+	@Transactional
+	public void updateAttendance(Long atdCode, AttendanceDTO attendanceDTO) {
+
+		Attendance attendance = attendanceRepository.findById(atdCode)
+				.orElseThrow(()-> new IllegalArgumentException("근태 코드가 없습니다."));
+		
+		attendance.setAtdStatus(attendanceDTO.getAtdStatus());
+		attendance.setAtdEtc(attendanceDTO.getAtdEtc());
+		
+		attendanceRepository.save(attendance);
 	}
 
 }

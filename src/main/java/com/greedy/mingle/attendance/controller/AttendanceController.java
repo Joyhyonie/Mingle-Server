@@ -1,9 +1,7 @@
 package com.greedy.mingle.attendance.controller;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -83,23 +81,44 @@ public class AttendanceController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
 	
-	
-	/* 교직원의 이름으로 검색 */
+	/* 학과 및 소속명으로 검색 */
 	@GetMapping("/search")
-	public ResponseEntity<ResponseDTO> selectEmployeeListByEmpName(
-			@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String empName) {
+	public ResponseEntity<ResponseDTO> selectEmployeeListSearchName(
+			@RequestParam(name="page", defaultValue="1") int page,	
+			@RequestParam(name="condition")String condition,
+			@RequestParam(name="search") String name){
 		
-		Page<EmployeeDTO> employeeDtoList = employeeService.selectEmployeeListByEmpName(page, empName);
-		System.out.println(employeeDtoList);
-		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
+		Page<EmployeeDTO> employeeDTOList = employeeService.selectEmployeeListByDeptName(page, condition, name);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDTOList);
 
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
-		responseDtoWithPaging.setData(employeeDtoList.getContent());
-
+		responseDtoWithPaging.setData(employeeDTOList.getContent());
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
-		
 	}
+	
+	
+	/* 교직원의 이름으로 검색 */
+	/*
+	 * @GetMapping("/search") public ResponseEntity<ResponseDTO>
+	 * selectEmployeeListByEmpName(
+	 * 
+	 * @RequestParam(name="page", defaultValue="1") int
+	 * page, @RequestParam(name="search") String empName) {
+	 * 
+	 * Page<EmployeeDTO> employeeDtoList =
+	 * employeeService.selectEmployeeListByEmpName(page, empName); PagingButtonInfo
+	 * pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
+	 * 
+	 * ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+	 * responseDtoWithPaging.setPageInfo(pageInfo);
+	 * responseDtoWithPaging.setData(employeeDtoList.getContent());
+	 * 
+	 * return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",
+	 * responseDtoWithPaging));
+	 * 
+	 * }
+	 */
 	
 	/* 상세조회 */
 	@GetMapping("/list-management/{empCode}")
@@ -115,14 +134,7 @@ public class AttendanceController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"조회성공",responseDtoWithPaging));
 	}
 	
-	/* 근태 수정 */
-	@PutMapping("/modify")
-	public ResponseEntity<ResponseDTO> updateAttendance(@ModelAttribute AttendanceDTO attendanceDto){
-
-		attendanceService.updateAttendance(attendanceDto);
-		
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"수정 성공"));
-	}
+	
 	
 	/* 휴가 신청 조회 */
 	@GetMapping("/leave/list")
@@ -159,6 +171,57 @@ public class AttendanceController {
 		leaveDocService.registLeaveDoc(leaveDocDTO);
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"등록 성공"));
+	}
+	
+	/* 내 휴가 신청 내역 조회 */
+	@GetMapping("/leave/myLeave")
+	public ResponseEntity<ResponseDTO> getMyLeave(@RequestParam(name="page",defaultValue="1") int page,
+			@AuthenticationPrincipal EmployeeDTO employee){
+		
+		Page<LeaveDocDTO> leaveDocDTO = leaveDocService.selectEmployeeLeave(page,employee.getEmpCode());
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(leaveDocDTO);
+		
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(leaveDocDTO.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"조회 성공",responseDtoWithPaging));
+	}
+	
+	/* 내 근태 내역 조회 */
+	@GetMapping("/myAttendance")
+	public ResponseEntity<ResponseDTO> getMyAttendance(@RequestParam(name="page",defaultValue="1") int page,
+			@AuthenticationPrincipal EmployeeDTO employee){
+		
+		Page<AttendanceDTO> attendanceDTO = attendanceService.getMyAttendance(page,employee.getEmpCode());
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(attendanceDTO);
+		
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(attendanceDTO.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"조회 성공",responseDtoWithPaging));
+		
+	}
+	
+	/* 근태 수정 */
+	@PutMapping("/modify")
+	public ResponseEntity<ResponseDTO> updateAttendance(@ModelAttribute AttendanceDTO attendanceDto){
+
+		attendanceService.updateAttendance(attendanceDto);
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK,"수정 성공"));
+	}
+	
+	/* 근태 수정 */
+	@PatchMapping("/updateAdmin/{atdCode}")
+	public ResponseEntity<ResponseDTO> updateAttendance(@PathVariable Long atdCode,@ModelAttribute AttendanceDTO attendanceDTO){
+		
+		attendanceService.updateAttendance(atdCode, attendanceDTO);
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "수정 성공"));
 	}
 
 	/* 오늘의 출퇴근 기록 조회 */

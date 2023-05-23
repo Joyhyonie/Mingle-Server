@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.dto.TokenDTO;
-import com.greedy.mingle.employee.entity.EmployeeRole;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

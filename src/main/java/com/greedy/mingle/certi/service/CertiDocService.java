@@ -16,6 +16,8 @@ import com.greedy.mingle.certi.entity.CertiDoc;
 import com.greedy.mingle.certi.repository.CertiDocRepository;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.entity.Employee;
+import com.greedy.mingle.subject.dto.SubjectDTO;
+import com.greedy.mingle.subject.entity.Subject;
 
 @Service
 public class CertiDocService {
@@ -78,6 +80,21 @@ public class CertiDocService {
 	public void registCertiDoc(CertiDocDTO certiDocDTO) {
 		
 		certiDocRepository.save(modelMapper.map(certiDocDTO, CertiDoc.class));
+	}
+
+	public Page<CertiDocDTO> selectCertiDocSearchName(int page, String condition, String name) {
+		
+		if(condition.equals("empName")) {
+			Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("certiDocCode").descending());
+			Page<CertiDoc> certiDocList = certiDocRepository.findByApplyerEmpName(pageable, name);		
+			Page<CertiDocDTO> certiDocDtoDeptList = certiDocList.map(certiDoc -> modelMapper.map(certiDoc, CertiDocDTO.class));
+			return certiDocDtoDeptList;
+			} else {
+				Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("certiDocCode").descending());
+				Page<CertiDoc> certiDocList = certiDocRepository.findByCertiFormCertiFormName(pageable, name);
+				Page<CertiDocDTO> certiDocDTOList = certiDocList.map(certiDoc -> modelMapper.map(certiDoc, CertiDocDTO.class));
+				return certiDocDTOList;
+			}
 	}
 
 	
