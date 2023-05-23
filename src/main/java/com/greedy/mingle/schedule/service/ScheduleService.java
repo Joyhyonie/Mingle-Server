@@ -131,6 +131,14 @@ public class ScheduleService {
 		
 		return scheduleDTOList;
 	}
+	
+	/* 9. 학사 일정 등록 */
+	@Transactional
+	public void registAcSchedule(ScheduleDTO scheduleDTO) {
+		
+		scheduleRepository.save(modelMapper.map(scheduleDTO, Schedule.class));
+		
+	}
 
 	
 

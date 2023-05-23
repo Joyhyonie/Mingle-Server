@@ -81,6 +81,10 @@ public class EmployeeController {
 
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
+	
+	/* 2-1. selectbox - 교수만 조회 */
+	
+	/* 2-2. selectbox - 교직원만 조회 */
 
 	/* 3. 교직원 목록 조회 - 교직원명 검색 기준, 페이징 */
 	@GetMapping("/employees/search")
