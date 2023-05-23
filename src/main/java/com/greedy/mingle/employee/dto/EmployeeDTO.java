@@ -102,8 +102,15 @@ public class EmployeeDTO implements UserDetails{
 		return true;
 	}
 
-	
+	public String getNewPassword() {
+		
+		return empPwd;
+	}
 
+	
+	public void setNewPassword(String newPassword) {
+	    this.empPwd = newPassword;
+	}
 
 
 	
