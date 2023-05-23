@@ -118,4 +118,17 @@ public class AttendanceService {
 		return attendanceDtoList;
 	}
 
+	/* 근태 수정 */
+	@Transactional
+	public void updateAttendance(Long atdCode, AttendanceDTO attendanceDTO) {
+
+		Attendance attendance = attendanceRepository.findById(atdCode)
+				.orElseThrow(()-> new IllegalArgumentException("근태 코드가 없습니다."));
+		
+		attendance.setAtdStatus(attendanceDTO.getAtdStatus());
+		attendance.setAtdEtc(attendanceDTO.getAtdEtc());
+		
+		attendanceRepository.save(attendance);
+	}
+
 }

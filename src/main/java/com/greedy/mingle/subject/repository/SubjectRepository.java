@@ -17,4 +17,6 @@ public interface SubjectRepository extends JpaRepository<Subject, Long>{
 
 	List<Subject> findByDepartmentDeptCode(Long deptCode);
 
+	Page<Subject> findByDepartmentDeptName(Pageable pageable, String name);
+
 }

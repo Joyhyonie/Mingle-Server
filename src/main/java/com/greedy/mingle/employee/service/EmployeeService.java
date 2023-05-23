@@ -85,8 +85,24 @@ public class EmployeeService {
 		
 		return employeeDtoList;
 	}
+	
+	/* 3. 교직원 목록 조회 - 소속 기준, 페이징 */
+	public Page<EmployeeDTO> selectEmployeeListByDeptName(int page, String condition, String name) {
+		
+		if(condition.equals("deptName")) {
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
+		Page<Employee> employeeList = employeeRepository.findByDepartmentDeptName(pageable, name);		
+		Page<EmployeeDTO> employeeDtoDeptList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
+		return employeeDtoDeptList;
+		} else {
+			Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
+			Page<Employee> employeeList = employeeRepository.findByEmpName(pageable, name);
+			Page<EmployeeDTO> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
+			return employeeDtoList;
+		}
+	}
 
-	/* 3. 교직원 목록 조회 - 교직원명 검색 기준, 페이징 */
+	/* 4. 교직원 목록 조회 - 교직원명 검색 기준, 페이징 */
 	public Page<EmployeeDTO> selectEmployeeListByEmpName(int page, String empName) {
 
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
@@ -100,7 +116,7 @@ public class EmployeeService {
 		return employeeDtoList;
 	}
 
-	/* 4. 교직원 상세 조회 - empCode로 교직원 1명 조회 */
+	/* 5. 교직원 상세 조회 - empCode로 교직원 1명 조회 */
 
 	public EmployeeDTO selectEmployee(Long empCode) {
 
@@ -113,7 +129,7 @@ public class EmployeeService {
 		return employeeDto;
 	}
 
-	/* 5. 교직원 신규 등록 */
+	/* 6. 교직원 신규 등록 */
 	@Transactional
 	public void insertEmployee(EmployeeDTO employeeDto) {
 
@@ -121,7 +137,7 @@ public class EmployeeService {
 
 	}
 
-	/* 6. 교직원 정보 수정 */
+	/* 7. 교직원 정보 수정 */
 	@Transactional
 	public void updateEmployee(EmployeeDTO employeeDto) {
 
@@ -136,7 +152,7 @@ public class EmployeeService {
 	}
 
 	/*
-	 * 7. 교직원 정보 삭제
+	 * 8. 교직원 정보 삭제
 	 * 
 	 * @Transactional public void deleteEmployee(Long empCode) {
 	 * 
@@ -162,11 +178,11 @@ public class EmployeeService {
 	}
 	
 
-	/* 8. 조직도 교직원 조회 - 스크롤 */
+	/* 9. 조직도 교직원 조회 - 스크롤 */
 
-	/* 9. 조직도 교직원 조회 - 소속 기준 */
+	/* 10. 조직도 교직원 조회 - 소속 기준 */
 
-	/* 10. 조직도 교직원 조회 - 교직원명 검색 기준 */
+	/* 11. 조직도 교직원 조회 - 교직원명 검색 기준 */
 
 	/* 마이페이지 이미지 변경 */
 	@Transactional
@@ -210,9 +226,6 @@ public class EmployeeService {
 		log.info("[ProductService] insertProduct end ============================== ");
 		log.info("[ProductService] insertProduct end ============================== ");
 	}
-
-
-
 	
 
 }

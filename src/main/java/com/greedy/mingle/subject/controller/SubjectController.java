@@ -20,6 +20,7 @@ import com.greedy.mingle.common.ResponseDTO;
 import com.greedy.mingle.common.paging.Pagenation;
 import com.greedy.mingle.common.paging.PagingButtonInfo;
 import com.greedy.mingle.common.paging.ResponseDTOWithPaging;
+import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.subject.dto.SubjectDTO;
 import com.greedy.mingle.subject.service.SubjectService;
 
@@ -71,19 +72,17 @@ public class SubjectController {
 	}
 	
 	@GetMapping("/search")
-	public ResponseEntity<ResponseDTO> selectSubjectListBySubjectName(
-	@RequestParam(name="page", defaultValue="1") int page, @RequestParam(name="search") String sbjName){
+	public ResponseEntity<ResponseDTO> selectSubjectListBySearchName(
+			@RequestParam(name="page", defaultValue="1") int page,	
+			@RequestParam(name="condition")String condition,
+			@RequestParam(name="search") String name){
 		
-		Page<SubjectDTO> subjectDtoList = subjectService.selectSubjectListBySubjectName(page,sbjName);
-		
-		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(subjectDtoList);
-		
+		Page<SubjectDTO> employeeDTOList = subjectService.selectEmployeeListByDeptName(page, condition, name);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDTOList);
+
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
-		responseDtoWithPaging.setData(subjectDtoList.getContent());
-		
-		log.info("[SubjectController : responseDtoWithPaging : {}",responseDtoWithPaging);
-		
+		responseDtoWithPaging.setData(employeeDTOList.getContent());
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
 	
