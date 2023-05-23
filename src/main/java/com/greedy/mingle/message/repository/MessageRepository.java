@@ -94,7 +94,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 				 "JOIN fetch m.sender " + 
 				 "WHERE (m.sender.empCode = :empCode AND m.msgImpSender = 'Y' AND m.msgDelSender = 'N' AND m.receiver.empName LIKE %:word%) " +
 				 "OR (m.receiver.empCode = :empCode AND m.msgImpReceiver = 'Y' AND m.msgDelReceiver = 'N' AND m.sender.empName LIKE %:word%) " +
-				 "ORDER BY msgSendDate DESC")
+				 "ORDER BY m.msgSendDate DESC")
 	List<Message> findLikedMessageBySender(@Param("empCode")Long empCode, @Param("word")String word);
 
 	/* 5-2. 내용으로 쪽지 검색 후 조회 (중요 쪽지함) */
@@ -104,7 +104,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 			 "JOIN fetch m.sender " + 
 			 "WHERE (m.sender.empCode = :empCode AND m.msgImpSender = 'Y' AND m.msgDelSender = 'N' AND m.msgContent LIKE %:word%) " +
 			 "OR (m.receiver.empCode = :empCode AND m.msgImpReceiver = 'Y' AND m.msgDelReceiver = 'N' AND m.msgContent LIKE %:word%) " +
-			 "ORDER BY msgSendDate DESC")
+			 "ORDER BY m.msgSendDate DESC")
 	List<Message> findLikedMessageByContent(Long empCode, String word);
 	
 	

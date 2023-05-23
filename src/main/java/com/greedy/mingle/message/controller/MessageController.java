@@ -18,6 +18,9 @@ import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.message.dto.MessageDTO;
 import com.greedy.mingle.message.service.MessageService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/message")
 public class MessageController {
