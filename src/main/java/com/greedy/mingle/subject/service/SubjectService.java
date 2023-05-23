@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.greedy.mingle.employee.dto.EmployeeDTO;
+import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.subject.dto.SubjectDTO;
 import com.greedy.mingle.subject.dto.SubjectNameDTO;
 import com.greedy.mingle.subject.entity.Department;
@@ -91,6 +93,20 @@ public class SubjectService {
 	public void deleteSubject(Long sbjCode) {
 
 		subjectRepository.deleteById(sbjCode);
+	}
+
+	public Page<SubjectDTO> selectEmployeeListByDeptName(int page, String condition, String name) {
+		if(condition.equals("deptName")) {
+			Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("sbjCode").descending());
+			Page<Subject> subjectList = subjectRepository.findByDepartmentDeptName(pageable, name);		
+			Page<SubjectDTO> subjectDtoDeptList = subjectList.map(subject -> modelMapper.map(subject, SubjectDTO.class));
+			return subjectDtoDeptList;
+			} else {
+				Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("sbjCode").descending());
+				Page<Subject> subjectList = subjectRepository.findBySbjName(pageable, name);
+				Page<SubjectDTO> subjectDtoList = subjectList.map(subject -> modelMapper.map(subject, SubjectDTO.class));
+				return subjectDtoList;
+			}
 	}
 
 	

@@ -47,6 +47,21 @@ public class CertiDocController {
 		
 	}
 	
+	@GetMapping("/search")
+	public ResponseEntity<ResponseDTO> selectCertiDocSearchName(
+			@RequestParam(name="page", defaultValue="1") int page,	
+			@RequestParam(name="condition")String condition,
+			@RequestParam(name="search") String name){
+		
+		Page<CertiDocDTO> certiDocDTOList = certiDocService.selectCertiDocSearchName(page, condition, name);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(certiDocDTOList);
+
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(certiDocDTOList.getContent());
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	}
+	
 	@PatchMapping("/update/{certiDocCOde}")
 	public ResponseEntity<ResponseDTO> updateCertiDoc(@PathVariable Long certiDocCOde,@RequestBody CertiDocDTO certiDocDto,@AuthenticationPrincipal EmployeeDTO employee){
 		
