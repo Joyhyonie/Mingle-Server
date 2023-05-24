@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.greedy.mingle.attendance.dto.LeaveDocDTO;
 import com.greedy.mingle.certi.dto.CertiDocDTO;
 import com.greedy.mingle.certi.service.CertiDocService;
 import com.greedy.mingle.common.ResponseDTO;
@@ -54,6 +55,22 @@ public class CertiDocController {
 			@RequestParam(name="search") String name){
 		
 		Page<CertiDocDTO> certiDocDTOList = certiDocService.selectCertiDocSearchName(page, condition, name);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(certiDocDTOList);
+
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(certiDocDTOList.getContent());
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	}
+	
+	@GetMapping("/myCertiDocSearch")
+	public ResponseEntity<ResponseDTO> selectMyCertiDocSearchName(
+			@RequestParam(name="page", defaultValue="1") int page,	
+			@RequestParam(name="condition")String condition,
+			@RequestParam(name="search") String name,
+			@AuthenticationPrincipal EmployeeDTO employee){
+		
+		Page<CertiDocDTO> certiDocDTOList = certiDocService.selectMyCertiDocSearchName(page, condition, name,employee.getEmpCode());
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(certiDocDTOList);
 
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();

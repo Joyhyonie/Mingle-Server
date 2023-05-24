@@ -21,6 +21,7 @@ import com.greedy.mingle.attendance.dto.AttendanceDTO;
 import com.greedy.mingle.attendance.dto.LeaveDocDTO;
 import com.greedy.mingle.attendance.service.AttendanceService;
 import com.greedy.mingle.attendance.service.LeaveDocService;
+import com.greedy.mingle.certi.dto.CertiDocDTO;
 import com.greedy.mingle.common.ResponseDTO;
 import com.greedy.mingle.common.paging.Pagenation;
 import com.greedy.mingle.common.paging.PagingButtonInfo;
@@ -97,6 +98,38 @@ public class AttendanceController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
 	
+	/* 휴가신청서종류 및 신청자 이름으로 검색 */
+	@GetMapping("/leaveDocSearch")
+	public ResponseEntity<ResponseDTO> selectLeaveDocSearchName(
+			@RequestParam(name="page", defaultValue="1") int page,	
+			@RequestParam(name="condition")String condition,
+			@RequestParam(name="search") String name){
+		
+		Page<LeaveDocDTO> LeaveDocDTOList = leaveDocService.selectLeaveDocSearchName(page, condition, name);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(LeaveDocDTOList);
+
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(LeaveDocDTOList.getContent());
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	}
+	
+	/* 나의 휴가신청내역종류 이름으로 검색 */
+	@GetMapping("/myLeaveDocSearch")
+	public ResponseEntity<ResponseDTO> selectMyLeaveDocSearchName(
+			@RequestParam(name="page", defaultValue="1") int page,	
+			@RequestParam(name="condition")String condition,
+			@RequestParam(name="search") String name,
+			@AuthenticationPrincipal EmployeeDTO employee){
+		
+		Page<LeaveDocDTO> LeaveDocDTOList = leaveDocService.selectMyLeaveDocSearchName(page, condition, name,employee.getEmpCode());
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(LeaveDocDTOList);
+
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(LeaveDocDTOList.getContent());
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	}
 	
 	/* 교직원의 이름으로 검색 */
 	/*
@@ -152,12 +185,22 @@ public class AttendanceController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",responseDtoWithPaging));
 	}
 	
-	/* 휴가 신청 내여 조회 후 상태 변경 */
+	/* 휴가 신청 내여 조회 후 승인 */
 	@PatchMapping("/update/{leaveDocCode}")
 	public ResponseEntity<ResponseDTO> updateLeave(@PathVariable Long leaveDocCode,@RequestBody LeaveDocDTO leaveDocDTO,@AuthenticationPrincipal EmployeeDTO employee){
 		
 		leaveDocDTO.setAccepter(employee);
 		leaveDocService.updateLeaveDoc(leaveDocCode, leaveDocDTO);
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "수정 성공"));
+	}
+	
+	/* 휴가 신청 내역 조회 후 반려 */
+	@PatchMapping("/noUpdate/{leaveDocCode}")
+	public ResponseEntity<ResponseDTO> noUpdateLeave(@PathVariable Long leaveDocCode,@RequestBody LeaveDocDTO leaveDocDTO,@AuthenticationPrincipal EmployeeDTO employee){
+		
+		leaveDocDTO.setAccepter(employee);
+		leaveDocService.updateLeaveDocX(leaveDocCode, leaveDocDTO);
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "수정 성공"));
 	}

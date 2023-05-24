@@ -58,6 +58,21 @@ public class LeaveDocService {
 		
 		leaveDocRepository.save(leaveDoc);
 	}
+	
+	@Transactional
+	public void updateLeaveDocX(Long leaveDocCode, LeaveDocDTO leaveDocDTO) {
+				
+		java.time.LocalDateTime localDateTime = java.time.LocalDateTime.now();
+		java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(localDateTime);
+		LeaveDoc leaveDoc = leaveDocRepository.findById(leaveDocCode)
+				.orElseThrow(() -> new NullPointerException("해당 문서가 존재하지 않습니다."));				
+		
+		leaveDoc.setAccepter(modelMapper.map(leaveDocDTO.getAccepter(), Employee.class));
+		leaveDoc.setSignDate(timestamp.toString());
+		leaveDoc.setDocStatus("반려");
+		
+		leaveDocRepository.save(leaveDoc);
+	}
 
 	@Transactional
 	public void registLeaveDoc(LeaveDocDTO leaveDocDTO) {
@@ -72,6 +87,30 @@ public class LeaveDocService {
 		Page<LeaveDocDTO> leaveDtoList = leaveList.map(leave -> modelMapper.map(leave, LeaveDocDTO.class));
 
 		return leaveDtoList;
+	}
+
+	public Page<LeaveDocDTO> selectLeaveDocSearchName(int page, String condition, String name) {
+
+		if(condition.equals("empName")) {
+			Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("leaveDocCode").descending());
+			Page<LeaveDoc> leaveDocList = leaveDocRepository.findByLeaveApplyerEmpName(pageable, name);		
+			Page<LeaveDocDTO> leaveDocDtoFromNameList = leaveDocList.map(leaveDoc -> modelMapper.map(leaveDoc, LeaveDocDTO.class));
+			return leaveDocDtoFromNameList;
+			} else {
+				Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("leaveDocCode").descending());
+				Page<LeaveDoc> leaveDocList = leaveDocRepository.findByApplyFormApplyFormName(pageable, name);
+				Page<LeaveDocDTO> leaveDocDTOList = leaveDocList.map(leaveDoc -> modelMapper.map(leaveDoc, LeaveDocDTO.class));
+				return leaveDocDTOList;
+			}
+	}
+
+	public Page<LeaveDocDTO> selectMyLeaveDocSearchName(int page, String condition, String name, Long empCode) {
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("leaveDocCode").descending());
+		Page<LeaveDoc> leaveDocList = leaveDocRepository.findByLeaveApplyerEmpCodeAndApplyFormApplyFormName(pageable, empCode, name);
+		Page<LeaveDocDTO> leaveDocDtoFromNameList = leaveDocList.map(leaveDoc -> modelMapper.map(leaveDoc, LeaveDocDTO.class));
+		
+		return leaveDocDtoFromNameList;
 	}
 
 }

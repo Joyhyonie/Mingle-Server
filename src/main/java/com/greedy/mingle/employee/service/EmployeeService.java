@@ -88,7 +88,6 @@ public class EmployeeService {
 	
 	/* 3. 교직원 목록 조회 - 소속 기준, 페이징 */
 	public Page<EmployeeDTO> selectEmployeeListByDeptName(int page, String condition, String name) {
-		
 		if(condition.equals("deptName")) {
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
 		Page<Employee> employeeList = employeeRepository.findByDepartmentDeptName(pageable, name);		
