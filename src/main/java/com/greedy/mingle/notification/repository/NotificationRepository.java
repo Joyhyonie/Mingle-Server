@@ -22,10 +22,6 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 	         + ")")
 	List<Notification> findMyNoti(@Param("empCode")Long empCode);
 	
-	/* 2. 알림 개별 삭제 */
-	
-	/* 3. 알림 전체 삭제 */
-	
 	/* 4. 공지사항 등록 시, 알림 등록 */
 	
 	/* 5. 학사일정 '시작일' 알림 등록 */
