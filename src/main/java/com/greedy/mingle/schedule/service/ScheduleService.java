@@ -109,7 +109,7 @@ public class ScheduleService {
 	}
 	
 	/* 7. 학사 일정 전체 조회 */
-	public Object selectAllAcSchedule(String scheType) {
+	public List<ScheduleDTO> selectAllAcSchedule(String scheType) {
 		
 		List<Schedule> scheduleList = scheduleRepository.findByScheType(scheType);
 		
@@ -121,7 +121,7 @@ public class ScheduleService {
 	}
 
 	/* 8. 선택한 날짜의 학사 일정 조회 */
-	public Object selectAcSchedule(Date date, String scheType) {
+	public List<ScheduleDTO> selectAcSchedule(Date date, String scheType) {
 		
 		List<Schedule> scheduleList = scheduleRepository.findAcScheduleBySelectedDate(date, scheType);
 		
