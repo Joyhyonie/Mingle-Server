@@ -153,10 +153,16 @@ public class ScheduleController {
 	}
 	
 	/* 9. 학사 일정 등록 */
-	@PostMapping("/academic/regist")
-	public ResponseEntity<ResponseDTO> registAcSchedule(@RequestBody ScheduleDTO scheduleDTO) {
+	@PostMapping("/academic")
+	public ResponseEntity<ResponseDTO> registAcSchedule(@RequestBody ScheduleDTO scheduleDTO, @AuthenticationPrincipal EmployeeDTO employee) {
 		
 		scheduleDTO.setScheType("학사");
+		EmployeeDTO employeeInSchedule = scheduleDTO.getEmployee();
+	    if(employeeInSchedule == null) {
+	        employeeInSchedule = new EmployeeDTO();
+	        scheduleDTO.setEmployee(employeeInSchedule);
+	    }
+	    employeeInSchedule.setEmpCode(employee.getEmpCode());
 		scheduleService.registAcSchedule(scheduleDTO);
 		
 		return ResponseEntity
