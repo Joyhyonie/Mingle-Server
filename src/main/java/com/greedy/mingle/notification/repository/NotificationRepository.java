@@ -17,15 +17,14 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 	         + "WHERE n.notiEndDate >= SYSDATE "
 	         + "AND (n.notiCode NOT IN (SELECT dn.notification.notiCode FROM DeletedNotification dn) OR "
 	         + "    (n.notiCode IN (SELECT dn.notification.notiCode FROM DeletedNotification dn) AND n.notiCode NOT IN "
-	         + "        (SELECT dn.notification.notiCode FROM DeletedNotification dn WHERE dn.employee.empCode = :empCode )"
-	         + "    )"
-	         + ")")
+	         + "        (SELECT dn.notification.notiCode FROM DeletedNotification dn WHERE dn.employee.empCode = :empCode ) "
+	         + "    ) "
+	         + ") "
+	         + "ORDER BY n.notiCode DESC ")
 	List<Notification> findMyNoti(@Param("empCode")Long empCode);
 	
 	/* 4. 공지사항 등록 시, 알림 등록 */
 	
-	/* 5. 학사일정 '시작일' 알림 등록 */
-	
-	/* 6. 학사일정 '종료일' 알림 등록 */
+	/* 5. 학사일정 '시작일'/'종료일' 알림 등록 */
 
 }

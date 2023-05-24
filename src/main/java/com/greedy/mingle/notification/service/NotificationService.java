@@ -1,5 +1,6 @@
 package com.greedy.mingle.notification.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -67,17 +68,14 @@ public class NotificationService {
 	/* 4. 공지사항 등록 시, 알림 등록 */
 	// BoardService에서 실행
 	
-	/* 5. 학사일정 '시작일' 알림 등록 */
-	public void addAcStartNoti(ScheduleDTO schedule) {
-		// TODO Auto-generated method stub
+	/* 5. 학사일정 '시작일'/'종료일' 알림 등록 */
+	@Transactional
+	public void addAcScheduleNoti(NotificationDTO notiDTO) {
+	
+		notiRepository.save(modelMapper.map(notiDTO, Notification.class));
 		
 	}
 
-	/* 6. 학사일정 '종료일' 알림 등록 */
-	public void addAcEndNoti(ScheduleDTO schedule) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	
 	
