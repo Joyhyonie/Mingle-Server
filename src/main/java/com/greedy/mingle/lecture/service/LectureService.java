@@ -156,10 +156,10 @@ public class LectureService {
 //	}
 	/*3. 행정직원의 강의개설 강의 리스트 2*/
 	public Page<LectureOfficerDTO> lectureList(int page) {
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("id").descending());
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("lecCode").descending());
 		
-		Page<Lecture> lectureList =lectureRepository.findAll(pageable);
-		Page<LectureOfficerDTO> lectureDtoList =lectureList.map(lecture->modelMapper.map(lecture,LectureOfficerDTO.class));
+		Page<Lecture> lectureList = lectureRepository.findAll(pageable);
+		Page<LectureOfficerDTO> lectureDtoList = lectureList.map(lecture->modelMapper.map(lecture,LectureOfficerDTO.class));
 		
 		return lectureDtoList;
 	} 

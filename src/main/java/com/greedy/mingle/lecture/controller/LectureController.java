@@ -63,7 +63,7 @@ public class LectureController {
 	}
 	
 	/*행정직원의 강의개설 리스트(게시판 리스트) */
-	@GetMapping("adminLectureList")
+	@GetMapping("/adminLectureList")
 	public ResponseEntity<ResponseDTO>getAdminLectureList(@RequestParam(name = "page", defaultValue = "1") int page){
 		
 		log.info("[LectureController] : selectLectureList start ==================================== ");
@@ -84,27 +84,5 @@ public class LectureController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
 	
-//	/*행정직원의 강의개설 리스트(게시판 리스트)2 */
-//	@GetMapping("adminLectureList")
-//	public ResponseEntity<ResponseDTO>getAdminLectureList2(@RequestParam(name = "page", defaultValue = "1") int page){
-//		
-//		log.info("[LectureController] : selectLectureList start ==================================== ");
-//		log.info("[LectureController] : page : {}", page);
-//		
-//		Page<LectureOfficerDTO> lectureDtoList = lectureService.lectureList2(page);
-//		
-//		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(lectureDtoList);
-//		log.info("[LectureController] : pageInfo : {}", pageInfo);
-//		
-//		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
-//		responseDtoWithPaging.setPageInfo(pageInfo);
-//		responseDtoWithPaging.setData(lectureDtoList.getContent());
-//
-//		log.info("[LectureController] : selectEmployeeList end ==================================== ");
-//		
-//		
-//		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
-//	
-//	
-//	}
+
 }
