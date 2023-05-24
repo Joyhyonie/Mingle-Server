@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.greedy.mingle.attendance.dto.LeaveDocDTO;
+import com.greedy.mingle.attendance.entity.LeaveDoc;
 import com.greedy.mingle.certi.dto.CertiDocDTO;
 import com.greedy.mingle.certi.entity.CertiDoc;
 import com.greedy.mingle.certi.repository.CertiDocRepository;
@@ -95,6 +97,15 @@ public class CertiDocService {
 				Page<CertiDocDTO> certiDocDTOList = certiDocList.map(certiDoc -> modelMapper.map(certiDoc, CertiDocDTO.class));
 				return certiDocDTOList;
 			}
+	}
+
+	public Page<CertiDocDTO> selectMyCertiDocSearchName(int page, String condition, String name, Long empCode) {
+				
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("certiDocCode").descending());
+		Page<CertiDoc> certiDocList = certiDocRepository.findByApplyerEmpCodeAndCertiFormCertiFormName(pageable, empCode, name);
+		Page<CertiDocDTO> certiDocDTOList = certiDocList.map(certiDoc -> modelMapper.map(certiDoc, CertiDocDTO.class));
+		
+		return certiDocDTOList;
 	}
 
 	

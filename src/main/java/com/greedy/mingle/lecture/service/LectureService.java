@@ -5,6 +5,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -140,7 +144,25 @@ public class LectureService {
 		lectureRepository.save(modelMapper.map(lectureOfficerDTO, Lecture.class));
 		
 	}
-		 
+//	/*3. 행정직원의 강의개설 강의 리스트 */
+//	public Page<LectureOfficerDTO> lectureList(int page) {
+//		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("id").descending());
+//		
+//		Page<Lecture> lectureList =lectureRepository.findLectureList(pageable);
+//		Page<LectureOfficerDTO> lectureDtoList =lectureList.map(lecture->modelMapper.map(lecture,LectureOfficerDTO.class));
+//		
+//		return lectureDtoList;
+//		
+//	}
+	/*3. 행정직원의 강의개설 강의 리스트 2*/
+	public Page<LectureOfficerDTO> lectureList(int page) {
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("id").descending());
+		
+		Page<Lecture> lectureList =lectureRepository.findAll(pageable);
+		Page<LectureOfficerDTO> lectureDtoList =lectureList.map(lecture->modelMapper.map(lecture,LectureOfficerDTO.class));
+		
+		return lectureDtoList;
+	} 
 	
-	
+//	
 }

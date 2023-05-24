@@ -13,4 +13,10 @@ public interface LeaveDocRepository extends JpaRepository<LeaveDoc, Long>{
 
 	LeaveDoc findByLeaveApplyer(Employee employee);
 
+	Page<LeaveDoc> findByLeaveApplyerEmpName(Pageable pageable, String name);
+
+	Page<LeaveDoc> findByApplyFormApplyFormName(Pageable pageable, String name);
+
+	Page<LeaveDoc> findByLeaveApplyerEmpCodeAndApplyFormApplyFormName(Pageable pageable, Long empCode, String name);
+
 }
