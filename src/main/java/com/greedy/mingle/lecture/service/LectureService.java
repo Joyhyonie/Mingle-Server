@@ -136,7 +136,7 @@ public class LectureService {
 
 
 	/*2. (행정실) 강의배정 하기(신규 강의 등록하기)*/
-	@Transactional
+	@Transactional 
 	public void insertLecture(LectureOfficerDTO lectureOfficerDTO) {
 		
 		log.info("[LectureService lectureOfficerDTO:{}",lectureOfficerDTO);
@@ -144,17 +144,8 @@ public class LectureService {
 		lectureRepository.save(modelMapper.map(lectureOfficerDTO, Lecture.class));
 		
 	}
-//	/*3. 행정직원의 강의개설 강의 리스트 */
-//	public Page<LectureOfficerDTO> lectureList(int page) {
-//		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("id").descending());
-//		
-//		Page<Lecture> lectureList =lectureRepository.findLectureList(pageable);
-//		Page<LectureOfficerDTO> lectureDtoList =lectureList.map(lecture->modelMapper.map(lecture,LectureOfficerDTO.class));
-//		
-//		return lectureDtoList;
-//		
-//	}
-	/*3. 행정직원의 강의개설 강의 리스트 2*/
+
+	/*3. 행정직원의 강의개설 강의 리스트 */
 	public Page<LectureOfficerDTO> lectureList(int page) {
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("lecCode").descending());
 		
@@ -164,5 +155,5 @@ public class LectureService {
 		return lectureDtoList;
 	} 
 	
-//	
+
 }

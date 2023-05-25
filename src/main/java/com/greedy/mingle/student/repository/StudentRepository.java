@@ -35,4 +35,3 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 	
 	/* 7. 학생 정보 삭제 */
 }
-
