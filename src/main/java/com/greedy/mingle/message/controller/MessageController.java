@@ -17,6 +17,7 @@ import com.greedy.mingle.common.ResponseDTO;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.message.dto.MessageDTO;
 import com.greedy.mingle.message.service.MessageService;
+import com.greedy.mingle.notification.service.NotificationService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,9 +27,11 @@ import lombok.extern.slf4j.Slf4j;
 public class MessageController {
 	
 	private final MessageService messageService;
+	private final NotificationService notiService;
 	
-	public MessageController(MessageService messageService) {
+	public MessageController(MessageService messageService, NotificationService notiService) {
 		this.messageService = messageService;
+		this.notiService = notiService;
 	}
 	
 	/* 1. 받은 쪽지함 조회 (최근 20개) */
@@ -142,6 +145,9 @@ public class MessageController {
 		
 		messageDTO.setSender(sender);
 		messageService.sendMessage(messageDTO);
+		
+		// 전송 시, 받는 사람에게 알림 전송
+		notiService.notifyReceivedMsg(messageDTO);
 		
 		return ResponseEntity
 				.ok()

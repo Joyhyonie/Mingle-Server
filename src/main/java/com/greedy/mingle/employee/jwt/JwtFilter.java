@@ -52,7 +52,7 @@ public class JwtFilter extends OncePerRequestFilter{
 
 			}
 		}catch(io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-			log.info("[JwtFilter] : 잘못 jwt 서명이다.");
+			log.info("[JwtFilter] : 잘못 된 jwt 서명입니다.");
 		}catch(ExpiredJwtException e) {
 			log.info("[JwtFilter] : 만료 된 JWT 서명입니다.");
 		}catch(UnsupportedJwtException e) {

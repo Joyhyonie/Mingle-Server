@@ -31,10 +31,8 @@ public class TokenProvider {
 	private static final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 1440;	// 30분 (밀리세컨기준)
 	private static final String BEARER_TYPE = "bearer";
 	private final Key key;
-	
 	private final UserDetailsService userDetailsService;
  
-
 	
 	public TokenProvider(@Value("${jwt.secret}") String secretKey,UserDetailsService userDetailsService) {
 		byte[] keyBytes = Decoders.BASE64.decode(secretKey);
@@ -48,6 +46,7 @@ public class TokenProvider {
 		
 		//Claims라고 불리우는 JWT body(payload)에 정보 담기
 		Claims claims = Jwts.claims().setSubject(employee.getEmpId());
+		
 		// 권한도 claims에 담기
 		 List<String> roles = Collections.emptyList(); // 기본적으로 빈 리스트로 초기화
 		    
@@ -66,8 +65,9 @@ public class TokenProvider {
 				.signWith(key, SignatureAlgorithm.HS512)
 				.compact();
 		
-		return new TokenDTO(BEARER_TYPE, employee.getEmpId(), accessToken, accessTokenExpiresIn.getTime());
+		return new TokenDTO(BEARER_TYPE, employee.getEmpId(), accessToken, accessTokenExpiresIn.getTime(), employee.getEmpCode());
 	}
+	
 	
 	public boolean validateToken(String jwt) {
 		
@@ -75,6 +75,7 @@ public class TokenProvider {
 		
 		return true;
 	}
+	
 	/* DB에서 해당 USer에 대한 정보를 조회 후 authentication 타입으로 반환하는 메소드*/
 	public Authentication getAuthentication(String jwt) {
 	
@@ -88,8 +89,15 @@ public class TokenProvider {
 		
 		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwt).getBody();
 	}
-
 	
+	/* SSE 설정을 위한 getUserIdFromToken() */
+	public String getUserIdFromToken(String jwt) {
+		
+	    Claims claims = parseClaims(jwt);
+	    
+	    return claims.getSubject();
+
+	}
 
 }
 
