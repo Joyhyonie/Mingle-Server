@@ -13,7 +13,7 @@ spring:
     host: smtp.naver.com
     port: 465
     username: qwe030223@naver.com
-    password: weqaz100400!
+    password: weqaz1004001
     properties:
       mail.smtp.auth: true
       mail.smtp.ssl.enable: true 
@@ -45,4 +45,5 @@ image:
 jwt:
   secret: asdfjp298pafo1320efqw0udvnh0er0h412r08byfdq9dsvh02143908hfeqwn80fdqs0nfdqs0n412013rq0nqefn08dfas0das730732g86923
 
-    
+dynamic:
+  password: my_actual_password  
