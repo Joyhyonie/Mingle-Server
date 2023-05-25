@@ -112,6 +112,18 @@ public class EmployeeDTO implements UserDetails{
 	    this.empPwd = newPassword;
 	}
 
+	
+
+	public String getTwoFactorCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setTwoFactorCode(String dynamicPassword) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 	
 

@@ -29,6 +29,24 @@ public class SendEmailService {
       this.mailSender = mailSender;
       this.passwordEncoder = passwordEncoder;
    }
+   
+   @Transactional
+   public MailDTO createMailAndTwoPassword(String empId, String empEmail, String empName) {
+      
+      log.info("[SendEmailService] empName : {}", empName);
+      
+      String password = getTwoPassword();
+      MailDTO dto = new MailDTO();
+      dto.setAddress(empEmail);
+      dto.setTitle(empName + "님의 morethanus 2차 비밀번호 이메일 입니다.");
+      dto.setMessage("안녕하세요. Mingle 2차 비밀번호 안내 관련 이메일 입니다." + "[" + empName + "]" + "님의 임시 비밀번호는 " + password + " 입니다.");
+  
+      
+      return dto;
+   }
+   
+   
+   
    @Transactional
    public MailDTO createMailAndChangePassword(String empId, String empEmail, String empName) {
       
@@ -49,6 +67,8 @@ public class SendEmailService {
        char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
                'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
 
+   
+       
        String str = "";
 
        int idx = 0;
@@ -58,6 +78,21 @@ public class SendEmailService {
        }
        return str;
    }
+   
+   public String getTwoPassword() {
+	   char[] charSet = new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+               'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+
+	   String password = "";
+	   int idx = 0;
+	   
+	    for (int i = 0; i < 6; i++) {
+	    	 idx = (int) (charSet.length * Math.random());
+	    	 password += charSet[idx];
+	    }
+
+	    return password; // StringBuilder를 String으로 변환하여 반환
+	}
 
 
    public void mailSend(MailDTO mailDTO) {
@@ -70,5 +105,8 @@ public class SendEmailService {
 
 		 mailSender.send(message); 
    }
+
+
+
 
 }
