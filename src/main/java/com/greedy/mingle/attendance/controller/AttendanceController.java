@@ -310,8 +310,8 @@ public class AttendanceController {
 		
 		// 현재 시간 포맷 (String)
 		Timestamp timestamp = Timestamp.valueOf(now);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String formattedTime = sdf.format(timestamp);
+		SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String formattedTime = timeFormat.format(timestamp);
 		
 		log.info("[AttendanceController] 클라이언트에서 요청한 현재 시간 : {}", formattedTime);
 		log.info("[AttendanceController] 클라이언트가 요청한 날짜 : {}", formattedDate);
