@@ -1,22 +1,32 @@
 package com.greedy.mingle.notification.service;
 
-import java.util.Date;
+// import시 static으로 선언하여 sseEmitters를 해당 클래스에서 사용
+import static com.greedy.mingle.notification.controller.SseController.sseEmitters;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.MediaType;
+import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter.SseEventBuilder;
 
+import com.greedy.mingle.message.dto.MessageDTO;
 import com.greedy.mingle.notification.dto.DeletedNotificationDTO;
 import com.greedy.mingle.notification.dto.NotificationDTO;
 import com.greedy.mingle.notification.entity.DeletedNotification;
 import com.greedy.mingle.notification.entity.Notification;
 import com.greedy.mingle.notification.repository.DeletedNotificationRepository;
 import com.greedy.mingle.notification.repository.NotificationRepository;
-import com.greedy.mingle.schedule.dto.ScheduleDTO;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class NotificationService {
 
@@ -76,7 +86,55 @@ public class NotificationService {
 		
 	}
 
+	
+	/* ------------------------------------------------------------------------------------------------------- */
+	
+	/* 1. 쪽지 알림 */
+	public synchronized void notifyReceivedMsg(MessageDTO messageDTO) {
+		
+		String receiverId = messageDTO.getReceiver().getEmpId();
+				
+		log.info("[NotificationService] notifyReceivedMsg 호출!");
+		log.info("[NotificationService] receiverId : {}", receiverId);
+		log.info("[NotificationService] sseEmitters : {}", sseEmitters); // => 클라이언트가 새로고침 직후에는 잘 담겨서 넘어오는데 시간이 조금만 지나도 빈 객체로 출력...
+		
+		if(sseEmitters.containsKey(receiverId)) {
+			SseEmitter sseEmitter = sseEmitters.get(receiverId);
+			log.info("[NotificationService] sseEmitter: {}", sseEmitter);
 
+			try {
+				sseEmitter.send(SseEmitter.event()
+						  .name("receivedMsg")
+						  .data(messageDTO)
+						  .reconnectTime(500));
+			} catch (IOException e) {
+				sseEmitters.remove(receiverId);
+				log.error("[NotificationService] IOException : {}", e.getMessage());
+			} catch (IllegalStateException e) {
+				sseEmitters.remove(receiverId);
+				log.error("[NotificationService] IllegalStateException : {}", e.getMessage());
+			}
+		}
+		
+	}
+	
+	/* 2. 학사일정 알림 */
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 
