@@ -63,7 +63,7 @@ public class SubjectService {
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("sbjCode").descending());
 		
-		Page<Subject> subjectList = subjectRepository.findBySbjName(pageable,sbjName);
+		Page<Subject> subjectList = subjectRepository.findBySbjNameContaining(pageable,sbjName);
 		Page<SubjectDTO> subjectDtoList = subjectList.map(subject -> modelMapper.map(subject, SubjectDTO.class));
 		return subjectDtoList;
 	}
@@ -98,12 +98,12 @@ public class SubjectService {
 	public Page<SubjectDTO> selectEmployeeListByDeptName(int page, String condition, String name) {
 		if(condition.equals("deptName")) {
 			Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("sbjCode").descending());
-			Page<Subject> subjectList = subjectRepository.findByDepartmentDeptName(pageable, name);		
+			Page<Subject> subjectList = subjectRepository.findByDepartmentDeptNameContaining(pageable, name);		
 			Page<SubjectDTO> subjectDtoDeptList = subjectList.map(subject -> modelMapper.map(subject, SubjectDTO.class));
 			return subjectDtoDeptList;
 			} else {
 				Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("sbjCode").descending());
-				Page<Subject> subjectList = subjectRepository.findBySbjName(pageable, name);
+				Page<Subject> subjectList = subjectRepository.findBySbjNameContaining(pageable, name);
 				Page<SubjectDTO> subjectDtoList = subjectList.map(subject -> modelMapper.map(subject, SubjectDTO.class));
 				return subjectDtoList;
 			}

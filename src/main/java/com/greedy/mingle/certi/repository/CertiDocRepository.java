@@ -12,8 +12,8 @@ public interface CertiDocRepository extends JpaRepository <CertiDoc,Long>{
 
 	Page<CertiDoc> findByApplyerEmpName(Pageable pageable, String name);
 
-	Page<CertiDoc> findByCertiFormCertiFormName(Pageable pageable, String name);
+	Page<CertiDoc> findByCertiFormCertiFormNameContaining(Pageable pageable, String name);
 
-	Page<CertiDoc> findByApplyerEmpCodeAndCertiFormCertiFormName(Pageable pageable, Long empCode, String name);
+	Page<CertiDoc> findByApplyerEmpCodeAndCertiFormCertiFormNameContaining(Pageable pageable, Long empCode, String name);
 
 }

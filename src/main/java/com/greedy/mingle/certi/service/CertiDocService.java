@@ -41,8 +41,6 @@ public class CertiDocService {
 		return certiDtoList;
 	}
 
-
-
 	public Page<CertiDocDTO> selectEmployeeCerti(int page, long empCode) {
 
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("certiDocCode").descending());
@@ -93,7 +91,7 @@ public class CertiDocService {
 			return certiDocDtoDeptList;
 			} else {
 				Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("certiDocCode").descending());
-				Page<CertiDoc> certiDocList = certiDocRepository.findByCertiFormCertiFormName(pageable, name);
+				Page<CertiDoc> certiDocList = certiDocRepository.findByCertiFormCertiFormNameContaining(pageable, name);
 				Page<CertiDocDTO> certiDocDTOList = certiDocList.map(certiDoc -> modelMapper.map(certiDoc, CertiDocDTO.class));
 				return certiDocDTOList;
 			}
@@ -102,7 +100,7 @@ public class CertiDocService {
 	public Page<CertiDocDTO> selectMyCertiDocSearchName(int page, String condition, String name, Long empCode) {
 				
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("certiDocCode").descending());
-		Page<CertiDoc> certiDocList = certiDocRepository.findByApplyerEmpCodeAndCertiFormCertiFormName(pageable, empCode, name);
+		Page<CertiDoc> certiDocList = certiDocRepository.findByApplyerEmpCodeAndCertiFormCertiFormNameContaining(pageable, empCode, name);
 		Page<CertiDocDTO> certiDocDTOList = certiDocList.map(certiDoc -> modelMapper.map(certiDoc, CertiDocDTO.class));
 		
 		return certiDocDTOList;
