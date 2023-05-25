@@ -1,7 +1,10 @@
 package com.greedy.mingle.attendance.controller;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -306,9 +309,10 @@ public class AttendanceController {
 		String formattedDate = now.format(dateFormat);
 		
 		// 현재 시간 포맷 (String)
-		DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:SS");
-		String formattedTime = now.format(timeFormat);
-
+		Timestamp timestamp = Timestamp.valueOf(now);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String formattedTime = sdf.format(timestamp);
+		
 		log.info("[AttendanceController] 클라이언트에서 요청한 현재 시간 : {}", formattedTime);
 		log.info("[AttendanceController] 클라이언트가 요청한 날짜 : {}", formattedDate);
 		
