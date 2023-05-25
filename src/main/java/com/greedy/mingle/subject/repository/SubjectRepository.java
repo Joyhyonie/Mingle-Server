@@ -13,10 +13,10 @@ public interface SubjectRepository extends JpaRepository<Subject, Long>{
 
 	Page<Subject> findByDepartment(Pageable pageable, Department findDepartment);
 
-	Page<Subject> findBySbjName(Pageable pageable, String sbjName);
+	Page<Subject> findBySbjNameContaining(Pageable pageable, String sbjName);
 
 	List<Subject> findByDepartmentDeptCode(Long deptCode);
 
-	Page<Subject> findByDepartmentDeptName(Pageable pageable, String name);
+	Page<Subject> findByDepartmentDeptNameContaining(Pageable pageable, String name);
 
 }

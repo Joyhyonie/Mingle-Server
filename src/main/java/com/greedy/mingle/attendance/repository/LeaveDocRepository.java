@@ -15,8 +15,8 @@ public interface LeaveDocRepository extends JpaRepository<LeaveDoc, Long>{
 
 	Page<LeaveDoc> findByLeaveApplyerEmpName(Pageable pageable, String name);
 
-	Page<LeaveDoc> findByApplyFormApplyFormName(Pageable pageable, String name);
+	Page<LeaveDoc> findByApplyFormApplyFormNameContaining(Pageable pageable, String name);
 
-	Page<LeaveDoc> findByLeaveApplyerEmpCodeAndApplyFormApplyFormName(Pageable pageable, Long empCode, String name);
+	Page<LeaveDoc> findByLeaveApplyerEmpCodeAndApplyFormApplyFormNameContaining(Pageable pageable, Long empCode, String name);
 
 }

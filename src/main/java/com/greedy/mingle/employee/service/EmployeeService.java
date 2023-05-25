@@ -90,7 +90,7 @@ public class EmployeeService {
 	public Page<EmployeeDTO> selectEmployeeListByDeptName(int page, String condition, String name) {
 		if(condition.equals("deptName")) {
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
-		Page<Employee> employeeList = employeeRepository.findByDepartmentDeptName(pageable, name);		
+		Page<Employee> employeeList = employeeRepository.findByDepartmentDeptNameContaining(pageable, name);		
 		Page<EmployeeDTO> employeeDtoDeptList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
 		return employeeDtoDeptList;
 		} else {

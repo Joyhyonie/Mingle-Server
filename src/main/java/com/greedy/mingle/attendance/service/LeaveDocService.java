@@ -1,5 +1,8 @@
 package com.greedy.mingle.attendance.service;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
@@ -12,9 +15,6 @@ import org.springframework.stereotype.Service;
 import com.greedy.mingle.attendance.dto.LeaveDocDTO;
 import com.greedy.mingle.attendance.entity.LeaveDoc;
 import com.greedy.mingle.attendance.repository.LeaveDocRepository;
-import com.greedy.mingle.certi.dto.CertiDocDTO;
-import com.greedy.mingle.certi.entity.CertiDoc;
-import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.employee.repository.EmployeeRepository;
 
@@ -41,7 +41,7 @@ public class LeaveDocService {
 	}
 
 	@Transactional
-	public void updateLeaveDoc(Long leaveDocCode, LeaveDocDTO leaveDocDTO) {
+	public void updateLeaveDoc(Long leaveDocCode, LeaveDocDTO leaveDocDTO){
 				
 		java.time.LocalDateTime localDateTime = java.time.LocalDateTime.now();
 		java.sql.Timestamp timestamp = java.sql.Timestamp.valueOf(localDateTime);
@@ -50,6 +50,9 @@ public class LeaveDocService {
 		
 		Employee employee = employeeRepository.findById(leaveDocDTO.getAccepter().getEmpCode())
 				.orElseThrow(() -> new NullPointerException("연차 갯수가 부족합니다."));
+
+		if(employee.getEmpAnnual() > 0) {
+		
 		employee.setEmpAnnual(employee.getEmpAnnual() - 1);
 		
 		leaveDoc.setAccepter(modelMapper.map(leaveDocDTO.getAccepter(), Employee.class));
@@ -57,6 +60,7 @@ public class LeaveDocService {
 		leaveDoc.setDocStatus("승인");
 		
 		leaveDocRepository.save(leaveDoc);
+		}
 	}
 	
 	@Transactional
@@ -98,7 +102,7 @@ public class LeaveDocService {
 			return leaveDocDtoFromNameList;
 			} else {
 				Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("leaveDocCode").descending());
-				Page<LeaveDoc> leaveDocList = leaveDocRepository.findByApplyFormApplyFormName(pageable, name);
+				Page<LeaveDoc> leaveDocList = leaveDocRepository.findByApplyFormApplyFormNameContaining(pageable, name);
 				Page<LeaveDocDTO> leaveDocDTOList = leaveDocList.map(leaveDoc -> modelMapper.map(leaveDoc, LeaveDocDTO.class));
 				return leaveDocDTOList;
 			}
@@ -107,7 +111,8 @@ public class LeaveDocService {
 	public Page<LeaveDocDTO> selectMyLeaveDocSearchName(int page, String condition, String name, Long empCode) {
 		
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("leaveDocCode").descending());
-		Page<LeaveDoc> leaveDocList = leaveDocRepository.findByLeaveApplyerEmpCodeAndApplyFormApplyFormName(pageable, empCode, name);
+		Page<LeaveDoc> leaveDocList = leaveDocRepository.findByLeaveApplyerEmpCodeAndApplyFormApplyFormNameContaining(pageable, empCode, name);
+		System.out.println(leaveDocList);
 		Page<LeaveDocDTO> leaveDocDtoFromNameList = leaveDocList.map(leaveDoc -> modelMapper.map(leaveDoc, LeaveDocDTO.class));
 		
 		return leaveDocDtoFromNameList;
