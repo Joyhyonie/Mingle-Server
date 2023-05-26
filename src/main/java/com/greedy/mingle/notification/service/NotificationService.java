@@ -1,10 +1,11 @@
 package com.greedy.mingle.notification.service;
 
-// import시 static으로 선언하여 sseEmitters를 해당 클래스에서 사용
-import static com.greedy.mingle.notification.controller.SseController.sseEmitters;
+// import시 static으로 선언하여 sseEmitters(map)와 allSseEmitters(List)를 해당 클래스에서 사용
+import static com.greedy.mingle.notification.controller.SseController.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
@@ -78,18 +79,17 @@ public class NotificationService {
 	/* 4. 공지사항 등록 시, 알림 등록 */
 	// BoardService에서 실행
 	
-	/* 5. 학사일정 '시작일'/'종료일' 알림 등록 */
+	/* 5. 학사일정 시작일&종료일 알림 등록 */
 	@Transactional
 	public void addAcScheduleNoti(NotificationDTO notiDTO) {
 	
 		notiRepository.save(modelMapper.map(notiDTO, Notification.class));
 		
 	}
-
 	
-	/* ------------------------------------------------------------------------------------------------------- */
+	/* ------------------------------------------------ 실시간 알림 메소드 ------------------------------------------------ */
 	
-	/* 1. 쪽지 알림 */
+	/* 1. Sender가 쪽지를 Receiver에게 전송 시, 쪽지 실시간 알림 (특정 클라이언트 지정) */
 	public synchronized void notifyReceivedMsg(MessageDTO messageDTO) {
 		
 		String receiverId = messageDTO.getReceiver().getEmpId();
@@ -107,21 +107,35 @@ public class NotificationService {
 						  .name("receivedMsg")
 						  .data(messageDTO)
 						  .reconnectTime(500));
-			} catch (IOException e) {
+			} catch (IOException | IllegalStateException e) {
 				sseEmitters.remove(receiverId);
-				log.error("[NotificationService] IOException : {}", e.getMessage());
-			} catch (IllegalStateException e) {
-				sseEmitters.remove(receiverId);
-				log.error("[NotificationService] IllegalStateException : {}", e.getMessage());
-			}
+			} finally {
+		        sseEmitter.complete(); // SseEmitter 객체 종료
+		    }
 		}
 		
 	}
-	
-	/* 2. 학사일정 알림 */
-	
-	
-	
+
+	/* 2. 학사일정 시작일&종료일 및 공지사항 알림 등록과 동시에 실시간 알림 */
+	public synchronized void notifyCommonNoti(NotificationDTO notiDTO) {
+		
+		log.info("[NotificationService] notifyAcScheduleNoti 호출!");
+		log.info("[NotificationService] allSseEmitters : {}", allSseEmitters);
+		
+		for(SseEmitter sseEmitter : allSseEmitters) {
+			try {
+				sseEmitter.send(SseEmitter.event()
+						  .name("commonNoti")
+						  .data(notiDTO)
+						  .reconnectTime(500));
+			} catch (IOException | IllegalStateException e) {
+				allSseEmitters.remove(sseEmitter);
+			} finally {
+		        sseEmitter.complete();
+		    }
+		}
+		
+	}
 	
 	
 	
