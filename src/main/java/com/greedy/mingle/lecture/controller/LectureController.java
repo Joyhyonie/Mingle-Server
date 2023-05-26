@@ -5,6 +5,7 @@ package com.greedy.mingle.lecture.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import com.greedy.mingle.common.ResponseDTO;
 import com.greedy.mingle.common.paging.Pagenation;
 import com.greedy.mingle.common.paging.PagingButtonInfo;
 import com.greedy.mingle.common.paging.ResponseDTOWithPaging;
+import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.lecture.dto.LectureOfficerDTO;
 import com.greedy.mingle.lecture.service.LectureService;
 
@@ -82,6 +84,13 @@ public class LectureController {
 		
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	}
+	
+	/* 나의 강의 목록 조회 */
+	@GetMapping("/myLecture")
+	public ResponseEntity<ResponseDTO> getMyLecture(@AuthenticationPrincipal EmployeeDTO employee){		
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", lectureService.getMyLecture(employee.getEmpCode())));
 	}
 	
 
