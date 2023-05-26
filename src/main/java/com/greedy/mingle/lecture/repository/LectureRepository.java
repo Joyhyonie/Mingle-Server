@@ -8,7 +8,7 @@ import com.greedy.mingle.lecture.entity.Lecture;
 
 public interface LectureRepository extends JpaRepository <Lecture, Long> {
 
-	List<Lecture> findByEmployeeEmpCode(Long empCode);
+	List<Lecture> findTop5ByEmployeeEmpCode(Long empCode);
 
 
 	
