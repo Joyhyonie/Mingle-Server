@@ -150,14 +150,17 @@ public class EmployeeService {
 				employeeDto.getEmpPwd(), employeeDto.getEmpSsn(), employeeDto.getEmpAnnual());
 	}
 
-	/*
-	 * 8. 교직원 정보 삭제
-	 * 
-	 * @Transactional public void deleteEmployee(Long empCode) {
-	 * 
-	 * employeeRepository.deleteById(empCode); }
-	 */
-	/* 자신의 마이페이지 조회 */
+	
+	 /* 8. 교직원 정보 삭제 */
+	 
+	@Transactional
+	public void deleteEmployee(Long empCode) {
+		
+		employeeRepository.deleteById(empCode);
+	}
+	 
+
+	/* 9. 자신의 마이페이지 조회 */
 
 	public EmployeeDTO selectInfo(Long empCode) {
 
@@ -177,13 +180,33 @@ public class EmployeeService {
 	}
 	
 
-	/* 9. 조직도 교직원 조회 - 스크롤 */
+	/* 10. 조직도 교직원 조회 */
+	public Page<EmployeeDTO> selectOrganizationList(int page) {
 
-	/* 10. 조직도 교직원 조회 - 소속 기준 */
+		log.info("[EmployeeService] selectOrganizationList start ============================== ");
 
-	/* 11. 조직도 교직원 조회 - 교직원명 검색 기준 */
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
 
-	/* 마이페이지 이미지 변경 */
+		Page<Employee> employeeList = employeeRepository.findAll(pageable);
+		Page<EmployeeDTO> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
+		
+		/* 클라이언트 측에서 서버에 저장 된 이미지 요청 시 필요한 주소로 가공 */
+		employeeDtoList.forEach(employee -> employee.setEmpProfile(IMAGE_URL + employee.getEmpProfile()));
+
+		log.info("[EmployeeService] employeeDtoList.getContent() : {}", employeeDtoList.getContent());
+
+		log.info("[EmployeeService] selectOrganizationList end ============================== ");
+
+		return employeeDtoList;
+
+	}
+
+
+	/* 11. 조직도 교직원 조회 - 소속 기준 */
+
+	/* 12. 조직도 교직원 조회 - 교직원명 검색 기준 */
+
+	/* 13. 마이페이지 이미지 변경 */
 	@Transactional
 	public void updateEmp(EmployeeDTO employeeDTO) {
 		log.info("[EmployeeService] insertProduct start ============================== ");

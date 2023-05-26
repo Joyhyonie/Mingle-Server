@@ -139,6 +139,17 @@ public class ScheduleService {
 		scheduleRepository.save(modelMapper.map(scheduleDTO, Schedule.class));
 		
 	}
+	
+	/* 10. 나의 일정 삭제 */
+	@Transactional
+	public void deleteAcSchedule(Long scheCode) {
+		
+		Schedule schedule = scheduleRepository.findById(scheCode)
+				.orElseThrow(() -> new IllegalArgumentException("학사 일정 scheCode : " + scheCode));
+		
+		scheduleRepository.deleteById(scheCode);
+		
+	}
 
 	
 
