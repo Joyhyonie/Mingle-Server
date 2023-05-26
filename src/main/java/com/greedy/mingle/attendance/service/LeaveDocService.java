@@ -1,7 +1,8 @@
 package com.greedy.mingle.attendance.service;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 
 import javax.transaction.Transactional;
 
@@ -50,10 +51,18 @@ public class LeaveDocService {
 		
 		Employee employee = employeeRepository.findById(leaveDocDTO.getAccepter().getEmpCode())
 				.orElseThrow(() -> new NullPointerException("연차 갯수가 부족합니다."));
-
-		if(employee.getEmpAnnual() > 0) {
 		
-		employee.setEmpAnnual(employee.getEmpAnnual() - 1);
+		String date = leaveDoc.getStartDate();
+		String endDate = leaveDoc.getEndDate();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		LocalDate localDate = LocalDate.parse(date, formatter);
+		LocalDate localEndDate = LocalDate.parse(endDate, formatter);
+		Period period = Period.between(localDate, localEndDate);
+		int daysBetween = period.getDays() + 1;		
+
+		if(employee.getEmpAnnual() > 0 && employee.getEmpAnnual() > daysBetween) {
+		
+		employee.setEmpAnnual(employee.getEmpAnnual() - daysBetween);
 		
 		leaveDoc.setAccepter(modelMapper.map(leaveDocDTO.getAccepter(), Employee.class));
 		leaveDoc.setSignDate(timestamp.toString());

@@ -153,6 +153,16 @@ public class LectureService {
 		Page<LectureOfficerDTO> lectureDtoList = lectureList.map(lecture->modelMapper.map(lecture,LectureOfficerDTO.class));
 		
 		return lectureDtoList;
+	}
+
+
+
+	public List<LectureOfficerDTO> getMyLecture(Long empCode) {
+		
+		List<Lecture> lecture = lectureRepository.findByEmployeeEmpCode(empCode);
+		List<LectureOfficerDTO> lectureDTO = lecture.stream().map(myLecture -> modelMapper.map(myLecture, LectureOfficerDTO.class))
+                .collect(Collectors.toList());
+		return lectureDTO;
 	} 
 	
 
