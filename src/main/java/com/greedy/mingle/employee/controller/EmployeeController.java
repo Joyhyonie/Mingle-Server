@@ -1,16 +1,20 @@
 package com.greedy.mingle.employee.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -81,6 +85,10 @@ public class EmployeeController {
 
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
+	
+	/* 2-1. selectbox - 교수만 조회 */
+	
+	/* 2-2. selectbox - 교직원만 조회 */
 
 	/* 3. 교직원 목록 조회 - 교직원명 검색 기준, 페이징 */
 	@GetMapping("/employees/search")
@@ -133,22 +141,28 @@ public class EmployeeController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록 성공"));
 	}
 
-	/*
-	 * 7. 교직원 정보 삭제
-	 * 
-	 * @DeleteMapping("/delete/{empCode}") public ResponseEntity<ResponseDTO>
-	 * deleteEmployee(@PathVariable String empCode){
-	 * 
-	 * employeeService.deleteEmployee(empCode);
-	 * 
-	 * return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "삭제 성공")); }
-	 */
+
+	 /* 7. 교직원 정보 삭제 */
+	 
+	@DeleteMapping("/delete")
+	public ResponseEntity<ResponseDTO> deleteEmployees(@RequestBody List<Long> empCodes) {
+	    try {
+	        for (Long empCode : empCodes) {
+	            employeeService.deleteEmployee(empCode);
+	        }
+	        return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "삭제 성공"));
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	                .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "삭제 실패"));
+	    }
+	}
+	 
 
 	/* 8. 조직도 교직원 조회 - 스크롤 */
 
 	/* 9. 조직도 교직원 조회 - 소속 기준 */
 
-	/* 자신의 마이페이지 조회 */
+	/* 10. 자신의 마이페이지 조회 */
 	@GetMapping("/myemployees")
 	public ResponseEntity<ResponseDTO> selectMyInfo(@AuthenticationPrincipal EmployeeDTO employee) {
 		
@@ -158,7 +172,7 @@ public class EmployeeController {
 				.body(new ResponseDTO(HttpStatus.OK, "조회 완료", employeeService.selectInfo(employee.getEmpCode())));
 	}
 
-	/* 마이페이지 수정 */
+	/* 11. 마이페이지 수정 */
 	@PatchMapping("/putmypage")
 	public ResponseEntity<ResponseDTO> updateEmp(
 	        @RequestParam(value = "myPageImage", required = false) MultipartFile myPageImage,
@@ -176,6 +190,30 @@ public class EmployeeController {
 	    
 	    return ResponseEntity.ok()
 	            .body(new ResponseDTO(HttpStatus.OK, "정보 수정 성공"));
+	}
+	
+	
+	/* 12. 조직도 목록 조회 - 페이징 */
+	@GetMapping("/organization")
+	public ResponseEntity<ResponseDTO> selectOrganizationList(@RequestParam(name = "page", defaultValue = "1") int page) {
+
+		log.info("[EmployeeController] : selectOrganizationList start ==================================== ");
+		log.info("[EmployeeController] : page : {}", page);
+
+		Page<EmployeeDTO> employeeDtoList = employeeService.selectOrganizationList(page);
+
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
+
+		log.info("[EmployeeController] : pageInfo : {}", pageInfo);
+
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(employeeDtoList.getContent());
+
+		log.info("[EmployeeController] : selectOrganizationList end ==================================== ");
+
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+
 	}
 
 }

@@ -24,7 +24,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 	Page<Student> findByStdName(Pageable pageable, String stdName);
 
 	/* 4. 학생 상세 조회 - stdCode로 학생 1명 조회 */
-	@Query("SELECT s.stdCode" +
+	@Query("SELECT s" +
 			" FROM Student s " +
 			"WHERE s.stdCode = :stdCode ")
 	Optional<Student> findByStdCode(@Param("stdCode") Long stdCode);

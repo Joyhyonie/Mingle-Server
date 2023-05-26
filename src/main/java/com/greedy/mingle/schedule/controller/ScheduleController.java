@@ -151,5 +151,31 @@ public class ScheduleController {
 				.body(new ResponseDTO(HttpStatus.OK, "선택한 날짜의 학사 일정 조회 성공", scheduleService.selectAcSchedule(date, scheType)));
 	
 	}
+	
+	/* 9. 학사 일정 등록 */
+	@PostMapping("/academic")
+	public ResponseEntity<ResponseDTO> registAcSchedule(@RequestBody ScheduleDTO scheduleDTO, @AuthenticationPrincipal EmployeeDTO employee) {
+			
+		scheduleDTO.setScheType("학사");
+	    scheduleDTO.setEmployee(employee);
+		scheduleService.registAcSchedule(scheduleDTO);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "학사 일정 등록 성공"));
+	}
+	
+	/* 10. 나의 일정 삭제 */
+	@DeleteMapping("/academic/{scheCode}")
+	public ResponseEntity<ResponseDTO> deleteAcSchedule(@PathVariable Long scheCode) {
+		
+		scheduleService.deleteAcSchedule(scheCode);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "학사 일정 삭제 성공"));
+		
+	}
+	
 
 }

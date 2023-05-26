@@ -131,6 +131,25 @@ public class ScheduleService {
 		
 		return scheduleDTOList;
 	}
+	
+	/* 9. 학사 일정 등록 */
+	@Transactional
+	public void registAcSchedule(ScheduleDTO scheduleDTO) {
+		
+		scheduleRepository.save(modelMapper.map(scheduleDTO, Schedule.class));
+		
+	}
+	
+	/* 10. 나의 일정 삭제 */
+	@Transactional
+	public void deleteAcSchedule(Long scheCode) {
+		
+		Schedule schedule = scheduleRepository.findById(scheCode)
+				.orElseThrow(() -> new IllegalArgumentException("학사 일정 scheCode : " + scheCode));
+		
+		scheduleRepository.deleteById(scheCode);
+		
+	}
 
 	
 

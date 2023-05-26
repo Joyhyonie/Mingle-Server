@@ -46,7 +46,7 @@ public class StudentController {
 		Page<StudentDTO> studentDtoList = studentService.selectStudentList(page);
 
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(studentDtoList);
-
+		
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(studentDtoList.getContent());
@@ -92,7 +92,7 @@ public class StudentController {
 
 	/* 4. 학생 상세 조회 - stdCode로 학생 1명 조회 */
 	@GetMapping("/students/{stdCode}")
-	public ResponseEntity<ResponseDTO> selectStudentDetail(@PathVariable Long stdCode) {
+	public ResponseEntity<ResponseDTO> selectStudent(@PathVariable Long stdCode) {
 
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", studentService.selectStudent(stdCode)));
 	}
