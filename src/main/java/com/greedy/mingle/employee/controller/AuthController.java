@@ -93,7 +93,7 @@ public class AuthController {
 
 		         return ResponseEntity
 		               .ok()
-		               .body(new ResponseDTO(HttpStatus.OK, "이메일이 전송되었습니다."));
+		               .body(new ResponseDTO(HttpStatus.OK, "임시 비밀번호가 발급되었습니다."));
 
 		      } else {
 		         return ResponseEntity.badRequest().body(new ResponseDTO(HttpStatus.BAD_REQUEST, "이메일이 일치하지 않습니다."));

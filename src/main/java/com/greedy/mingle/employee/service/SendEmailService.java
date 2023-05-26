@@ -96,7 +96,7 @@ public class SendEmailService {
 
 
    public void mailSend(MailDTO mailDTO) {
-      log.info("이메일 전송 완료");
+      log.info("임시 비밀번호 발급되었습니다.");
       SimpleMailMessage message = new SimpleMailMessage();
       message.setTo(mailDTO.getAddress());
       message.setFrom(SendEmailService.FROM_ADDRESS);
