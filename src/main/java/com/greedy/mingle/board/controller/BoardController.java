@@ -1,5 +1,7 @@
 package com.greedy.mingle.board.controller;
 
+import java.util.Date;
+
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +23,20 @@ import com.greedy.mingle.common.paging.Pagenation;
 import com.greedy.mingle.common.paging.PagingButtonInfo;
 import com.greedy.mingle.common.paging.ResponseDTOWithPaging;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
+import com.greedy.mingle.notification.dto.NotificationDTO;
+import com.greedy.mingle.notification.dto.NotificationTypeDTO;
+import com.greedy.mingle.notification.service.NotificationService;
 
 @RestController
 @RequestMapping("/board")
 public class BoardController {
 	
 	private final BoardService boardService;
+	private final NotificationService notiService;
 	
-	public BoardController(BoardService boardService) {
+	public BoardController(BoardService boardService, NotificationService notiService) {
 		this.boardService = boardService;
+		this.notiService = notiService;
 	}
 	
 	/* 1. 최신 공지사항 7개 조회 */
@@ -77,7 +84,7 @@ public class BoardController {
 		
 		return ResponseEntity
 				.ok()
-				.body(new ResponseDTO(HttpStatus.OK, "카테고리 및 검색한 공지사항 조회 성공", responseDTOWithPaging));
+				.body(new ResponseDTO(HttpStatus.OK, "분류 및 검색기준별 공지사항 조회 성공", responseDTOWithPaging));
 	}
 	
 	/* 4. 공지 상세 내용 조회 */
@@ -95,6 +102,23 @@ public class BoardController {
 		
 		boardDTO.setWriter(writer);
 		boardService.registBoard(boardDTO);
+		
+		/* 공지사항이 등록될 때, 알림 테이블에 insert되는 동시에 모든 교직원에게 실시간 알림 전송 */
+		// 공지사항의 알림 유효시간은 3일
+		Date now = new Date();
+		Date threeDaysAfter = new Date(now.getTime() + (1000 * 60 * 60 * 24 * 3));
+		// NotiType 설정
+		NotificationTypeDTO notiTypeDTO = new NotificationTypeDTO();
+		notiTypeDTO.setNotiTypeCode((long) 40001);
+		notiTypeDTO.setNotiTitle("새로운 공지사항이 등록되었습니다.");
+		// Noti 설정
+		NotificationDTO notiDTO = new NotificationDTO();
+		notiDTO.setNotiContent(boardDTO.getBoardTitle());
+		notiDTO.setNotiEndDate(threeDaysAfter);
+		notiDTO.setNotiType(notiTypeDTO);
+		
+    	notiService.addNoti(notiDTO);
+		notiService.notifyCommonNoti(notiDTO);
 		
 		return ResponseEntity
 				.ok()
