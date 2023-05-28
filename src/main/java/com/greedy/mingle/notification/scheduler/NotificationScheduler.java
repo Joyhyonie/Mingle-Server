@@ -63,7 +63,7 @@ public class NotificationScheduler {
         		notiDTO.setNotiEndDate(tomorrow);
         		notiDTO.setNotiType(notiTypeDTO);
         		
-            	notiService.addAcScheduleNoti(notiDTO);
+            	notiService.addNoti(notiDTO);
         		notiService.notifyCommonNoti(notiDTO); // 학사일정 시작일 알림 등록 시, 모든 교직원에게 실시간 알림 전송
             	
             } else if (endDate.equals(today)) {
@@ -79,7 +79,7 @@ public class NotificationScheduler {
         		notiDTO.setNotiEndDate(tomorrow);
         		notiDTO.setNotiType(notiTypeDTO);
         		
-            	notiService.addAcScheduleNoti(notiDTO);
+            	notiService.addNoti(notiDTO);
             	notiService.notifyCommonNoti(notiDTO); // 학사일정 종료일 알림 등록 시, 모든 교직원에게 실시간 알림 전송
             	
             }

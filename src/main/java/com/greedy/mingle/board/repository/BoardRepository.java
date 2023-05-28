@@ -58,7 +58,9 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 	// boardUpdate() 메소드 활용
 	
 	/* 7. 등록된 공지사항 삭제 */
+	// save() 메소드 활용
 	
 	/* 8. 공지사항 조회수 증가 */
+	// save() 메소드 활용
 
 }

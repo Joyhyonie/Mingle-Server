@@ -76,12 +76,9 @@ public class NotificationService {
 	/* 3. 알림 전체 삭제 */
 	// NotificationController에서 foreach로 상단의 removeOneNoti()를 활용
 	
-	/* 4. 공지사항 등록 시, 알림 등록 */
-	// BoardService에서 실행
-	
-	/* 5. 학사일정 시작일&종료일 알림 등록 */
+	/* 4. 새 공지사항 및 학사일정 시작일&종료일 알림 등록 */
 	@Transactional
-	public void addAcScheduleNoti(NotificationDTO notiDTO) {
+	public void addNoti(NotificationDTO notiDTO) {
 	
 		notiRepository.save(modelMapper.map(notiDTO, Notification.class));
 		

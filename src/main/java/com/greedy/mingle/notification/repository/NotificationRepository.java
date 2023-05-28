@@ -29,9 +29,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 	/* 2-2. 알림 개별 삭제 */
 	// save() 메소드 활용
 	
-	/* 4. 공지사항 등록 시, 알림 등록 */
+	/* 4. 새 공지사항 및 학사일정 시작일&종료일 알림 등록 */
 	// save() 메소드 활용
-	
-	/* 5. 학사일정 시작일&종료일 알림 등록 */
-	// save() 메소드 활용
+
 }
