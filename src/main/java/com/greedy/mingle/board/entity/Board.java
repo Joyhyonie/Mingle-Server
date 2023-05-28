@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicInsert;
+
 import com.greedy.mingle.employee.entity.Employee;
 
 import lombok.Getter;
@@ -24,6 +26,7 @@ import lombok.Setter;
 @SequenceGenerator(name="BOARD_SEQ_GENERATOR",
 				   sequenceName="SEQ_BOARD_CODE",
 				   initialValue=1, allocationSize=1)
+@DynamicInsert
 public class Board {
 	
 	@Id
@@ -55,5 +58,15 @@ public class Board {
 	
 	@Column(name="BOARD_MODIFY_DATE")
 	private Date boardModifyDate;
+	
+	
+	/* 공지사항 수정용 메소드 */
+	public void boardUpdate(String boardType, String boardTitle, String boardContent) {
+		
+		this.boardType = boardType;
+		this.boardTitle = boardTitle;
+		this.boardContent = boardContent;
+		
+	}
 
 }
