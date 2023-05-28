@@ -50,6 +50,7 @@ public class AuthController {
 	 */
 	 
 	
+	
 		
 		  // 2. 로그인
 		  
@@ -57,7 +58,7 @@ public class AuthController {
 		  public ResponseEntity<ResponseDTO> login(@RequestBody
 		  EmployeeDTO employeeDto) {
 		  
-		  
+			  log.info("hi 내가 먼저야!  : {}",  employeeDto);
 		  
 		  return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "로그인 완료",
 		  authService.login(employeeDto)));
