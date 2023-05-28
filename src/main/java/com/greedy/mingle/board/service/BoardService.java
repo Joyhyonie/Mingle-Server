@@ -1,6 +1,7 @@
 package com.greedy.mingle.board.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.greedy.mingle.board.dto.BoardDTO;
 import com.greedy.mingle.board.entity.Board;
@@ -31,7 +33,7 @@ public class BoardService {
 	/* 1. 최신 공지사항 7개 조회 */
 	public List<BoardDTO> selectBoardPreview() {
 		
-		List<Board> boardList = boardRepository.findTop7ByBoardStatusOrderByBoardWriteDateDesc("Y");
+		List<Board> boardList = boardRepository.findTop7ByBoardStatusOrderByBoardCodeDesc("Y");
 		
 		log.info("[BoardService] boardList : {}", boardList);
 		
@@ -67,6 +69,7 @@ public class BoardService {
 		Page<Board> boardList;
 		
 		switch(condition) {
+			case "" : boardList = boardRepository.findByBoardTypeAndBoardStatus(type, "Y", pageable); break;
 			case "title" :  boardList = boardRepository.findByBoardTitle(type, word, pageable); break;
 			case "content" : boardList = boardRepository.findByBoardContent(type, word, pageable); break;
 			case "writer" : boardList = boardRepository.findByWriter(type, word, pageable); break;
@@ -89,16 +92,51 @@ public class BoardService {
 		
 		return boardDTO;
 	}
-	
-	
-	
-	
+
 	/* 5. 새 공지사항 등록 */
-	
+	@Transactional
+	public void registBoard(BoardDTO boardDTO) {
+		
+		boardRepository.save(modelMapper.map(boardDTO, Board.class));
+		
+	}
+
 	/* 6. 등록된 공지사항 수정 */
-	
+	@Transactional
+	public void modifyBoard(BoardDTO boardDTO) {
+		
+		Board board = boardRepository.findByBoardCode(boardDTO.getBoardCode())
+				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 공지사항이 없어유🤕 boardCode=" + boardDTO.getBoardCode())); 
+		
+		// 공지사항 수정용 메소드(boardUpdate())를 통한 수정
+		board.boardUpdate(boardDTO.getBoardType(), boardDTO.getBoardTitle(), boardDTO.getBoardContent());
+		
+	}
+
 	/* 7. 등록된 공지사항 삭제 */
-	
+	public void removeBoard(Long boardCode) {
+		
+		Board board = boardRepository.findByBoardCode(boardCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 공지사항이 없어유🤕 boardCode=" + boardCode)); 
+		
+		board.setBoardStatus("N");
+		boardRepository.save(board);
+		
+	}
+
 	/* 8. 공지사항 조회수 증가 */
+	public void countUpBoard(Long boardCode) {
+		
+		Board board = boardRepository.findByBoardCode(boardCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 공지사항이 없어유🤕 boardCode=" + boardCode)); 
+		
+		int count = board.getBoardCount();
+		board.setBoardCount(count + 1);
+		boardRepository.save(board);
+		
+	}
+	
+	
+	
 	
 }
