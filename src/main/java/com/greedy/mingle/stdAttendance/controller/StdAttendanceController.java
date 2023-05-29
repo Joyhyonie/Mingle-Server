@@ -1,26 +1,17 @@
 package com.greedy.mingle.stdAttendance.controller;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.springframework.expression.ParseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greedy.mingle.common.ResponseDTO;
-import com.greedy.mingle.employee.dto.EmployeeDTO;
-import com.greedy.mingle.schedule.dto.ScheduleDTO;
-import com.greedy.mingle.schedule.service.ScheduleService;
+import com.greedy.mingle.cource.entity.Course;
+import com.greedy.mingle.lecture.entity.Lecture;
+import com.greedy.mingle.stdAttendance.service.StdAttendanceService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,13 +20,26 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/attendance")
 public class StdAttendanceController {
 	
-	private final ScheduleService scheduleService;
+	private final StdAttendanceService stdAttendanceService;
 	
-	public StdAttendanceController(ScheduleService scheduleService) {
-		this.scheduleService = scheduleService;
+	public StdAttendanceController(StdAttendanceService stdAttendanceService) {
+		this.stdAttendanceService = stdAttendanceService;
 	}
 	
-//	/*1. 출석정보 조회하기( ) */
-//	@GetMapping("")
+	
+/*lecCode를 통해서      course 클래스의 조회기능이 필요없는게 아닐까? */	
+ @GetMapping("/list/{lecCode}")
+ public ResponseEntity<ResponseDTO> getattendanceList(@PathVariable("lecCode") Long lecCode,
+		 @RequestParam(name="stdAtdDate",defaultValue="1")Long stdAtdDate){
+	/* 
+	 Course course = new Course();
+	 Lecture lecture= new Lecture();
+	 lecture.setLecCode(lecCode);
+	 course.setLecture(lecture);*/
+	 
+	 return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", stdAttendanceService.getAttendanceInfo(stdAtdDate, lecCode)));
+
+	 
+ }
 
 }

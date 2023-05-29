@@ -16,7 +16,7 @@ public class StdAttendanceDTO {
 	private String stdAtdStatus;		//출결상태
 	
 	
-	private String stdAtdDate;		//출결 날짜
+	private Long stdAtdDate;		//출결 날짜
 	
 
 	private Course course;		//수강코드
