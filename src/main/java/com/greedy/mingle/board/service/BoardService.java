@@ -35,8 +35,6 @@ public class BoardService {
 		
 		List<Board> boardList = boardRepository.findTop7ByBoardStatusOrderByBoardCodeDesc("Y");
 		
-		log.info("[BoardService] boardList : {}", boardList);
-		
 		List<BoardDTO> boardDTOList = boardList.stream()
 		            .map(board -> modelMapper.map(board, BoardDTO.class))
 		            .collect(Collectors.toList());
@@ -69,11 +67,10 @@ public class BoardService {
 		Page<Board> boardList;
 		
 		switch(condition) {
-			case "" : boardList = boardRepository.findByBoardTypeAndBoardStatus(type, "Y", pageable); break;
 			case "title" :  boardList = boardRepository.findByBoardTitle(type, word, pageable); break;
 			case "content" : boardList = boardRepository.findByBoardContent(type, word, pageable); break;
 			case "writer" : boardList = boardRepository.findByWriter(type, word, pageable); break;
-			default: throw new IllegalArgumentException("일치하는 검색 기준이 없습니다 🥲 condition : " + condition);
+			default : boardList = boardRepository.findByBoardTypeAndBoardStatus(type, "Y", pageable);
 		}
 		
 		Page<BoardDTO> boardDTOList = boardList.map(board -> modelMapper.map(board, BoardDTO.class));
