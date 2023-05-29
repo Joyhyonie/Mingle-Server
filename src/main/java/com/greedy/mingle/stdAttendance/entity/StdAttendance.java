@@ -29,16 +29,16 @@ public class StdAttendance {
 	@Id
 	@Column(name="STD_ATD_CODE")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_STD_ATD_CODE")
-	private Long stdCode;				
+	private Long stdAtdCode;				
 	
 	@Column(name="STD_ATD_STATUS")
 	private String stdAtdStatus;
 	
 	@Column(name="STD_ATD_DATE")
-	private String stdAtdDate;
+	private Long stdAtdDate;
 	
 	@ManyToOne
-	@JoinColumn(name="STD_COURSE_CODE")
+	@JoinColumn(name="COURSE_CODE")
 	private Course course;
 	
 	
