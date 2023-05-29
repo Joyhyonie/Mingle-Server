@@ -1,6 +1,10 @@
 # port config
 server:
   port: 8001
+#  tomcat:
+#    connection-timeout: 30s
+#    max-keep-alive-requests: 100
+#    keep-alive-timeout: 3600000 # 1시간
   
 # datasource config
 spring:
@@ -27,7 +31,7 @@ spring:
       hibernate:
         '[format_sql]' : true
   # SSE 통신 사용 시, DB connection을 닫기 위한 설정
-#    open-in-view: false
+    open-in-view: false
     
 # maximum upload size
   servlet:

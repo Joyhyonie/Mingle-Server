@@ -70,7 +70,7 @@ public class BoardController {
 	@GetMapping("/search")
 	public ResponseEntity<ResponseDTO> selectSearchedBoard(@RequestParam(name="page", defaultValue="1") int page,
 														   @RequestParam(name="type", defaultValue="전체") String type,
-														   @RequestParam(name="condition") String condition,
+														   @RequestParam(name="condition", defaultValue="title") String condition,
 														   @RequestParam(name="word") String word) {
 		
 		Page<BoardDTO> boardDTOList = boardService.selectSearchedBoard(page, type, condition, word);
