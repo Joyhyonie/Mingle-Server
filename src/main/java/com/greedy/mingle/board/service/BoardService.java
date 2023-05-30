@@ -111,6 +111,7 @@ public class BoardService {
 	}
 
 	/* 7. 등록된 공지사항 삭제 */
+	@Transactional
 	public void removeBoard(Long boardCode) {
 		
 		Board board = boardRepository.findByBoardCode(boardCode)
@@ -122,6 +123,7 @@ public class BoardService {
 	}
 
 	/* 8. 공지사항 조회수 증가 */
+	@Transactional
 	public void countUpBoard(Long boardCode) {
 		
 		Board board = boardRepository.findByBoardCode(boardCode)

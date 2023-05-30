@@ -1,5 +1,6 @@
 package com.greedy.mingle.message.controller;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greedy.mingle.common.ResponseDTO;
+import com.greedy.mingle.common.paging.ResponseDTOWithMorePaging;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.message.dto.MessageDTO;
 import com.greedy.mingle.message.service.MessageService;
@@ -34,13 +36,20 @@ public class MessageController {
 		this.notiService = notiService;
 	}
 	
-	/* 1. 받은 쪽지함 조회 (최근 20개) */
+	/* 1. 받은 쪽지함 조회 */
 	@GetMapping("/received")
-	public ResponseEntity<ResponseDTO> selectReceivedMessage(@AuthenticationPrincipal EmployeeDTO receiver) {
+	public ResponseEntity<ResponseDTO> selectReceivedMessage(@AuthenticationPrincipal EmployeeDTO receiver,
+															 @RequestParam(name="size", defaultValue="10")int size) {
+		
+		Page<MessageDTO> messageDTOList = messageService.selectReceivedMessage(receiver.getEmpCode(), size);
+		
+		ResponseDTOWithMorePaging responseDTOWithMorePaging = new ResponseDTOWithMorePaging();
+		responseDTOWithMorePaging.setData(messageDTOList.getContent());
+		responseDTOWithMorePaging.setTotalElements(messageDTOList.getTotalElements());
 		
 		return ResponseEntity
 				.ok()
-				.body(new ResponseDTO(HttpStatus.OK, "받은 쪽지함 조회 성공", messageService.selectReceivedMessage(receiver.getEmpCode())));
+				.body(new ResponseDTO(HttpStatus.OK, "받은 쪽지함 조회 성공", responseDTOWithMorePaging));
 		
 	}
 	
@@ -59,10 +68,18 @@ public class MessageController {
 	@GetMapping("/received/search")
 	public ResponseEntity<ResponseDTO> searchReceivedMessage(@AuthenticationPrincipal EmployeeDTO receiver, 
 															 @RequestParam(name="condition")String condition, 
-															 @RequestParam(name="word")String word) {
+															 @RequestParam(name="word")String word,
+															 @RequestParam(name="size", defaultValue="10")int size) {
+		
+		Page<MessageDTO> messageDTOList = messageService.searchReceivedMessage(receiver.getEmpCode(), condition, word, size);
+		
+		ResponseDTOWithMorePaging responseDTOWithMorePaging = new ResponseDTOWithMorePaging();
+		responseDTOWithMorePaging.setData(messageDTOList.getContent());
+		responseDTOWithMorePaging.setTotalElements(messageDTOList.getTotalElements());
+		
 		return ResponseEntity
 				.ok()
-				.body(new ResponseDTO(HttpStatus.OK, "받은 쪽지함 검색 후 조회 성공", messageService.searchReceivedMessage(receiver.getEmpCode(), condition, word)));
+				.body(new ResponseDTO(HttpStatus.OK, "받은 쪽지함 검색 후 조회 성공", responseDTOWithMorePaging));
 		
 	}
 	

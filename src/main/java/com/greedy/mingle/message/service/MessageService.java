@@ -7,6 +7,10 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.greedy.mingle.employee.dto.EmployeeDTO;
@@ -38,14 +42,14 @@ public class MessageService {
 		this.modelMapper = modelMapper;
 	}
 
-	/* 1. 받은 쪽지함 조회 (최근 20개) */
-	public List<MessageDTO> selectReceivedMessage(Long empCode) {
+	/* 1. 받은 쪽지함 조회 */
+	public Page<MessageDTO> selectReceivedMessage(Long empCode, int size) {
 		
-		List<Message> messageList = messageRepository.findReceivedMessage(empCode);
+		Pageable pageable = PageRequest.of(0, size, Sort.by("msgCode").descending());
 		
-		List<MessageDTO> messageDTOList = messageList.stream()
-				.map(message -> modelMapper.map(message, MessageDTO.class))
-				.collect(Collectors.toList());
+		Page<Message> messageList = messageRepository.findReceivedMessage(empCode, pageable);
+		
+		Page<MessageDTO> messageDTOList = messageList.map(message -> modelMapper.map(message, MessageDTO.class));
 		
 		return messageDTOList;
 	}
@@ -62,29 +66,21 @@ public class MessageService {
 	}
 
 	/* 3. 교직원명/내용으로 쪽지 검색 후 조회 (받은 쪽지함) */
-	public Object searchReceivedMessage(Long empCode, String condition, String word) {
+	public Page<MessageDTO> searchReceivedMessage(Long empCode, String condition, String word, int size) {
+		
+		Pageable pageable = PageRequest.of(0, size, Sort.by("msgCode").descending());
+		
+		Page<Message> messageList;
 		
 		if(condition.equals("empName")) {
-			
-			List<Message> messageList = messageRepository.findReceivedMessageBySender(empCode, word);
-			
-			List<MessageDTO> messageDTOList = messageList.stream()
-					.map(message -> modelMapper.map(message, MessageDTO.class))
-					.collect(Collectors.toList());
-			
-			return messageDTOList;
-			
+			messageList = messageRepository.findReceivedMessageBySender(empCode, word, pageable);
 		} else {
-			
-			List<Message> messageList = messageRepository.findReceivedMessageByContent(empCode, word);
-			
-			List<MessageDTO> messageDTOList = messageList.stream()
-					.map(message -> modelMapper.map(message, MessageDTO.class))
-					.collect(Collectors.toList());
-			
-			return messageDTOList;
-			
+			messageList = messageRepository.findReceivedMessageByContent(empCode, word, pageable);
 		}
+		
+		Page<MessageDTO> messageDTOList = messageList.map(message -> modelMapper.map(message, MessageDTO.class));
+		
+		return messageDTOList;
 	}
 	
 	/* 4. 보낸 쪽지함 조회 (최근 20개) */
