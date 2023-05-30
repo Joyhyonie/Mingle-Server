@@ -36,6 +36,20 @@ public class MessageController {
 		this.notiService = notiService;
 	}
 	
+	/* 0. 읽지 않은 쪽지 갯수 조회 */
+	@GetMapping("/unread")
+	public ResponseEntity<ResponseDTO> selectUnreadMessage(@AuthenticationPrincipal EmployeeDTO receiver) {
+		
+		int counting = messageService.selectUnreadMessage(receiver.getEmpCode());
+		MessageDTO messageDTO = new MessageDTO();
+		messageDTO.setUnreadMsgs(counting);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "읽지 않은 쪽지 갯수 조회 성공", messageDTO));
+	}
+	
+	
 	/* 1. 받은 쪽지함 조회 */
 	@GetMapping("/received")
 	public ResponseEntity<ResponseDTO> selectReceivedMessage(@AuthenticationPrincipal EmployeeDTO receiver,

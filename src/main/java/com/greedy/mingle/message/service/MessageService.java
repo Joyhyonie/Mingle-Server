@@ -41,6 +41,14 @@ public class MessageService {
 		this.employeeRepository = employeeRepository;
 		this.modelMapper = modelMapper;
 	}
+	
+	/* 0. 읽지 않은 쪽지 갯수 조회 */
+	public int selectUnreadMessage(Long empCode) {
+		
+		int counting = messageRepository.countUnreadMessage(empCode);
+		
+		return counting;
+	}
 
 	/* 1. 받은 쪽지함 조회 */
 	public Page<MessageDTO> selectReceivedMessage(Long empCode, int size) {
@@ -201,7 +209,7 @@ public class MessageService {
 	}
 	
 	/* 9. 상위 카테고리가 존재하는 소속 전체 조회 */
-	public Object selectAllDepartment() {
+	public List<DepartmentDTO> selectAllDepartment() {
 		
 		List<Department> departmentList = departmentRepository.findByRefDeptCodeIsNotNull();
 		
@@ -260,6 +268,8 @@ public class MessageService {
 		} 
 			
 	}
+
+	
 		
 	
 }

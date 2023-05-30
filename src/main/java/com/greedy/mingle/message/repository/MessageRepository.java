@@ -7,11 +7,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.message.entity.Message;
 
 public interface MessageRepository extends JpaRepository<Message, Long> {
+	
+	/* 0. 읽지 않은 쪽지 갯수 조회 */
+	@Query(value="SELECT COUNT(m.msgReadYn) "
+			   + "FROM Message m "
+			   + "JOIN m.receiver "
+			   + "WHERE m.receiver.empCode = :empCode "
+			   + "AND m.msgReadYn = 'N' ")
+	int countUnreadMessage(@Param("empCode")Long empCode);
 
 	/* 1. 받은 쪽지함 조회 (최근 20개) */
 	@Query(value="SELECT m " +
@@ -104,6 +110,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 			 "OR (m.receiver.empCode = :empCode AND m.msgImpReceiver = 'Y' AND m.msgDelReceiver = 'N' AND m.msgContent LIKE %:word%) " +
 			 "ORDER BY m.msgSendDate DESC")
 	List<Message> findLikedMessageByContent(Long empCode, String word);
+
 	
 	
 	/* 6. 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
