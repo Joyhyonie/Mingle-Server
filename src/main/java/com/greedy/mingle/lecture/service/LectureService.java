@@ -164,6 +164,15 @@ public class LectureService {
                 .collect(Collectors.toList());
 		return lectureDTO;
 	} 
+	/*수업 회차 조회를 위한 findBylecCode*/
+	public List<LectureOfficerDTO> lectureCount(Long lecCode){
+		
+		List<Lecture>lecture = lectureRepository.findByLecCode(lecCode);
+		List<LectureOfficerDTO> lectureDTO=lecture.stream().map(myLecture -> modelMapper.map(myLecture, LectureOfficerDTO.class))
+				.collect(Collectors.toList());
+		return lectureDTO;
+	}
+	
 	
 
 }
