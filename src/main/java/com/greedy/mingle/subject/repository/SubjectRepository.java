@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.greedy.mingle.subject.entity.Department;
@@ -11,6 +12,9 @@ import com.greedy.mingle.subject.entity.Subject;
 
 public interface SubjectRepository extends JpaRepository<Subject, Long>{
 
+	@EntityGraph(attributePaths= {"department"})
+	Page<Subject> findAll(Pageable pageable);
+	
 	Page<Subject> findByDepartment(Pageable pageable, Department findDepartment);
 
 	Page<Subject> findBySbjNameContaining(Pageable pageable, String sbjName);
