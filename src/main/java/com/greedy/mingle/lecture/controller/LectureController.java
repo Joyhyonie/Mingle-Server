@@ -93,5 +93,14 @@ public class LectureController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", lectureService.getMyLecture(employee.getEmpCode())));
 	}
 	
+	/*수업 회차 조회를 위한 findBylecCode*/
+	@GetMapping("/lectureCount/{lecCode}")
+	public ResponseEntity<ResponseDTO> getMyLectureCount(@PathVariable Long lecCode ){
+		
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", lectureService.lectureCount(lecCode)));
+		
+	}
 
+	
 }
