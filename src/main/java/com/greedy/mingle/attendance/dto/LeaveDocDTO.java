@@ -1,6 +1,5 @@
 package com.greedy.mingle.attendance.dto;
 
-import com.greedy.mingle.attendance.entity.ApplyForm;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
 
 import lombok.Data;
@@ -18,7 +17,7 @@ public class LeaveDocDTO {
 	
 	private String reason;
 	
-	private ApplyForm applyForm;
+	private ApplyFormDTO applyForm;
 	
 	private String startDate;
 	
