@@ -68,10 +68,23 @@ public class StdAttendanceService {
 	
 	return stdAttendanceDtoList;
 }
+
+
+	@Transactional
+	public void updateAttendance(StdAttendanceDTO stdAttendanceDto) {
+	    StdAttendance findAttendance = stdAttendanceRepository.findById(stdAttendanceDto.getStdAtdCode())
+	            .orElseThrow(() -> new IllegalArgumentException("해당 StdAtdCode가 없습니다. getStdAtdCode = " + stdAttendanceDto.getStdAtdCode()));
+
+	    findAttendance.setStdAtdStatus((stdAttendanceDto.getStdAtdStatus()));
+	    
+	    stdAttendanceRepository.save(findAttendance);
+	   
+		
+	    
+	}
 	
 	
 	
-
-
-
 }
+
+
