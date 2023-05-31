@@ -195,6 +195,19 @@ public class LectureService {
 		return lectureDtoList;
 	}
 	
+	public Page<LectureOfficerDTO> searchLecName(int page, String condition,String name, Long empCode){
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("lecCode").descending());
+		if(condition.equals("sbjName")){
+			Page<Lecture> findLectureSbjName = lectureRepository.findByEmployeeEmpCodeAndSubjectSbjName(pageable, empCode, name);
+			Page<LectureOfficerDTO> lectureDtoSbjNameList = findLectureSbjName.map(mylecture->modelMapper.map(mylecture,LectureOfficerDTO.class));
+			return lectureDtoSbjNameList;
+		} else {		
+		Page<Lecture> lecture = lectureRepository.findByEmployeeEmpCodeAndLecName(pageable, empCode, name);
+		Page<LectureOfficerDTO> lectureDtoList = lecture.map(mylecture->modelMapper.map(mylecture,LectureOfficerDTO.class));
+		return lectureDtoList;
+		}
+	}
+	
 	
 
 }
