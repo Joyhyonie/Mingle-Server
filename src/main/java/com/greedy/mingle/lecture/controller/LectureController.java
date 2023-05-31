@@ -87,10 +87,37 @@ public class LectureController {
 	}
 	
 	/* 나의 강의 목록 조회 */
-	@GetMapping("/myLecture")
-	public ResponseEntity<ResponseDTO> getMyLecture(@AuthenticationPrincipal EmployeeDTO employee){		
+	@GetMapping("/myLectureCerti")
+	public ResponseEntity<ResponseDTO> getMyLectureCerti(@AuthenticationPrincipal EmployeeDTO employee){		
 		
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", lectureService.getMyLecture(employee.getEmpCode())));
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", lectureService.getMyLectureCerti(employee.getEmpCode())));
+	}
+	/* 나의 강의 목록 조회 */
+	@GetMapping("/myLecture")
+	public ResponseEntity<ResponseDTO> getMyLecture(@RequestParam(name = "page", defaultValue = "1") int page, @AuthenticationPrincipal EmployeeDTO employee){
+		
+		Page<LectureOfficerDTO> lectureDtoList = lectureService.getMyLecture(page, employee.getEmpCode());
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(lectureDtoList);
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(lectureDtoList.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	}
+	
+	/* 강의명이 있는 강의 조회 */
+	@GetMapping("/lecNameMyLecture")
+	public ResponseEntity<ResponseDTO> getLecNameMyLecture(@RequestParam(name = "page", defaultValue = "1") int page, @AuthenticationPrincipal EmployeeDTO employee){
+		
+		Page<LectureOfficerDTO> lectureDtoList = lectureService.getLecNameMyLecture(page, employee.getEmpCode());
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(lectureDtoList);
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(lectureDtoList.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
 	
 	/*수업 회차 조회를 위한 findBylecCode*/
