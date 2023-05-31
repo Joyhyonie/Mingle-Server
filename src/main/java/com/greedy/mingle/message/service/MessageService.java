@@ -41,8 +41,16 @@ public class MessageService {
 		this.employeeRepository = employeeRepository;
 		this.modelMapper = modelMapper;
 	}
+	
+	/* 1. 읽지 않은 쪽지 갯수 조회 */
+	public int selectUnreadMessage(Long empCode) {
+		
+		int counting = messageRepository.countUnreadMessage(empCode);
+		
+		return counting;
+	}
 
-	/* 1. 받은 쪽지함 조회 */
+	/* 2. 받은 쪽지함 조회 */
 	public Page<MessageDTO> selectReceivedMessage(Long empCode, int size) {
 		
 		Pageable pageable = PageRequest.of(0, size, Sort.by("msgCode").descending());
@@ -54,7 +62,7 @@ public class MessageService {
 		return messageDTOList;
 	}
 
-	/* 2. 받은 쪽지 클릭 시, 쪽지 읽음 표시 */
+	/* 3. 받은 쪽지 클릭 시, 쪽지 읽음 표시 */
 	@Transactional
 	public void readMessage(Long msgCode, Long empCode) {
 		
@@ -65,7 +73,7 @@ public class MessageService {
 		
 	}
 
-	/* 3. 교직원명/내용으로 쪽지 검색 후 조회 (받은 쪽지함) */
+	/* 4. 교직원명/내용으로 쪽지 검색 후 조회 (받은 쪽지함) */
 	public Page<MessageDTO> searchReceivedMessage(Long empCode, String condition, String word, int size) {
 		
 		Pageable pageable = PageRequest.of(0, size, Sort.by("msgCode").descending());
@@ -83,84 +91,83 @@ public class MessageService {
 		return messageDTOList;
 	}
 	
-	/* 4. 보낸 쪽지함 조회 (최근 20개) */
-	public List<MessageDTO> selectSentMessage(Long empCode) {
+	/* 5. 보낸 쪽지함 조회 */
+	public Page<MessageDTO> selectSentMessage(Long empCode, int size) {
 		
-		List<Message> messageList = messageRepository.findSentMessage(empCode);
+		Pageable pageable = PageRequest.of(0, size, Sort.by("msgCode").descending());
 		
-		List<MessageDTO> messageDTOList = messageList.stream()
-				.map(message -> modelMapper.map(message, MessageDTO.class))
-				.collect(Collectors.toList());
+		Page<Message> messageList = messageRepository.findSentMessage(empCode, pageable);
 		
-		return messageDTOList;
-	}
-
-	/* 5. 교직원명/내용으로 쪽지 검색 후 조회 (보낸 쪽지함) */
-	public List<MessageDTO> searchSentMessage(Long empCode, String condition, String word) {
-		
-		if(condition.equals("empName")) {
-			
-			List<Message> messageList = messageRepository.findSentMessageBySender(empCode, word);
-			
-			List<MessageDTO> messageDTOList = messageList.stream()
-					.map(message -> modelMapper.map(message, MessageDTO.class))
-					.collect(Collectors.toList());
-			
-			return messageDTOList;
-			
-		} else {
-			
-			List<Message> messageList = messageRepository.findSentMessageByContent(empCode, word);
-			
-			List<MessageDTO> messageDTOList = messageList.stream()
-					.map(message -> modelMapper.map(message, MessageDTO.class))
-					.collect(Collectors.toList());
-			
-			return messageDTOList;
-			
-		}
-	}
-
-	/* 6. 중요 쪽지함 조회 (전체) */
-	public List<MessageDTO> selectLikedMessage(Long empCode) {
-		
-		List<Message> messageList = messageRepository.findLikedMessage(empCode);
-		
-		List<MessageDTO> messageDTOList = messageList.stream()
-				.map(message -> modelMapper.map(message, MessageDTO.class))
-				.collect(Collectors.toList());
+		Page<MessageDTO> messageDTOList = messageList.map(message -> modelMapper.map(message, MessageDTO.class));
 		
 		return messageDTOList;
 	}
 
-	/* 7. 교직원명/내용으로 쪽지 검색 후 조회 (중요 쪽지함) */
-	public List<MessageDTO> searchLikedMessage(Long empCode, String condition, String word) {
+	/* 6. 교직원명/내용으로 쪽지 검색 후 조회 (보낸 쪽지함) */
+	public Page<MessageDTO> searchSentMessage(Long empCode, String condition, String word, int size) {
+		
+		Pageable pageable = PageRequest.of(0, size, Sort.by("msgCode").descending());
+		
+		Page<Message> messageList;
 		
 		if(condition.equals("empName")) {
-			
-			List<Message> messageList = messageRepository.findLikedMessageBySender(empCode, word);
-			
-			List<MessageDTO> messageDTOList = messageList.stream()
-					.map(message -> modelMapper.map(message, MessageDTO.class))
-					.collect(Collectors.toList());
-			
-			return messageDTOList;
-			
+			messageList = messageRepository.findSentMessageByReceiver(empCode, word, pageable);
 		} else {
-			
-			List<Message> messageList = messageRepository.findLikedMessageByContent(empCode, word);
-			
-			List<MessageDTO> messageDTOList = messageList.stream()
-					.map(message -> modelMapper.map(message, MessageDTO.class))
-					.collect(Collectors.toList());
-			
-			return messageDTOList;
-			
+			messageList = messageRepository.findSentMessageByContent(empCode, word, pageable);
 		}
+		
+		Page<MessageDTO> messageDTOList = messageList.map(message -> modelMapper.map(message, MessageDTO.class));
+		
+		return messageDTOList;
 		
 	}
 
-	/* 8. 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
+	/* 7. 중요 쪽지함 조회 */
+	public Page<MessageDTO> selectLikedMessage(Long empCode, int size) {
+		
+		Pageable pageable = PageRequest.of(0, size, Sort.by("msgCode").descending());
+		
+		Page<Message> messageList = messageRepository.findLikedMessage(empCode, pageable);
+		
+		Page<MessageDTO> messageDTOList = messageList.map(message -> modelMapper.map(message, MessageDTO.class));
+		
+		return messageDTOList;
+		
+	}
+
+	/* 8. 교직원명/내용으로 쪽지 검색 후 조회 (중요 쪽지함) */
+	public Page<MessageDTO> searchLikedMessage(Long empCode, String condition, String word, int size) {
+		
+		Pageable pageable = PageRequest.of(0, size, Sort.by("msgCode").descending());
+		
+		Page<Message> messageList;
+		
+		if(condition.equals("empName")) {
+			messageList = messageRepository.findLikedMessageByEmployee(empCode, word, pageable);
+		} else {
+			messageList = messageRepository.findLikedMessageByContent(empCode, word, pageable);
+		}
+		
+		Page<MessageDTO> messageDTOList = messageList.map(message -> modelMapper.map(message, MessageDTO.class));
+		
+		return messageDTOList;
+		
+	}
+	
+	/* 9. 휴지통 조회 */
+	public Page<MessageDTO> selectRemovedMessage(Long empCode, int size) {
+		
+		Pageable pageable = PageRequest.of(0, size, Sort.by("msgCode").descending());
+		
+		Page<Message> messageList = messageRepository.findRemovedMessage(empCode, pageable);
+		
+		Page<MessageDTO> messageDTOList = messageList.map(message -> modelMapper.map(message, MessageDTO.class));
+		
+		return messageDTOList;
+
+	}
+
+	/* 10. 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
 	@Transactional
 	public void likeToggleMessage(Long msgCode, Long empCode) {
 		
@@ -200,8 +207,8 @@ public class MessageService {
 		
 	}
 	
-	/* 9. 상위 카테고리가 존재하는 소속 전체 조회 */
-	public Object selectAllDepartment() {
+	/* 11. 상위 카테고리가 존재하는 소속 전체 조회 */
+	public List<DepartmentDTO> selectAllDepartment() {
 		
 		List<Department> departmentList = departmentRepository.findByRefDeptCodeIsNotNull();
 		
@@ -212,7 +219,7 @@ public class MessageService {
 		return departmentDTOList;
 	}
 
-	/* 10. 소속 선택 시, 해당 소속 교직원 조회 */
+	/* 12. 소속 선택 시, 해당 소속 교직원 조회 */
 	public List<EmployeeDTO> selectReceiverByDeptCode(Long deptCode) {
 		
 		List<Employee> employeeList = employeeRepository.findByDepartmentDeptCode(deptCode);
@@ -225,7 +232,7 @@ public class MessageService {
 		
 	}
 
-	/* 11. 쪽지 전송 */
+	/* 13. 쪽지 전송 */
 	@Transactional
 	public void sendMessage(MessageDTO messageDTO) {
 		
@@ -233,7 +240,7 @@ public class MessageService {
 		
 	}
 
-	/* 12. 선택한 쪽지 삭제 */
+	/* 14. 선택한 쪽지 삭제 */
 	public void removeMessage(Long[] selectedMsgs, Long empCode) {
 		
 		for (Long msgCode : selectedMsgs) {
@@ -260,6 +267,58 @@ public class MessageService {
 		} 
 			
 	}
-		
 	
+	/* 15. 선택한 쪽지 복구 */
+	public void restoreMessage(Long[] selectedMsgs, Long empCode) {
+		
+		for (Long msgCode : selectedMsgs) {
+			
+			Message message = messageRepository.findById(msgCode)
+					.orElseThrow(() -> new IllegalArgumentException("해당 코드의 쪽지가 없습니다 🥲 msgCode : " + msgCode));
+		
+			Long receiverEmpCode = message.getReceiver().getEmpCode();
+			Long senderEmpCode = message.getSender().getEmpCode();
+			
+			// 해당 유저가 receiver일 경우,
+			if(receiverEmpCode.equals(empCode)) {
+				message.setMsgDelReceiver("N");
+				messageRepository.save(message);
+				
+			// 해당 유저가 sender일 경우,
+			} else if(senderEmpCode.equals(empCode)) {
+				message.setMsgDelSender("N");
+				messageRepository.save(message);
+			}
+			
+		} 
+		
+	}
+
+	/* 16. 선택한 쪽지 영구 삭제 */
+	public void deleteMessage(Long[] selectedMsgs, Long empCode) {
+		
+		for (Long msgCode : selectedMsgs) {
+			
+			Message message = messageRepository.findById(msgCode)
+					.orElseThrow(() -> new IllegalArgumentException("해당 코드의 쪽지가 없습니다 🥲 msgCode : " + msgCode));
+		
+			Long receiverEmpCode = message.getReceiver().getEmpCode();
+			Long senderEmpCode = message.getSender().getEmpCode();
+			
+			// 해당 유저가 receiver일 경우,
+			if(receiverEmpCode.equals(empCode)) {
+				message.setMsgDelReceiver("F");
+				messageRepository.save(message);
+				
+			// 해당 유저가 sender일 경우,
+			} else if(senderEmpCode.equals(empCode)) {
+				message.setMsgDelSender("F");
+				messageRepository.save(message);
+			}
+			
+		} 
+		
+	}
+
+
 }

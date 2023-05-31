@@ -20,6 +20,11 @@ public class MessageDTO {
 	private String msgDelSender;
 	private String msgDelReceiver;
 	
-	// '12. 선택한 쪽지 삭제'를 위한 필드
+	// 읽지 않은 쪽지의 갯수를 저장하기 위한 필드
+	private int unreadMsgs;
+	
+	// 선택한 쪽지 삭제 & 복구 & 영구 삭제를 위한 필드
 	private Long[] selectedMsgs;
+	
+	
 }
