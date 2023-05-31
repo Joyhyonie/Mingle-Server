@@ -50,28 +50,24 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 				 "AND m.msgContent LIKE %:word%")
 	Page<Message> findReceivedMessageByContent(@Param("empCode")Long empCode, @Param("word")String word, Pageable pageable);
 
-	/* 4. 보낸 쪽지함 조회 (최근 20개) */
-	@Query(value="SELECT * " +
-				 "FROM ( SELECT * " + 
-						 "FROM TBL_MESSAGE " + 
-						 "WHERE MSG_SENDER = :empCode " + 
-						 "AND MSG_IMP_SENDER = 'N' " + 
-						 "AND MSG_DEL_SENDER = 'N' " + 
-						 "ORDER BY MSG_SEND_DATE DESC ) " + 
-				 "WHERE ROWNUM <= 20 ",
-				 nativeQuery = true)
-	List<Message> findSentMessage(@Param("empCode")Long empCode);
+	/* 4. 보낸 쪽지함 조회 */
+	@Query(value="SELECT m " +
+			 "FROM Message m " + 
+			 "WHERE m.sender.empCode = :empCode " + 
+			 "AND m.msgImpSender = 'N' " + 
+			 "AND m.msgDelSender = 'N' ")
+	Page<Message> findSentMessage(@Param("empCode")Long empCode, Pageable pageable);
 
 	/* 4-1. 교직원명으로 쪽지 검색 후 조회 (보낸 쪽지함) */
 	@Query(value="SELECT m " +
 			 "FROM Message m " +
-			 "JOIN fetch m.receiver " +
-			 "JOIN fetch m.sender " +
+			 "JOIN m.receiver " +
+			 "JOIN m.sender " +
 			 "WHERE m.sender.empCode = :empCode " +
 			 "AND m.msgImpSender = 'N' " + 
 			 "AND m.msgDelSender = 'N' " +
 			 "AND m.receiver.empName LIKE %:word%")
-	List<Message> findSentMessageBySender(@Param("empCode")Long empCode, @Param("word")String word);
+	Page<Message> findSentMessageByReceiver(@Param("empCode")Long empCode, @Param("word")String word, Pageable pageable);
 
 	/* 4-2. 내용으로 쪽지 검색 후 조회 (보낸 쪽지함) */
 	@Query(value="SELECT m " +
@@ -80,39 +76,33 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 			 "AND m.msgImpSender = 'N' " + 
 			 "AND m.msgDelSender = 'N' " +
 			 "AND m.msgContent LIKE %:word%")
-	List<Message> findSentMessageByContent(@Param("empCode")Long empCode, @Param("word")String word);
+	Page<Message> findSentMessageByContent(@Param("empCode")Long empCode, @Param("word")String word, Pageable pageable);
 
-	/* 5. 중요 쪽지함 조회 (전체) */
-	@Query(value="SELECT * " +
-				 "FROM TBL_MESSAGE " +
-				 "WHERE (MSG_SENDER = :empCode AND MSG_IMP_SENDER = 'Y' AND MSG_DEL_SENDER = 'N') " +
-				 "OR (MSG_RECEIVER = :empCode AND MSG_IMP_RECEIVER = 'Y' AND MSG_DEL_RECEIVER = 'N') " +
-				 "ORDER BY MSG_SEND_DATE DESC ",
-				 nativeQuery = true)
-	List<Message> findLikedMessage(@Param("empCode")Long empCode);
+	/* 5. 중요 쪽지함 조회 */
+	@Query(value="SELECT m "
+			   + "FROM Message m "
+			   + "WHERE (m.sender.empCode = :empCode AND msgImpSender = 'Y' AND msgDelSender = 'N') "
+			   + "OR (m.receiver.empCode = :empCode AND msgImpReceiver = 'Y' AND msgDelReceiver = 'N') ")
+	Page<Message> findLikedMessage(@Param("empCode")Long empCode, Pageable pageable);
 
 	/* 5-1. 교직원명으로 쪽지 검색 후 조회 (중요 쪽지함) */
 	@Query(value="SELECT m " +
 				 "FROM Message m " +
-				 "JOIN fetch m.receiver " +
-				 "JOIN fetch m.sender " + 
+				 "JOIN m.receiver " +
+				 "JOIN m.sender " + 
 				 "WHERE (m.sender.empCode = :empCode AND m.msgImpSender = 'Y' AND m.msgDelSender = 'N' AND m.receiver.empName LIKE %:word%) " +
-				 "OR (m.receiver.empCode = :empCode AND m.msgImpReceiver = 'Y' AND m.msgDelReceiver = 'N' AND m.sender.empName LIKE %:word%) " +
-				 "ORDER BY m.msgSendDate DESC")
-	List<Message> findLikedMessageBySender(@Param("empCode")Long empCode, @Param("word")String word);
+				 "OR (m.receiver.empCode = :empCode AND m.msgImpReceiver = 'Y' AND m.msgDelReceiver = 'N' AND m.sender.empName LIKE %:word%) ")
+	Page<Message> findLikedMessageByEmployee(@Param("empCode")Long empCode, @Param("word")String word, Pageable pageable);
 
 	/* 5-2. 내용으로 쪽지 검색 후 조회 (중요 쪽지함) */
 	@Query(value="SELECT m " +
 			 "FROM Message m " +
-			 "JOIN fetch m.receiver " +
-			 "JOIN fetch m.sender " + 
+			 "JOIN m.receiver " +
+			 "JOIN m.sender " + 
 			 "WHERE (m.sender.empCode = :empCode AND m.msgImpSender = 'Y' AND m.msgDelSender = 'N' AND m.msgContent LIKE %:word%) " +
-			 "OR (m.receiver.empCode = :empCode AND m.msgImpReceiver = 'Y' AND m.msgDelReceiver = 'N' AND m.msgContent LIKE %:word%) " +
-			 "ORDER BY m.msgSendDate DESC")
-	List<Message> findLikedMessageByContent(Long empCode, String word);
+			 "OR (m.receiver.empCode = :empCode AND m.msgImpReceiver = 'Y' AND m.msgDelReceiver = 'N' AND m.msgContent LIKE %:word%) ")
+	Page<Message> findLikedMessageByContent(Long empCode, String word, Pageable pageable);
 
-	
-	
 	/* 6. 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
 	// save() 메소드 활용
 	

@@ -91,80 +91,66 @@ public class MessageService {
 		return messageDTOList;
 	}
 	
-	/* 4. 보낸 쪽지함 조회 (최근 20개) */
-	public List<MessageDTO> selectSentMessage(Long empCode) {
+	/* 4. 보낸 쪽지함 조회 */
+	public Page<MessageDTO> selectSentMessage(Long empCode, int size) {
 		
-		List<Message> messageList = messageRepository.findSentMessage(empCode);
+		Pageable pageable = PageRequest.of(0, size, Sort.by("msgCode").descending());
 		
-		List<MessageDTO> messageDTOList = messageList.stream()
-				.map(message -> modelMapper.map(message, MessageDTO.class))
-				.collect(Collectors.toList());
+		Page<Message> messageList = messageRepository.findSentMessage(empCode, pageable);
+		
+		Page<MessageDTO> messageDTOList = messageList.map(message -> modelMapper.map(message, MessageDTO.class));
 		
 		return messageDTOList;
 	}
 
 	/* 5. 교직원명/내용으로 쪽지 검색 후 조회 (보낸 쪽지함) */
-	public List<MessageDTO> searchSentMessage(Long empCode, String condition, String word) {
+	public Page<MessageDTO> searchSentMessage(Long empCode, String condition, String word, int size) {
+		
+		Pageable pageable = PageRequest.of(0, size, Sort.by("msgCode").descending());
+		
+		Page<Message> messageList;
 		
 		if(condition.equals("empName")) {
-			
-			List<Message> messageList = messageRepository.findSentMessageBySender(empCode, word);
-			
-			List<MessageDTO> messageDTOList = messageList.stream()
-					.map(message -> modelMapper.map(message, MessageDTO.class))
-					.collect(Collectors.toList());
-			
-			return messageDTOList;
-			
+			messageList = messageRepository.findSentMessageByReceiver(empCode, word, pageable);
 		} else {
-			
-			List<Message> messageList = messageRepository.findSentMessageByContent(empCode, word);
-			
-			List<MessageDTO> messageDTOList = messageList.stream()
-					.map(message -> modelMapper.map(message, MessageDTO.class))
-					.collect(Collectors.toList());
-			
-			return messageDTOList;
-			
+			messageList = messageRepository.findSentMessageByContent(empCode, word, pageable);
 		}
-	}
-
-	/* 6. 중요 쪽지함 조회 (전체) */
-	public List<MessageDTO> selectLikedMessage(Long empCode) {
 		
-		List<Message> messageList = messageRepository.findLikedMessage(empCode);
-		
-		List<MessageDTO> messageDTOList = messageList.stream()
-				.map(message -> modelMapper.map(message, MessageDTO.class))
-				.collect(Collectors.toList());
+		Page<MessageDTO> messageDTOList = messageList.map(message -> modelMapper.map(message, MessageDTO.class));
 		
 		return messageDTOList;
+		
+	}
+
+	/* 6. 중요 쪽지함 조회 */
+	public Page<MessageDTO> selectLikedMessage(Long empCode, int size) {
+		
+		Pageable pageable = PageRequest.of(0, size, Sort.by("msgCode").descending());
+		
+		Page<Message> messageList = messageRepository.findLikedMessage(empCode, pageable);
+		
+		Page<MessageDTO> messageDTOList = messageList.map(message -> modelMapper.map(message, MessageDTO.class));
+		
+		return messageDTOList;
+		
 	}
 
 	/* 7. 교직원명/내용으로 쪽지 검색 후 조회 (중요 쪽지함) */
-	public List<MessageDTO> searchLikedMessage(Long empCode, String condition, String word) {
+	public Page<MessageDTO> searchLikedMessage(Long empCode, String condition, String word, int size) {
+		
+		Pageable pageable = PageRequest.of(0, size, Sort.by("msgCode").descending());
+		
+		Page<Message> messageList;
 		
 		if(condition.equals("empName")) {
-			
-			List<Message> messageList = messageRepository.findLikedMessageBySender(empCode, word);
-			
-			List<MessageDTO> messageDTOList = messageList.stream()
-					.map(message -> modelMapper.map(message, MessageDTO.class))
-					.collect(Collectors.toList());
-			
-			return messageDTOList;
-			
+			messageList = messageRepository.findLikedMessageByEmployee(empCode, word, pageable);
 		} else {
-			
-			List<Message> messageList = messageRepository.findLikedMessageByContent(empCode, word);
-			
-			List<MessageDTO> messageDTOList = messageList.stream()
-					.map(message -> modelMapper.map(message, MessageDTO.class))
-					.collect(Collectors.toList());
-			
-			return messageDTOList;
-			
+			messageList = messageRepository.findLikedMessageByContent(empCode, word, pageable);
 		}
+		
+		Page<MessageDTO> messageDTOList = messageList.map(message -> modelMapper.map(message, MessageDTO.class));
+		
+		return messageDTOList;
 		
 	}
 

@@ -97,13 +97,20 @@ public class MessageController {
 		
 	}
 	
-	/* 4. 보낸 쪽지함 조회 (최근 20개) */
+	/* 4. 보낸 쪽지함 조회 */
 	@GetMapping("/sent")
-	public ResponseEntity<ResponseDTO> selectSentMessage(@AuthenticationPrincipal EmployeeDTO sender) {
+	public ResponseEntity<ResponseDTO> selectSentMessage(@AuthenticationPrincipal EmployeeDTO sender,
+														 @RequestParam(name="size", defaultValue="10")int size) {
+		
+		Page<MessageDTO> messageDTOList = messageService.selectSentMessage(sender.getEmpCode(), size);
+		
+		ResponseDTOWithMorePaging responseDTOWithMorePaging = new ResponseDTOWithMorePaging();
+		responseDTOWithMorePaging.setData(messageDTOList.getContent());
+		responseDTOWithMorePaging.setTotalElements(messageDTOList.getTotalElements());
 		
 		return ResponseEntity
 				.ok()
-				.body(new ResponseDTO(HttpStatus.OK, "보낸 쪽지함 조회 성공", messageService.selectSentMessage(sender.getEmpCode())));
+				.body(new ResponseDTO(HttpStatus.OK, "보낸 쪽지함 조회 성공", responseDTOWithMorePaging));
 		
 	}
 	
@@ -111,20 +118,36 @@ public class MessageController {
 	@GetMapping("/sent/search")
 	public ResponseEntity<ResponseDTO> searchSentMessage(@AuthenticationPrincipal EmployeeDTO sender, 
 													     @RequestParam(name="condition")String condition, 
-														 @RequestParam(name="word")String word) {
+														 @RequestParam(name="word")String word,
+														 @RequestParam(name="size", defaultValue="10")int size) {
+		
+		Page<MessageDTO> messageDTOList = messageService.searchSentMessage(sender.getEmpCode(), condition, word, size);
+		
+		ResponseDTOWithMorePaging responseDTOWithMorePaging = new ResponseDTOWithMorePaging();
+		responseDTOWithMorePaging.setData(messageDTOList.getContent());
+		responseDTOWithMorePaging.setTotalElements(messageDTOList.getTotalElements());
+		
+		
 		return ResponseEntity
 				.ok()
-				.body(new ResponseDTO(HttpStatus.OK, "보낸 쪽지함 검색 후 조회 성공", messageService.searchSentMessage(sender.getEmpCode(), condition, word)));
+				.body(new ResponseDTO(HttpStatus.OK, "보낸 쪽지함 검색 후 조회 성공", responseDTOWithMorePaging));
 		
 	}
 	
-	/* 6. 중요 쪽지함 조회 (전체) */
+	/* 6. 중요 쪽지함 조회 */
 	@GetMapping("/liked")
-	public ResponseEntity<ResponseDTO> selectlikedMessage(@AuthenticationPrincipal EmployeeDTO employee) {
+	public ResponseEntity<ResponseDTO> selectlikedMessage(@AuthenticationPrincipal EmployeeDTO employee,
+														  @RequestParam(name="size", defaultValue="10")int size) {
+		
+		Page<MessageDTO> messageDTOList = messageService.selectLikedMessage(employee.getEmpCode(), size);
+		
+		ResponseDTOWithMorePaging responseDTOWithMorePaging = new ResponseDTOWithMorePaging();
+		responseDTOWithMorePaging.setData(messageDTOList.getContent());
+		responseDTOWithMorePaging.setTotalElements(messageDTOList.getTotalElements());
 		
 		return ResponseEntity
 				.ok()
-				.body(new ResponseDTO(HttpStatus.OK, "중요 쪽지함 조회 성공", messageService.selectLikedMessage(employee.getEmpCode())));
+				.body(new ResponseDTO(HttpStatus.OK, "중요 쪽지함 조회 성공", responseDTOWithMorePaging));
 		
 	}
 	
@@ -132,10 +155,18 @@ public class MessageController {
 	@GetMapping("/liked/search")
 	public ResponseEntity<ResponseDTO> searchLikedMessage(@AuthenticationPrincipal EmployeeDTO employee, 
 														  @RequestParam(name="condition")String condition, 
-														  @RequestParam(name="word")String word) {
+														  @RequestParam(name="word")String word,
+														  @RequestParam(name="size", defaultValue="10")int size) {
+		
+		Page<MessageDTO> messageDTOList = messageService.searchLikedMessage(employee.getEmpCode(), condition, word, size);
+		
+		ResponseDTOWithMorePaging responseDTOWithMorePaging = new ResponseDTOWithMorePaging();
+		responseDTOWithMorePaging.setData(messageDTOList.getContent());
+		responseDTOWithMorePaging.setTotalElements(messageDTOList.getTotalElements());
+		
 		return ResponseEntity
 				.ok()
-				.body(new ResponseDTO(HttpStatus.OK, "중요 쪽지함 검색 후 조회 성공", messageService.searchLikedMessage(employee.getEmpCode(), condition, word)));
+				.body(new ResponseDTO(HttpStatus.OK, "중요 쪽지함 검색 후 조회 성공", responseDTOWithMorePaging));
 		
 	}
 	
