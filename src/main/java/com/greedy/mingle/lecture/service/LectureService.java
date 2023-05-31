@@ -157,13 +157,14 @@ public class LectureService {
 
 
 
-	public List<LectureOfficerDTO> getMyLecture(Long empCode) {
-		
-		List<Lecture> lecture = lectureRepository.findTop5ByEmployeeEmpCode(empCode);
-		List<LectureOfficerDTO> lectureDTO = lecture.stream().map(myLecture -> modelMapper.map(myLecture, LectureOfficerDTO.class))
-                .collect(Collectors.toList());
-		return lectureDTO;
-	} 
+	
+	  public List<LectureOfficerDTO> getMyLectureCerti(Long empCode) {
+	  
+	  List<Lecture> lecture = lectureRepository.findTop5ByEmployeeEmpCode(empCode);
+	  List<LectureOfficerDTO> lectureDTO = lecture.stream().map(myLecture ->
+	  modelMapper.map(myLecture, LectureOfficerDTO.class))
+	  .collect(Collectors.toList()); return lectureDTO; }
+	 
 	/*수업 회차 조회를 위한 findBylecCode*/
 	public List<LectureOfficerDTO> lectureCount(Long lecCode){
 		
@@ -171,6 +172,27 @@ public class LectureService {
 		List<LectureOfficerDTO> lectureDTO=lecture.stream().map(myLecture -> modelMapper.map(myLecture, LectureOfficerDTO.class))
 				.collect(Collectors.toList());
 		return lectureDTO;
+	}
+
+
+
+	public Page<LectureOfficerDTO> getMyLecture(int page, Long empCode) {
+		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("lecCode").descending());
+		
+		Page<Lecture> lecture = lectureRepository.findByEmployeeEmpCode(pageable, empCode);
+		Page<LectureOfficerDTO> lectureDtoList = lecture.map(mylecture->modelMapper.map(mylecture,LectureOfficerDTO.class));
+		return lectureDtoList;
+	}
+
+
+
+	public Page<LectureOfficerDTO> getLecNameMyLecture(int page, Long empCode) {
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("lecCode").descending());
+		
+		Page<Lecture> lecture = lectureRepository.findByEmployeeEmpCodeAndLecNameIsNotNull(pageable, empCode);
+		Page<LectureOfficerDTO> lectureDtoList = lecture.map(mylecture->modelMapper.map(mylecture,LectureOfficerDTO.class));
+		return lectureDtoList;
 	}
 	
 	
