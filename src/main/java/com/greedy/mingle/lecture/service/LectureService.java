@@ -194,6 +194,25 @@ public class LectureService {
 		Page<LectureOfficerDTO> lectureDtoList = lecture.map(mylecture->modelMapper.map(mylecture,LectureOfficerDTO.class));
 		return lectureDtoList;
 	}
+
+
+	@Transactional
+	public void updatePlan(LectureOfficerDTO lectureDTO) {
+		Lecture originMyplan = lectureRepository.findById(lectureDTO.getLecCode())
+				.orElseThrow(() -> new IllegalArgumentException("해당 번호의 직원이 없습니다. EmpCode=" + lectureDTO.getLecCode()));
+
+
+	    
+	    originMyplan.setLecName(lectureDTO.getLecName());
+	    originMyplan.setLecSummary(lectureDTO.getLecSummary());
+	    originMyplan.setLecGoal(lectureDTO.getLecGoal());
+	    originMyplan.setLecMethod(lectureDTO.getLecMethod());
+	    originMyplan.setLecBookMain(lectureDTO.getLecBookMain());
+	    originMyplan.setLecBookSub(lectureDTO.getLecBooksub());
+
+	    // 엔티티가 변경되었으므로, 변경을 저장합니다.
+	    lectureRepository.save(originMyplan);
+	}
 	
 	public Page<LectureOfficerDTO> searchLecName(int page, String condition,String name, Long empCode){
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("lecCode").descending());

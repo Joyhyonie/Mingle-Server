@@ -32,6 +32,7 @@ public class LectureOfficerDTO {
 	private Long lecPerFinal; //기말 평가기준
 	private Long lecPerAtdNumber;// 평가 기준 출석
 	private Long lecPerTask;	//평과 기준 과제
+
 	
 	
 
