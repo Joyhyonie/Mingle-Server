@@ -150,6 +150,21 @@ public class ScheduleService {
 		scheduleRepository.deleteById(scheCode);
 		
 	}
+	
+	/* 11. 학사 일정 수정 */
+	@Transactional
+	public void modifyAcSchedule(ScheduleDTO scheduleDTO) {
+		
+		Schedule schedule = scheduleRepository.findById(scheduleDTO.getScheCode())
+				.orElseThrow(() -> new IllegalArgumentException("학사 일정 조회 실패 : " + scheduleDTO.getScheCode()));
+		
+		// entity에 정의한 수정용 메소드를 통해 다른 방식의 수정을 방지
+		schedule.acScheUpdate(scheduleDTO.getScheName(), 
+							  scheduleDTO.getScheStartDate(), 
+							  scheduleDTO.getScheEndDate(),
+							  scheduleDTO.getScheContent());
+		
+	}
 
 	
 
