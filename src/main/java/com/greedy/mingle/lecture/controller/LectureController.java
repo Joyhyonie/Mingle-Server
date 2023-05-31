@@ -120,6 +120,24 @@ public class LectureController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
 	
+	/* 검색 기능 */
+	@GetMapping("/search")
+	public ResponseEntity<ResponseDTO> searchLecName(
+			@RequestParam(name="page", defaultValue="1") int page,	
+			@RequestParam(name="condition")String condition,
+			@RequestParam(name="search") String name,
+			@AuthenticationPrincipal EmployeeDTO employee){
+		
+		Page<LectureOfficerDTO> lectureDtoList= lectureService.searchLecName(page, condition, name, employee.getEmpCode());
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(lectureDtoList);
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(lectureDtoList.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	}
+	
 	/*수업 회차 조회를 위한 findBylecCode*/
 	@GetMapping("/lectureCount/{lecCode}")
 	public ResponseEntity<ResponseDTO> getMyLectureCount(@PathVariable Long lecCode ){
