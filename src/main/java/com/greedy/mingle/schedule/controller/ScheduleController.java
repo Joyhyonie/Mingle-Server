@@ -177,5 +177,18 @@ public class ScheduleController {
 		
 	}
 	
+	/* 11. 학사 일정 수정 */
+	@PutMapping("/academic/modify")
+	public ResponseEntity<ResponseDTO> modifyAcSchedule(@RequestBody ScheduleDTO scheduleDTO, @AuthenticationPrincipal EmployeeDTO employee) {
+		
+		scheduleDTO.setScheType("학사");
+		scheduleDTO.setEmployee(employee);
+		scheduleService.modifyAcSchedule(scheduleDTO);
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "나의 일정 수정 성공"));
+	}
+	
 
 }
