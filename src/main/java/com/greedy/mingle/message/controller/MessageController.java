@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -36,7 +37,7 @@ public class MessageController {
 		this.notiService = notiService;
 	}
 	
-	/* 0. 읽지 않은 쪽지 갯수 조회 */
+	/* 1. 읽지 않은 쪽지 갯수 조회 */
 	@GetMapping("/unread")
 	public ResponseEntity<ResponseDTO> selectUnreadMessage(@AuthenticationPrincipal EmployeeDTO receiver) {
 		
@@ -50,7 +51,7 @@ public class MessageController {
 	}
 	
 	
-	/* 1. 받은 쪽지함 조회 */
+	/* 2. 받은 쪽지함 조회 */
 	@GetMapping("/received")
 	public ResponseEntity<ResponseDTO> selectReceivedMessage(@AuthenticationPrincipal EmployeeDTO receiver,
 															 @RequestParam(name="size", defaultValue="10")int size) {
@@ -67,7 +68,7 @@ public class MessageController {
 		
 	}
 	
-	/* 2. 받은 쪽지 클릭 시, 쪽지 읽음 표시 */
+	/* 3. 받은 쪽지 클릭 시, 쪽지 읽음 표시 */
 	@PatchMapping("/read/{msgCode}")
 	public ResponseEntity<ResponseDTO> readMessage(@PathVariable Long msgCode, @AuthenticationPrincipal EmployeeDTO receiver) {
 		
@@ -78,7 +79,7 @@ public class MessageController {
 				.body(new ResponseDTO(HttpStatus.OK, "쪽지 읽음 표시 성공"));
 	}
 	
-	/* 3. 교직원명/내용으로 쪽지 검색 후 조회 (받은 쪽지함) */
+	/* 4. 교직원명/내용으로 쪽지 검색 후 조회 (받은 쪽지함) */
 	@GetMapping("/received/search")
 	public ResponseEntity<ResponseDTO> searchReceivedMessage(@AuthenticationPrincipal EmployeeDTO receiver, 
 															 @RequestParam(name="condition")String condition, 
@@ -97,7 +98,7 @@ public class MessageController {
 		
 	}
 	
-	/* 4. 보낸 쪽지함 조회 */
+	/* 5. 보낸 쪽지함 조회 */
 	@GetMapping("/sent")
 	public ResponseEntity<ResponseDTO> selectSentMessage(@AuthenticationPrincipal EmployeeDTO sender,
 														 @RequestParam(name="size", defaultValue="10")int size) {
@@ -114,7 +115,7 @@ public class MessageController {
 		
 	}
 	
-	/* 5. 교직원명/내용으로 쪽지 검색 후 조회 (보낸 쪽지함) */
+	/* 6. 교직원명/내용으로 쪽지 검색 후 조회 (보낸 쪽지함) */
 	@GetMapping("/sent/search")
 	public ResponseEntity<ResponseDTO> searchSentMessage(@AuthenticationPrincipal EmployeeDTO sender, 
 													     @RequestParam(name="condition")String condition, 
@@ -134,7 +135,7 @@ public class MessageController {
 		
 	}
 	
-	/* 6. 중요 쪽지함 조회 */
+	/* 7. 중요 쪽지함 조회 */
 	@GetMapping("/liked")
 	public ResponseEntity<ResponseDTO> selectlikedMessage(@AuthenticationPrincipal EmployeeDTO employee,
 														  @RequestParam(name="size", defaultValue="10")int size) {
@@ -151,7 +152,7 @@ public class MessageController {
 		
 	}
 	
-	/* 7. 교직원명/내용으로 쪽지 검색 후 조회 (중요 쪽지함) */
+	/* 8. 교직원명/내용으로 쪽지 검색 후 조회 (중요 쪽지함) */
 	@GetMapping("/liked/search")
 	public ResponseEntity<ResponseDTO> searchLikedMessage(@AuthenticationPrincipal EmployeeDTO employee, 
 														  @RequestParam(name="condition")String condition, 
@@ -170,7 +171,24 @@ public class MessageController {
 		
 	}
 	
-	/* 8. 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
+	/* 9. 휴지통 조회 */
+	@GetMapping("/removed")
+	public ResponseEntity<ResponseDTO> selectRemovedMessage(@AuthenticationPrincipal EmployeeDTO employee,
+			  											  	@RequestParam(name="size", defaultValue="10")int size) {
+
+		Page<MessageDTO> messageDTOList = messageService.selectRemovedMessage(employee.getEmpCode(), size);
+		
+		ResponseDTOWithMorePaging responseDTOWithMorePaging = new ResponseDTOWithMorePaging();
+		responseDTOWithMorePaging.setData(messageDTOList.getContent());
+		responseDTOWithMorePaging.setTotalElements(messageDTOList.getTotalElements());
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "휴지통 조회 성공", responseDTOWithMorePaging));
+	
+	}
+	
+	/* 10. 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
 	@PatchMapping("/like/{msgCode}")
 	public ResponseEntity<ResponseDTO> likeToggleMessage(@PathVariable Long msgCode, @AuthenticationPrincipal EmployeeDTO employee) {
 		
@@ -181,7 +199,7 @@ public class MessageController {
 				.body(new ResponseDTO(HttpStatus.OK, "중요 쪽지함으로 이동/취소 성공"));
 	}
 	
-	/* 9. 상위 카테고리가 존재하는 소속 전체 조회 */
+	/* 11. 상위 카테고리가 존재하는 소속 전체 조회 */
 	@GetMapping("/find/department")
 	public ResponseEntity<ResponseDTO> selectAllDepartment() {
 		
@@ -191,7 +209,7 @@ public class MessageController {
 		
 	}
 	
-	/* 10. 소속 선택 시, 해당 소속 교직원 조회 */
+	/* 12. 소속 선택 시, 해당 소속 교직원 조회 */
 	@GetMapping("/find/employee/{deptCode}")
 	public ResponseEntity<ResponseDTO> selectReceiverByDeptCode(@PathVariable Long deptCode) {
 		
@@ -201,7 +219,7 @@ public class MessageController {
 		
 	}
 	
-	/* 11. 쪽지 전송 */
+	/* 13. 쪽지 전송 */
 	@PostMapping("/send")
 	public ResponseEntity<ResponseDTO> sendMessage(@ModelAttribute MessageDTO messageDTO, @AuthenticationPrincipal EmployeeDTO sender) {
 		
@@ -217,7 +235,7 @@ public class MessageController {
 		
 	}
 	
-	/* 12. 선택한 쪽지 삭제 */
+	/* 14. 선택한 쪽지 삭제 (휴지통으로 이동) */
 	@PatchMapping("/remove")
 	public ResponseEntity<ResponseDTO> removeMessage(@RequestBody MessageDTO messageDTO, @AuthenticationPrincipal EmployeeDTO employee) {
 		
@@ -231,5 +249,32 @@ public class MessageController {
 		
 	}
 	
+	/* 15. 선택한 쪽지 복구 */
+	@PatchMapping("/restore")
+	public ResponseEntity<ResponseDTO> restoreMessage(@RequestBody MessageDTO messageDTO, @AuthenticationPrincipal EmployeeDTO employee) {
+		
+		Long [] selectedMsgs = messageDTO.getSelectedMsgs();
+		
+		messageService.restoreMessage(selectedMsgs, employee.getEmpCode());
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "선택한 쪽지 복구 성공"));
+		
+	}
+	
+	/* 16. 선택한 쪽지 영구 삭제 */
+	@PatchMapping("/delete")
+	public ResponseEntity<ResponseDTO> deleteMessage(@RequestBody MessageDTO messageDTO, @AuthenticationPrincipal EmployeeDTO employee) {
+		
+		Long [] selectedMsgs = messageDTO.getSelectedMsgs();
+		
+		messageService.deleteMessage(selectedMsgs, employee.getEmpCode());
+		
+		return ResponseEntity
+				.ok()
+				.body(new ResponseDTO(HttpStatus.OK, "선택한 쪽지 영구 삭제 성공"));
+		
+	}
 
 }
