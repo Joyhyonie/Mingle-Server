@@ -91,7 +91,7 @@ public class NotificationService {
 		
 		String receiverId = messageDTO.getReceiver().getEmpId();
 				
-		log.info("[NotificationService] notifyReceivedMsg 호출!");
+		log.info("[NotificationService] notifyReceivedMsg 호출!!");
 		log.info("[NotificationService] receiverId : {}", receiverId);
 		log.info("[NotificationService] sseEmitters : {}", sseEmitters); // => 클라이언트가 새로고침 직후에는 잘 담겨서 넘어오는데 시간이 조금만 지나도 빈 객체로 출력...
 		
@@ -106,9 +106,7 @@ public class NotificationService {
 						  .reconnectTime(500));
 			} catch (IOException | IllegalStateException e) {
 				sseEmitters.remove(receiverId);
-			} finally {
-		        sseEmitter.complete(); // SseEmitter 객체 종료
-		    }
+			} 
 		}
 		
 	}
@@ -127,9 +125,7 @@ public class NotificationService {
 						  .reconnectTime(500));
 			} catch (IOException | IllegalStateException e) {
 				allSseEmitters.remove(sseEmitter);
-			} finally {
-		        sseEmitter.complete();
-		    }
+			}
 		}
 		
 	}
