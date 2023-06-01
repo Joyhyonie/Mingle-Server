@@ -3,15 +3,18 @@ package com.greedy.mingle.stdAttendance.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greedy.mingle.common.ResponseDTO;
-import com.greedy.mingle.cource.entity.Course;
-import com.greedy.mingle.lecture.entity.Lecture;
+import com.greedy.mingle.stdAttendance.dto.StdAttendanceDTO;
 import com.greedy.mingle.stdAttendance.service.StdAttendanceService;
+import com.greedy.mingle.student.dto.StudentDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,4 +45,15 @@ public class StdAttendanceController {
 	 
  }
 
+ /*출석입력*/
+ 
+ @PatchMapping("/modify/{stdAtdCode}")
+ public ResponseEntity<ResponseDTO> updateStudent(@ModelAttribute StdAttendanceDTO stdAttendanceDto) {
+
+	 	stdAttendanceService.updateAttendance(stdAttendanceDto);  //stdAttendanceDto 이게 맞나? stdAtdCode인가? 
+
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록 성공"));
+	}
+ 
+ 
 }
