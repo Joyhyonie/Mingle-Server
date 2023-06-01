@@ -293,32 +293,35 @@ public class MessageService {
 		} 
 		
 	}
-
-	/* 16. 선택한 쪽지 영구 삭제 */
-	public void deleteMessage(Long[] selectedMsgs, Long empCode) {
+	
+	/* 16. 휴지통에 존재하는 쪽지 전체 조회 */
+	public List<MessageDTO> selectAllRemovedMessage() {
 		
-		for (Long msgCode : selectedMsgs) {
-			
-			Message message = messageRepository.findById(msgCode)
-					.orElseThrow(() -> new IllegalArgumentException("해당 코드의 쪽지가 없습니다 🥲 msgCode : " + msgCode));
+		List<Message> messageList = messageRepository.findByMsgDelSenderOrMsgDelReceiver("Y", "Y");
+		log.info("[MessageService] selectAllRemovedMessage의 messageList : {}", messageList);
+	
+		List<MessageDTO> messageDTOList = messageList.stream().map(message -> modelMapper.map(message, MessageDTO.class)).collect(Collectors.toList());
 		
-			Long receiverEmpCode = message.getReceiver().getEmpCode();
-			Long senderEmpCode = message.getSender().getEmpCode();
-			
-			// 해당 유저가 receiver일 경우,
-			if(receiverEmpCode.equals(empCode)) {
-				message.setMsgDelReceiver("F");
-				messageRepository.save(message);
-				
-			// 해당 유저가 sender일 경우,
-			} else if(senderEmpCode.equals(empCode)) {
-				message.setMsgDelSender("F");
-				messageRepository.save(message);
-			}
-			
-		} 
-		
+		return messageDTOList;
 	}
+
+	/* 17. 쪽지 영구 삭제 */
+	public void deleteMessage(Long msgCode, String empType) {
+		
+		log.info("쪽지 영구 삭제 실행!");
+			
+		Message message = messageRepository.findById(msgCode)
+				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 쪽지가 없습니다 🥲 msgCode : " + msgCode));
+			
+		switch(empType) {
+			case "receiver" : message.setMsgDelReceiver("F"); messageRepository.save(message); log.info("receiver 실행!"); break;
+			case "sender" : message.setMsgDelSender("F"); messageRepository.save(message); log.info("sender 실행!"); break;
+			default : return;
+		}
+	
+	}
+
+	
 
 
 }

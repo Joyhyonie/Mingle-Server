@@ -87,7 +87,7 @@ public class NotificationService {
 	/* ------------------------------------------------ 실시간 알림 메소드 ------------------------------------------------ */
 	
 	/* 1. Sender가 쪽지를 Receiver에게 전송 시, 쪽지 실시간 알림 (특정 클라이언트 지정) */
-	public synchronized void notifyReceivedMsg(MessageDTO messageDTO) {
+	public void notifyReceivedMsg(MessageDTO messageDTO) {
 		
 		String receiverId = messageDTO.getReceiver().getEmpId();
 				
@@ -114,7 +114,7 @@ public class NotificationService {
 	}
 
 	/* 2. 학사일정 시작일&종료일 및 공지사항 알림 등록과 동시에 실시간 알림 */
-	public synchronized void notifyCommonNoti(NotificationDTO notiDTO) {
+	public void notifyCommonNoti(NotificationDTO notiDTO) {
 		
 		log.info("[NotificationService] notifyAcScheduleNoti 호출!");
 		log.info("[NotificationService] allSseEmitters : {}", allSseEmitters);

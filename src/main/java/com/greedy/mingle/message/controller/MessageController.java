@@ -262,19 +262,6 @@ public class MessageController {
 				.body(new ResponseDTO(HttpStatus.OK, "선택한 쪽지 복구 성공"));
 		
 	}
-	
-	/* 16. 선택한 쪽지 영구 삭제 */
-	@PatchMapping("/delete")
-	public ResponseEntity<ResponseDTO> deleteMessage(@RequestBody MessageDTO messageDTO, @AuthenticationPrincipal EmployeeDTO employee) {
-		
-		Long [] selectedMsgs = messageDTO.getSelectedMsgs();
-		
-		messageService.deleteMessage(selectedMsgs, employee.getEmpCode());
-		
-		return ResponseEntity
-				.ok()
-				.body(new ResponseDTO(HttpStatus.OK, "선택한 쪽지 영구 삭제 성공"));
-		
-	}
+
 
 }
