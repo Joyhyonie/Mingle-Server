@@ -69,6 +69,8 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	Optional<Employee> findByEmpPwd(String empPwd);
 
+	Page<Employee> findByDepartmentDeptName(Pageable pageable, String name);
+
 	
 
 	

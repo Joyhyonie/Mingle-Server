@@ -20,7 +20,9 @@ import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.dto.EmployeeRoleDTO;
 import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.employee.repository.EmployeeRepository;
+import com.greedy.mingle.subject.dto.SubjectDTO;
 import com.greedy.mingle.subject.entity.Department;
+import com.greedy.mingle.subject.entity.Subject;
 import com.greedy.mingle.subject.repository.DepartmentRepository;
 import com.greedy.mingle.util.FileUploadUtils;
 
@@ -90,7 +92,7 @@ public class EmployeeService {
 	public Page<EmployeeDTO> selectEmployeeListByDeptName(int page, String condition, String name) {
 		if(condition.equals("deptName")) {
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
-		Page<Employee> employeeList = employeeRepository.findByDepartmentDeptNameContaining(pageable, name);		
+		Page<Employee> employeeList = employeeRepository.findByDepartmentDeptName(pageable, name);		
 		Page<EmployeeDTO> employeeDtoDeptList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
 		return employeeDtoDeptList;
 		} else {
@@ -219,19 +221,18 @@ public class EmployeeService {
 	}
 	
 	/* 13. 조직도 목록 조회 - 소속 기준, 페이징 */
-	public Page<EmployeeDTO> selectOrgListByDeptName(int page, String condition, String name) {
-		if(condition.equals("deptName")) {
+	public Page<EmployeeDTO> selectOrgListByDeptName(int page, Long deptCode) {
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
-		Page<Employee> employeeList = employeeRepository.findByDepartmentDeptName(pageable, name);		
-		Page<EmployeeDTO> employeeDtoDeptList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
-		return employeeDtoDeptList;
-		} else {
-			Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
-			Page<Employee> employeeList = employeeRepository.findByEmpName(pageable, name);
-			Page<EmployeeDTO> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
-			return employeeDtoList;
-		}
+		
+		Department findDepartment = departmentRepository.findById(deptCode)
+									.orElseThrow(()-> new IllegalArgumentException("해당 학과 없습니다. deptCode = "+ deptCode));
+		
+		Page<Employee> employeeList = employeeRepository.findByDepartment(pageable,findDepartment);
+		Page<EmployeeDTO> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
+		
+		return employeeDtoList;
 	}
+
 
 	/* 14. 마이페이지 이미지 변경 */
 	@Transactional
@@ -275,6 +276,6 @@ public class EmployeeService {
 		log.info("[ProductService] insertProduct end ============================== ");
 		log.info("[ProductService] insertProduct end ============================== ");
 	}
-
+	
 
 }

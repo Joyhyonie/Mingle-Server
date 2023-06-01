@@ -229,7 +229,7 @@ public class EmployeeController {
 		log.info("[EmployeeController] : page : {}", page);
 		log.info("[EmployeeController] : employeeName : {}", name);
 
-		Page<EmployeeDTO> employeeDtoList = employeeService.selectOrgListByDeptName(page, condition, name);
+		Page<EmployeeDTO> employeeDtoList = employeeService.selectEmployeeListByDeptName(page, condition, name);
 
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
 
