@@ -208,7 +208,7 @@ public class LectureService {
 	    originMyplan.setLecGoal(lectureDTO.getLecGoal());
 	    originMyplan.setLecMethod(lectureDTO.getLecMethod());
 	    originMyplan.setLecBookMain(lectureDTO.getLecBookMain());
-	    originMyplan.setLecBookSub(lectureDTO.getLecBooksub());
+	    originMyplan.setLecBookSub(lectureDTO.getLecBookSub());
 
 	    // 엔티티가 변경되었으므로, 변경을 저장합니다.
 	    lectureRepository.save(originMyplan);
