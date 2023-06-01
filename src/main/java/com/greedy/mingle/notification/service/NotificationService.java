@@ -87,11 +87,11 @@ public class NotificationService {
 	/* ------------------------------------------------ 실시간 알림 메소드 ------------------------------------------------ */
 	
 	/* 1. Sender가 쪽지를 Receiver에게 전송 시, 쪽지 실시간 알림 (특정 클라이언트 지정) */
-	public synchronized void notifyReceivedMsg(MessageDTO messageDTO) {
+	public void notifyReceivedMsg(MessageDTO messageDTO) {
 		
 		String receiverId = messageDTO.getReceiver().getEmpId();
 				
-		log.info("[NotificationService] notifyReceivedMsg 호출!");
+		log.info("[NotificationService] notifyReceivedMsg 호출!!");
 		log.info("[NotificationService] receiverId : {}", receiverId);
 		log.info("[NotificationService] sseEmitters : {}", sseEmitters); // => 클라이언트가 새로고침 직후에는 잘 담겨서 넘어오는데 시간이 조금만 지나도 빈 객체로 출력...
 		
@@ -106,15 +106,13 @@ public class NotificationService {
 						  .reconnectTime(500));
 			} catch (IOException | IllegalStateException e) {
 				sseEmitters.remove(receiverId);
-			} finally {
-		        sseEmitter.complete(); // SseEmitter 객체 종료
-		    }
+			} 
 		}
 		
 	}
 
 	/* 2. 학사일정 시작일&종료일 및 공지사항 알림 등록과 동시에 실시간 알림 */
-	public synchronized void notifyCommonNoti(NotificationDTO notiDTO) {
+	public void notifyCommonNoti(NotificationDTO notiDTO) {
 		
 		log.info("[NotificationService] notifyAcScheduleNoti 호출!");
 		log.info("[NotificationService] allSseEmitters : {}", allSseEmitters);
@@ -127,9 +125,7 @@ public class NotificationService {
 						  .reconnectTime(500));
 			} catch (IOException | IllegalStateException e) {
 				allSseEmitters.remove(sseEmitter);
-			} finally {
-		        sseEmitter.complete();
-		    }
+			}
 		}
 		
 	}

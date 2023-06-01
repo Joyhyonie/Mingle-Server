@@ -27,8 +27,8 @@ public class NotificationScheduler {
 		this.notiService = notiService;
 	}
 
-	// 매일 오전 9시에 실행되는 스케줄러
-    @Scheduled(cron = "0 8 11 * * *")
+	// 매일 오전 9시 45분에 실행되는 스케줄러
+    @Scheduled(cron = "0 45 9 * * *")
     public void checkSchedule() {
     	
         // 현재 날짜
