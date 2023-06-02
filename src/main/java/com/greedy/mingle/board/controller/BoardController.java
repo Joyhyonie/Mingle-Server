@@ -110,7 +110,7 @@ public class BoardController {
 		// NotiType 설정
 		NotificationTypeDTO notiTypeDTO = new NotificationTypeDTO();
 		notiTypeDTO.setNotiTypeCode((long) 40001);
-		notiTypeDTO.setNotiTitle("새로운 공지사항이 등록되었습니다.");
+		notiTypeDTO.setNotiTitle("새로운 공지사항이 등록되었습니다 :)");
 		// Noti 설정
 		NotificationDTO notiDTO = new NotificationDTO();
 		notiDTO.setNotiContent(boardDTO.getBoardTitle());

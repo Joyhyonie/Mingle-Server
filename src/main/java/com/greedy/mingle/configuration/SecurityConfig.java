@@ -75,8 +75,25 @@ public class SecurityConfig {
 		              * 이 때 OPTIONS 메서드로 서버에 사전 요청을 보내 요청 권한이 있는지 확인 */
 		             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 		             .antMatchers("/auth/**").permitAll()
+		             .antMatchers("/attendance-employee/**", 
+		            		 	  "/leave-doc-applied/**",
+		            		 	  "/certi-doc-applied/**",
+		            		 	  "/subject/**",
+		            		 	  "/lecture-student-admin/**",
+		            		 	  "/lecture-regist-admin/**",
+		            		 	  "/management-employee/**",
+		            		 	  "/regist-employee/**",
+		            		 	  "/modify-employee/**",
+		            		 	  "/search-employee/**",
+		            		 	  "/management-student/**",
+		            		 	  "/regist-student/**",
+		            		 	  "/modify-student/**",
+		            		 	  "/search-student/**",
+		            		 	  "/schedule-academic/**").hasAnyRole("ADMIN")
+		             .antMatchers("/lecture-student-prof/**",
+		            		 	  "/lecture-regist-prof/**").hasRole("PROF")
 		             .antMatchers(HttpMethod.GET, "/employee/putmypage/**").permitAll()
-		             .antMatchers("/api/**").hasAnyRole("PROF", "ADMIN","PROVOST")  // 나머지 API 는 전부 인증 필요
+//		             .antMatchers("/**").hasAnyRole("PROF", "ADMIN", "PROVOST")  // 나머지 API 는 전부 인증 필요
 		         .and()
 		         	.cors()
 		         .and()
