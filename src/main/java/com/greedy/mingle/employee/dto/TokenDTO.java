@@ -11,6 +11,9 @@ public class TokenDTO {
 	private String empName;
 	private String accessToken;
 	private Long accessTokenExpiresIn;
-	private Long empCode;
+
+		
+		
+	}
 	
-}
+

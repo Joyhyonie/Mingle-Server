@@ -63,11 +63,14 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
 	Optional<Employee> findByEmpNameAndEmpEmail(String empName, String empEmail);
 
+	@EntityGraph(attributePaths= {"department", "empRole","empRole.auth"})
 	Optional<Employee> findByEmpId(String empId);
 
 	Employee findByEmpPwd(Long empCode);
 
 	Optional<Employee> findByEmpPwd(String empPwd);
+
+	Page<Employee> findByDepartmentDeptName(Pageable pageable, String name);
 
 	
 

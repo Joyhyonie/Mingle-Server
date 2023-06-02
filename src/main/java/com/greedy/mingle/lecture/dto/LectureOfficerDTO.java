@@ -30,7 +30,7 @@ public class LectureOfficerDTO {
 	private String lecBookMain; //메인교재
 	private String lecBookSub; //서브 교재
 	private Long lecPerFinal; //기말 평가기준
-	private Long lecPerAtdNumber;// 평가 기준 출석
+	private Long lecPerAtd;// 평가 기준 출석
 	private Long lecPerTask;	//평과 기준 과제
 
 	
