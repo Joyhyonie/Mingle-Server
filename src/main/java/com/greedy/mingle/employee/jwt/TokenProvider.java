@@ -50,6 +50,7 @@ public class TokenProvider {
 		// 권한도 claims에 담기
 		 List<String> roles = Collections.emptyList(); // 기본적으로 빈 리스트로 초기화
 		    
+		 log.info("tokenProvierP{}", employee.getEmpRole());
 		    if (employee.getEmpRole() != null) {
 		        roles = employee.getEmpRole().stream()
 		                .map(role -> role.getAuth().getAuthName())
@@ -65,7 +66,7 @@ public class TokenProvider {
 				.signWith(key, SignatureAlgorithm.HS512)
 				.compact();
 		
-		return new TokenDTO(BEARER_TYPE, employee.getEmpId(), accessToken, accessTokenExpiresIn.getTime(), employee.getEmpCode());
+		return new TokenDTO(BEARER_TYPE, employee.getEmpId(), accessToken, accessTokenExpiresIn.getTime());
 	}
 	
 	
@@ -100,7 +101,6 @@ public class TokenProvider {
 	}
 
 }
-
 
 
 

@@ -10,7 +10,7 @@ import lombok.Data;
 public class StdAttendanceDTO {
 
 
-	private Long stdCode;		//출결코드
+	private Long stdAtdCode;		//출결코드
 	
 	
 	private String stdAtdStatus;		//출결상태

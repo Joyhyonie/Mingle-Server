@@ -93,7 +93,7 @@ public class SecurityConfig {
 		             .antMatchers("/lecture-student-prof/**",
 		            		 	  "/lecture-regist-prof/**").hasRole("PROF")
 		             .antMatchers(HttpMethod.GET, "/employee/putmypage/**").permitAll()
-//		             .antMatchers("/**").hasAnyRole("PROF", "ADMIN", "PROVOST")  // 나머지 API 는 전부 인증 필요
+//		             .antMatchers("/**").hasAnyRole("PROF", "ADMIN")  // 나머지 API 는 전부 인증 필요
 		         .and()
 		         	.cors()
 		         .and()

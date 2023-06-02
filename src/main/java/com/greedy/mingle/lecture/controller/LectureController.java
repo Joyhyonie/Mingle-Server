@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -120,6 +122,24 @@ public class LectureController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
 	
+	/* 검색 기능 */
+	@GetMapping("/search")
+	public ResponseEntity<ResponseDTO> searchLecName(
+			@RequestParam(name="page", defaultValue="1") int page,	
+			@RequestParam(name="condition")String condition,
+			@RequestParam(name="search") String name,
+			@AuthenticationPrincipal EmployeeDTO employee){
+		
+		Page<LectureOfficerDTO> lectureDtoList= lectureService.searchLecName(page, condition, name, employee.getEmpCode());
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(lectureDtoList);
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(lectureDtoList.getContent());
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	}
+	
 	/*수업 회차 조회를 위한 findBylecCode*/
 	@GetMapping("/lectureCount/{lecCode}")
 	public ResponseEntity<ResponseDTO> getMyLectureCount(@PathVariable Long lecCode ){
@@ -128,6 +148,21 @@ public class LectureController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", lectureService.lectureCount(lecCode)));
 		
 	}
-
+	/* 교수 수업 강의계획서 작성 */
+	@PatchMapping("/lecturePlan/{lecCode}")
+	public ResponseEntity<ResponseDTO> updatePlan(@ModelAttribute LectureOfficerDTO lectureDTO, @AuthenticationPrincipal EmployeeDTO employeeDTO ){
+		
+		employeeDTO.setEmpCode(employeeDTO.getEmpCode());
+		
+		lectureService.updatePlan(lectureDTO);
+		
+		return ResponseEntity.ok()
+	            .body(new ResponseDTO(HttpStatus.OK, "계획서가 작성되었습니다."));
+		
+		
+		
+	}
+	
+	
 	
 }

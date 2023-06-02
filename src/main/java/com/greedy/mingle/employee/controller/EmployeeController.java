@@ -26,6 +26,7 @@ import com.greedy.mingle.common.paging.PagingButtonInfo;
 import com.greedy.mingle.common.paging.ResponseDTOWithPaging;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.service.EmployeeService;
+import com.greedy.mingle.subject.dto.SubjectDTO;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -85,10 +86,6 @@ public class EmployeeController {
 
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
-	
-	/* 2-1. selectbox - 교수만 조회 */
-	
-	/* 2-2. selectbox - 교직원만 조회 */
 
 	/* 3. 교직원 목록 조회 - 교직원명 검색 기준, 페이징 */
 	@GetMapping("/employees/search")
@@ -134,9 +131,14 @@ public class EmployeeController {
 
 	/* 6. 교직원 정보 수정 */
 	@PutMapping("/modify")
-	public ResponseEntity<ResponseDTO> updateEmployee(@ModelAttribute EmployeeDTO employeeDto) {
-
-		employeeService.updateEmployee(employeeDto);
+	public ResponseEntity<ResponseDTO> updateEmployee(@ModelAttribute EmployeeDTO employeeDTO, 
+			@AuthenticationPrincipal EmployeeDTO loggedInEmployee) {
+		
+		employeeDTO.setEmpCode(loggedInEmployee.getEmpCode()); // 로그인한 사용자의 코드를 설정
+	    employeeDTO.setEmpId(loggedInEmployee.getEmpId()); // 로그인한 사용자의 아이디를 설정
+	    
+	    log.info("교직원 정보 수정 : ", employeeDTO);
+		employeeService.updateEmployee(employeeDTO);
 
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록 성공"));
 	}
@@ -215,5 +217,33 @@ public class EmployeeController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 
 	}
+	
+	/* 13. 조직도 목록 조회 - 교직원명 검색 기준, 페이징 */
+	@GetMapping("/organization/search")
+	public ResponseEntity<ResponseDTO> selectOrgListByEmpName(
+			@RequestParam(name = "page", defaultValue = "1") int page, 
+			@RequestParam(name = "search") String name,
+			@RequestParam(name = "condition") String condition) {
+
+		log.info("[EmployeeController] : selectOrgListByEmpName start ==================================== ");
+		log.info("[EmployeeController] : page : {}", page);
+		log.info("[EmployeeController] : employeeName : {}", name);
+
+		Page<EmployeeDTO> employeeDtoList = employeeService.selectOrgListByDeptName(page, condition, name);
+
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
+
+		log.info("[EmployeeController] : pageInfo : {}", pageInfo);
+
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(employeeDtoList.getContent());
+
+		log.info("[EmployeeController] : selectOrgListByEmpName end ==================================== ");
+
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+
+	}
+	
 
 }

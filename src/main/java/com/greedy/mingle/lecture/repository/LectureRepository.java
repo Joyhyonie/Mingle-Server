@@ -2,6 +2,7 @@ package com.greedy.mingle.lecture.repository;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,10 @@ public interface LectureRepository extends JpaRepository <Lecture, Long> {
 
 	Page<Lecture> findByEmployeeEmpCodeAndLecNameIsNotNull(Pageable pageable, Long empCode);
 
+	Page<Lecture> findByEmployeeEmpCodeAndLecNameContaining(Pageable pageable, Long empCode, String name);
+
+	Page<Lecture> findByEmployeeEmpCodeAndSubjectSbjNameContaining(Pageable pageable, Long empCode, String name);
+	
 
 	
 
