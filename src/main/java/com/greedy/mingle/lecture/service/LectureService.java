@@ -197,12 +197,10 @@ public class LectureService {
 
 
 	@Transactional
-	public void updatePlan(LectureOfficerDTO lectureDTO) {
-		Lecture originMyplan = lectureRepository.findById(lectureDTO.getLecCode())
+	public void updatePlan(LectureOfficerDTO lectureDTO, Long lecCode) {
+		Lecture originMyplan = lectureRepository.findById(lecCode)
 				.orElseThrow(() -> new IllegalArgumentException("해당 번호의 직원이 없습니다. EmpCode=" + lectureDTO.getLecCode()));
-
-
-	    
+    
 	    originMyplan.setLecName(lectureDTO.getLecName());
 	    originMyplan.setLecSummary(lectureDTO.getLecSummary());
 	    originMyplan.setLecGoal(lectureDTO.getLecGoal());
