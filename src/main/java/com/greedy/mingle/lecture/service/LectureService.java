@@ -197,18 +197,16 @@ public class LectureService {
 
 
 	@Transactional
-	public void updatePlan(LectureOfficerDTO lectureDTO) {
-		Lecture originMyplan = lectureRepository.findById(lectureDTO.getLecCode())
+	public void updatePlan(LectureOfficerDTO lectureDTO, Long lecCode) {
+		Lecture originMyplan = lectureRepository.findById(lecCode)
 				.orElseThrow(() -> new IllegalArgumentException("해당 번호의 직원이 없습니다. EmpCode=" + lectureDTO.getLecCode()));
-
-
-	    
+    
 	    originMyplan.setLecName(lectureDTO.getLecName());
 	    originMyplan.setLecSummary(lectureDTO.getLecSummary());
 	    originMyplan.setLecGoal(lectureDTO.getLecGoal());
 	    originMyplan.setLecMethod(lectureDTO.getLecMethod());
 	    originMyplan.setLecBookMain(lectureDTO.getLecBookMain());
-	    originMyplan.setLecBookSub(lectureDTO.getLecBooksub());
+	    originMyplan.setLecBookSub(lectureDTO.getLecBookSub());
 
 	    // 엔티티가 변경되었으므로, 변경을 저장합니다.
 	    lectureRepository.save(originMyplan);

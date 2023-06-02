@@ -150,16 +150,11 @@ public class LectureController {
 	}
 	/* 교수 수업 강의계획서 작성 */
 	@PatchMapping("/lecturePlan/{lecCode}")
-	public ResponseEntity<ResponseDTO> updatePlan(@ModelAttribute LectureOfficerDTO lectureDTO, @AuthenticationPrincipal EmployeeDTO employeeDTO ){
-		
-		employeeDTO.setEmpCode(employeeDTO.getEmpCode());
-		
-		lectureService.updatePlan(lectureDTO);
+	public ResponseEntity<ResponseDTO> updatePlan(@ModelAttribute LectureOfficerDTO lectureDTO, @PathVariable Long lecCode){
+		lectureService.updatePlan(lectureDTO,lecCode);
 		
 		return ResponseEntity.ok()
-	            .body(new ResponseDTO(HttpStatus.OK, "계획서가 작성되었습니다."));
-		
-		
+	            .body(new ResponseDTO(HttpStatus.OK, "계획서가 작성되었습니다."));				
 		
 	}
 	
