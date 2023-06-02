@@ -76,6 +76,7 @@ public class SecurityConfig {
 		             .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 		             .antMatchers("/auth/**").permitAll()
 		             .antMatchers(HttpMethod.GET, "/employee/putmypage/**").permitAll()
+		          
 		             .antMatchers("/api/**").hasAnyRole("PROF", "ADMIN","PROVOST")  // 나머지 API 는 전부 인증 필요
 		         .and()
 		         	.cors()

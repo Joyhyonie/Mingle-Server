@@ -1,22 +1,20 @@
 package com.greedy.mingle.employee.controller;
 
+import java.util.List;
 import java.util.Optional;
-
-import javax.transaction.Transactional;
-
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.greedy.mingle.configuration.exception.DuplicatedUserEmailException;
 import com.greedy.mingle.configuration.exception.IdsearchFailedException;
 import com.greedy.mingle.configuration.exception.LoginFailedException;
 import com.greedy.mingle.configuration.exception.UserNotFoundException;
 import com.greedy.mingle.employee.dto.EmployeeDTO;
+import com.greedy.mingle.employee.dto.EmployeeRoleDTO;
 import com.greedy.mingle.employee.dto.TokenDTO;
 import com.greedy.mingle.employee.entity.Employee;
-import com.greedy.mingle.employee.entity.EmployeeRole;
 import com.greedy.mingle.employee.jwt.TokenProvider;
 import com.greedy.mingle.employee.repository.EmployeeRepository;
 
@@ -66,16 +64,23 @@ public class AuthService {
 	  Employee employee = employeeRepository.findByEmpId(employeeDto.getEmpId()) 
 			  .orElseThrow(()-> new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.")); 
 	  
+	  
 	  // 2. 비밀번호 매칭 확인	  
 	  if(!passwordEncoder.matches(employeeDto.getEmpPwd(), employee.getEmpPwd())) {
 	  throw new LoginFailedException("잘못 된 아이디 또는 비밀번호입니다.");
 	  }
-	  // 토큰 발급
-	  TokenDTO tokenDto = tokenProvider.generateTokenDto(modelMapper.map(employee, EmployeeDTO.class));
-	  log.info("[AuthService] tokenDto : {}", tokenDto);
 	  
+	  //log.info("[AuthService] modelMapper : {}", modelMapper.map(employee, EmployeeDTO.class));
+	  EmployeeDTO employeeDTO = modelMapper.map(employee, EmployeeDTO.class);
+	  List<EmployeeRoleDTO> roleList = 
+			  employee.getEmpRole().stream().map(r -> modelMapper.map(r, EmployeeRoleDTO.class)).collect(Collectors.toList());
+	  employeeDTO.setEmpRole(roleList);
+	  // 토큰 발급
+	  TokenDTO tokenDto = tokenProvider.generateTokenDto(employeeDTO);
+	  log.info("[AuthService] tokenDto : {}", tokenDto);	  
 	  log.info("[AuthService] login end ==========================");
-	   return tokenDto;
+	   
+	  return tokenDto;
 	
 	  }
 
