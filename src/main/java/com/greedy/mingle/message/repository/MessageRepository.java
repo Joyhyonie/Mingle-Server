@@ -109,6 +109,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 			   + "WHERE (m.sender.empCode = :empCode AND msgDelSender = 'Y') "
 			   + "OR (m.receiver.empCode = :empCode AND msgDelReceiver = 'Y') ")
 	Page<Message> findRemovedMessage(@Param("empCode")Long empCode, Pageable pageable);
+
 	
 	/* 10. 하트 클릭 시, 중요 쪽지함으로 이동 및 취소 */
 	// save() 메소드 활용
@@ -128,7 +129,10 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 	/* 15. 선택한 쪽지 복구 */
 	// save() 메소드 활용
 	
-	/* 16. 선택한 쪽지 영구 삭제 */
+	/* 16. 휴지통에 존재하는 쪽지 전체 조회 */
+	List<Message> findByMsgDelSenderOrMsgDelReceiver(String msgDelSender, String msgDelReceiver);
+	
+	/* 17. 쪽지 영구 삭제 */
 	// save() 메소드 활용
 
 }

@@ -27,8 +27,8 @@ public class NotificationScheduler {
 		this.notiService = notiService;
 	}
 
-	// 매일 오전 9시에 실행되는 스케줄러
-    @Scheduled(cron = "0 8 11 * * *")
+	// 매일 오전 9시 45분에 실행되는 스케줄러
+    @Scheduled(cron = "0 45 9 * * *")
     public void checkSchedule() {
     	
         // 현재 날짜
@@ -56,7 +56,7 @@ public class NotificationScheduler {
         		// 시작일 notiType 설정
         		NotificationTypeDTO notiTypeDTO = new NotificationTypeDTO();
         		notiTypeDTO.setNotiTypeCode((long) 40002);
-        		notiTypeDTO.setNotiTitle("오늘은 해당 학사일정의 시작일입니다.");
+        		notiTypeDTO.setNotiTitle("오늘은 해당 학사일정의 시작일입니다 :)");
         		// 알림
         		NotificationDTO notiDTO = new NotificationDTO();
         		notiDTO.setNotiContent(schedule.getScheName());
@@ -72,7 +72,7 @@ public class NotificationScheduler {
             	// 종료일 notiType 설정
         		NotificationTypeDTO notiTypeDTO = new NotificationTypeDTO();
         		notiTypeDTO.setNotiTypeCode((long) 40003);
-        		notiTypeDTO.setNotiTitle("오늘은 해당 학사일정의 종료일입니다.");
+        		notiTypeDTO.setNotiTitle("오늘은 해당 학사일정의 종료일입니다 :)");
         		// 알림
         		NotificationDTO notiDTO = new NotificationDTO();
         		notiDTO.setNotiContent(schedule.getScheName());

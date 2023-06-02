@@ -8,8 +8,16 @@ import lombok.Data;
 
 @Data
 public class EmployeeRoleDTO {
+    //private EmployeeRolePk employeeRolepk;
+	
+    private AuthDTO auth;
 
-	private EmployeeRolePk employeeRolepk;
-	private AuthDTO auth;
-
+  
 }
+
+
+
+
+
+
+

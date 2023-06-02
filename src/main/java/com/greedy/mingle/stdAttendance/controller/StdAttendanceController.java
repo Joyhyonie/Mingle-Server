@@ -49,7 +49,8 @@ public class StdAttendanceController {
  
  @PatchMapping("/modify/{stdAtdCode}")
  public ResponseEntity<ResponseDTO> updateStudent(@ModelAttribute StdAttendanceDTO stdAttendanceDto) {
-
+	 
+	 	log.info("출석 정보 넘어왔나{}",stdAttendanceDto);
 	 	stdAttendanceService.updateAttendance(stdAttendanceDto);  //stdAttendanceDto 이게 맞나? stdAtdCode인가? 
 
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록 성공"));
