@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -88,28 +89,19 @@ public class EmployeeController {
 	}
 
 	/* 3. 교직원 목록 조회 - 교직원명 검색 기준, 페이징 */
-	@GetMapping("/employees/search")
-	public ResponseEntity<ResponseDTO> selectEmployeeListByEmpName(
-			@RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "search") String empName) {
-
-		log.info("[EmployeeController] : selectEmployeeListByEmpName start ==================================== ");
-		log.info("[EmployeeController] : page : {}", page);
-		log.info("[EmployeeController] : employeeName : {}", empName);
-
-		Page<EmployeeDTO> employeeDtoList = employeeService.selectEmployeeListByEmpName(page, empName);
-
-		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
-
-		log.info("[EmployeeController] : pageInfo : {}", pageInfo);
+	@GetMapping("/search")
+	public ResponseEntity<ResponseDTO> selectEmployeeListBySearchName(
+			@RequestParam(name="page", defaultValue="1") int page,	
+			@RequestParam(name="condition")String condition,
+			@RequestParam(name="search") String name){
+		
+		Page<EmployeeDTO> employeeDTOList = employeeService.selectEmployeeListByDeptName(page, condition, name);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDTOList);
 
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
-		responseDtoWithPaging.setData(employeeDtoList.getContent());
-
-		log.info("[EmployeeController] : selectEmployeeListByEmpName end ==================================== ");
-
+		responseDtoWithPaging.setData(employeeDTOList.getContent());
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
-
 	}
 
 	/* 4. 교직원 상세 조회 - empCode로 교직원 1명 조회 */
@@ -134,13 +126,13 @@ public class EmployeeController {
 	public ResponseEntity<ResponseDTO> updateEmployee(@ModelAttribute EmployeeDTO employeeDTO, 
 			@AuthenticationPrincipal EmployeeDTO loggedInEmployee) {
 		
-		employeeDTO.setEmpCode(loggedInEmployee.getEmpCode()); // 로그인한 사용자의 코드를 설정
-	    employeeDTO.setEmpId(loggedInEmployee.getEmpId()); // 로그인한 사용자의 아이디를 설정
+//		employeeDTO.setEmpCode(loggedInEmployee.getEmpCode()); // 로그인한 사용자의 코드를 설정
+//	    employeeDTO.setEmpId(loggedInEmployee.getEmpId()); // 로그인한 사용자의 아이디를 설정
 	    
 	    log.info("교직원 정보 수정 : ", employeeDTO);
 		employeeService.updateEmployee(employeeDTO);
 
-		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록 성공"));
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "수정 성공"));
 	}
 
 

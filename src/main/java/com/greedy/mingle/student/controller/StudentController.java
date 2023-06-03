@@ -20,6 +20,7 @@ import com.greedy.mingle.common.ResponseDTO;
 import com.greedy.mingle.common.paging.Pagenation;
 import com.greedy.mingle.common.paging.PagingButtonInfo;
 import com.greedy.mingle.common.paging.ResponseDTOWithPaging;
+import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.student.dto.StudentDTO;
 import com.greedy.mingle.student.service.StudentService;
 
@@ -61,33 +62,39 @@ public class StudentController {
 	@GetMapping("/students/department/{deptCode}")
 	public ResponseEntity<ResponseDTO> selectStudentListByDepartment(
 			@RequestParam(name = "page", defaultValue = "1") int page, @PathVariable Long deptCode) {
+		
+		log.info("[StudentController] : selectStudentListByDepartment start ==================================== ");
+		log.info("[StudentController] : page : {}", page);
 
 		Page<StudentDTO> studentDtoList = studentService.selectStudentListByDepartment(page, deptCode);
 
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(studentDtoList);
+		
+		log.info("[StudentController] : pageInfo : {}", pageInfo);
 
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(studentDtoList.getContent());
+		
+		log.info("[StudentController] : selectStudentListByDepartment end ==================================== ");
 
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
 
 	/* 3. 학생 목록 조회 - 학생명 검색 기준, 페이징 */
-	@GetMapping("/students/search")
-	public ResponseEntity<ResponseDTO> selectStudentListByStdName(
-			@RequestParam(name = "page", defaultValue = "1") int page, @RequestParam(name = "search") String stdName) {
-
-		Page<StudentDTO> studentDtoList = studentService.selectStudentListByStdName(page, stdName);
-
+	@GetMapping("/search")
+	public ResponseEntity<ResponseDTO> selectStudentListBySearchName(
+			@RequestParam(name="page", defaultValue="1") int page,	
+			@RequestParam(name="condition")String condition,
+			@RequestParam(name="search") String name){
+		
+		Page<StudentDTO> studentDtoList = studentService.selectStudentListByDeptName(page, condition, name);
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(studentDtoList);
 
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(studentDtoList.getContent());
-
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
-
 	}
 
 	/* 4. 학생 상세 조회 - stdCode로 학생 1명 조회 */
