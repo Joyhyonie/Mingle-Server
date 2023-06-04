@@ -78,7 +78,6 @@ public class SecurityConfig {
 		             .antMatchers("/attendance-employee/**", 
 		            		 	  "/leave-doc-applied/**",
 		            		 	  "/certi-doc-applied/**",
-		            		 	  "/subject/**",
 		            		 	  "/lecture-student-admin/**",
 		            		 	  "/lecture-regist-admin/**",
 		            		 	  "/management-employee/**",
@@ -89,7 +88,8 @@ public class SecurityConfig {
 		            		 	  "/regist-student/**",
 		            		 	  "/modify-student/**",
 		            		 	  "/search-student/**",
-		            		 	  "/schedule-academic/**").hasAnyRole("ADMIN")
+		            		 	  "/schedule-academic/**",
+		            		 	  "/subject/**").hasRole("ADMIN")
 		             .antMatchers("/lecture-student-prof/**",
 		            		 	  "/lecture-regist-prof/**").hasRole("PROF")
 		             .antMatchers(HttpMethod.GET, "/employee/putmypage/**").permitAll()
