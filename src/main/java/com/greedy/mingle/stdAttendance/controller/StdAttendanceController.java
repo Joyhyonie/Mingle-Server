@@ -56,5 +56,12 @@ public class StdAttendanceController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록 성공"));
 	}
  
+ 	/* 수강코드로 해당 강의를 수강하는 학생들의 출결 조회 (성적표 조회를 위함) */
+	@GetMapping("/std-attendance/{courseCode}")
+	public ResponseEntity<ResponseDTO> selectStdAttendanceByLecCode(@PathVariable Long courseCode){
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "해당 강의를 수강하는 학생들의 출결 조회 성공", stdAttendanceService.selectStdAttendanceByLecCode(courseCode)));
+	}
+ 
  
 }

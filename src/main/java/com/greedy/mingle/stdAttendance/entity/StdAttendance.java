@@ -41,11 +41,6 @@ public class StdAttendance {
 	@JoinColumn(name="COURSE_CODE")
 	private Course course;
 	
-	
-	
-	
-
-	
 	/*  UPDATE 하는 무언가 인듯. 
 
 	public void update(String stdNameEn, String stdPwd, String stdName, String stdEmail,
