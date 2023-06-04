@@ -34,6 +34,8 @@ public class LectureOfficerDTO {
 	private Long lecPerTask;	//평과 기준 과제
 
 	
+	private int countStatus;
+	
 	
 
 

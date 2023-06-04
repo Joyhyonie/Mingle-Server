@@ -157,7 +157,5 @@ public class LectureController {
 	            .body(new ResponseDTO(HttpStatus.OK, "계획서가 작성되었습니다."));				
 		
 	}
-	
-	
-	
+
 }

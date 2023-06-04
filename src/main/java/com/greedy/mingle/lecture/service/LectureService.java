@@ -2,6 +2,7 @@ package com.greedy.mingle.lecture.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
@@ -18,6 +19,8 @@ import com.greedy.mingle.employee.repository.EmployeeRepository;
 import com.greedy.mingle.lecture.dto.LectureOfficerDTO;
 import com.greedy.mingle.lecture.entity.Lecture;
 import com.greedy.mingle.lecture.repository.LectureRepository;
+import com.greedy.mingle.message.dto.MessageDTO;
+import com.greedy.mingle.message.entity.Message;
 import com.greedy.mingle.subject.dto.DeptNameDTO;
 import com.greedy.mingle.subject.dto.SubjectNameDTO;
 import com.greedy.mingle.subject.entity.Department;
@@ -224,7 +227,6 @@ public class LectureService {
 		return lectureDtoList;
 		}
 	}
-	
-	
+
 
 }
