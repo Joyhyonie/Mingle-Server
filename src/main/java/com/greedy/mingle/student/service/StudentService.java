@@ -5,12 +5,15 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.greedy.mingle.employee.dto.EmployeeDTO;
+import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.student.dto.StudentDTO;
 import com.greedy.mingle.student.entity.Student;
 import com.greedy.mingle.student.repository.StudentRepository;
@@ -34,6 +37,11 @@ public class StudentService {
 		this.departmentRepository = departmentRepository;
 		this.modelMapper = modelMapper;
 	}
+	
+	@Value("${image.image-url}")
+	private String IMAGE_URL;
+	@Value("${image.image-dir}")
+	private String IMAGE_DIR;
 
 	/* 1. 교번으로 교직원 목록 조회 - 페이징 */
 	public Page<StudentDTO> selectStudentList(int page) {
@@ -44,6 +52,9 @@ public class StudentService {
 
 		Page<Student> studentList = studentRepository.findAll(pageable);
 		Page<StudentDTO> studentDtoList = studentList.map(student -> modelMapper.map(student, StudentDTO.class));
+		
+		/* 클라이언트 측에서 서버에 저장 된 이미지 요청 시 필요한 주소로 가공 */
+		studentDtoList.forEach(student -> student.setStdProfile(IMAGE_URL + student.getStdProfile()));
 		
 		log.info("[StudentService] studentDtoList.getContent() : {}", studentDtoList.getContent());
 
@@ -63,19 +74,26 @@ public class StudentService {
 
 		Page<Student> studentList = studentRepository.findByDepartment(pageable, findDepartment);
 		Page<StudentDTO> studentDtoList = studentList.map(student -> modelMapper.map(student, StudentDTO.class));
+		
+		/* 클라이언트 측에서 서버에 저장 된 이미지 요청 시 필요한 주소로 가공 */
+//		studentDtoList.forEach(student -> student.getStdProfile(IMAGE_URL + student.getStdProfile()));
 
 		return studentDtoList;
 	}
 
 	/* 3. 학생 목록 조회 - 학생명 검색 기준, 페이징 */
-	public Page<StudentDTO> selectStudentListByStdName(int page, String stdName) {
-
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("stdCode").descending());
-
-		Page<Student> studentList = studentRepository.findByStdName(pageable, stdName);
-		Page<StudentDTO> studentDtoList = studentList.map(student -> modelMapper.map(student, StudentDTO.class));
-
-		return studentDtoList;
+	public Page<StudentDTO> selectStudentListByDeptName(int page, String condition, String name) {
+		if(condition.equals("deptName")) {
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
+		Page<Student> studentList = studentRepository.findByDepartmentDeptName(pageable, name);		
+		Page<StudentDTO> stduentDtoDeptList = studentList.map(student -> modelMapper.map(student, StudentDTO.class));
+		return stduentDtoDeptList;
+		} else {
+			Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("stdCode").descending());
+			Page<Student> studentList = studentRepository.findByStdName(pageable, name);
+			Page<StudentDTO> studentDtoList = studentList.map(student -> modelMapper.map(student, StudentDTO.class));
+			return studentDtoList;
+		}
 	}
 
 	/* 4. 학생 상세 조회 - stdCode로 학생 1명 조회 */
