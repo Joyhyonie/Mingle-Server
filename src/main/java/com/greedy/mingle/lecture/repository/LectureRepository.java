@@ -23,9 +23,11 @@ public interface LectureRepository extends JpaRepository <Lecture, Long> {
 
 	Page<Lecture> findByEmployeeEmpCodeAndSubjectSbjNameContaining(Pageable pageable, Long empCode, String name);
 	
-
+	Page<Lecture> findByEmployeeEmpName(Pageable pagable,String empName );
 	
+	Page<Lecture> findByLecName(Pageable pagable,String lecName );
 
+	Page<Lecture> findByLecNameNotNull(Pageable pageable);
 }
 
 

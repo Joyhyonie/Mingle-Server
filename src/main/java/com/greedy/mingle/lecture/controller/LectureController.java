@@ -66,7 +66,7 @@ public class LectureController {
 		
 	}
 	
-	/*행정직원의 강의개설 리스트(게시판 리스트) */
+	/*행정직원의 출석,성적체크를 위한 강의리스트(강의 개설 완료) */
 	@GetMapping("/adminLectureList")
 	public ResponseEntity<ResponseDTO>getAdminLectureList(@RequestParam(name = "page", defaultValue = "1") int page){
 		
@@ -74,6 +74,27 @@ public class LectureController {
 		log.info("[LectureController] : page : {}", page);
 		
 		Page<LectureOfficerDTO> lectureDtoList = lectureService.lectureList(page);
+		
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(lectureDtoList);
+		log.info("[LectureController] : pageInfo : {}", pageInfo);
+		
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(lectureDtoList.getContent());
+
+		log.info("[LectureController] : selectEmployeeList end ==================================== ");
+		
+		
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+	}
+	/*행정직원의 강의개설 리스트*/
+	@GetMapping("/adminOpenLectureList")
+	public ResponseEntity<ResponseDTO>getAdminOpenLectureList(@RequestParam(name = "page", defaultValue = "1") int page){
+		
+		log.info("[LectureController] : selectLectureList start ==================================== ");
+		log.info("[LectureController] : page : {}", page);
+		
+		Page<LectureOfficerDTO> lectureDtoList = lectureService.openLectureList(page);
 		
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(lectureDtoList);
 		log.info("[LectureController] : pageInfo : {}", pageInfo);
@@ -123,7 +144,7 @@ public class LectureController {
 	}
 	
 	/* 검색 기능 */
-	@GetMapping("/search")
+	@GetMapping("/Search")
 	public ResponseEntity<ResponseDTO> searchLecName(
 			@RequestParam(name="page", defaultValue="1") int page,	
 			@RequestParam(name="condition")String condition,
@@ -157,6 +178,24 @@ public class LectureController {
 	            .body(new ResponseDTO(HttpStatus.OK, "계획서가 작성되었습니다."));				
 		
 	}
+	
+	/*empname,lecName으로 조회해오기(검색 서치바)*/
+	@GetMapping("/listSearch")
+	public ResponseEntity<ResponseDTO> selectMyLectureSearchName(
+			@RequestParam(name="page", defaultValue="1") int page,	
+			@RequestParam(name="condition")String condition,
+			@RequestParam(name="search") String name)                  {
+			
+		Page<LectureOfficerDTO> lectureDtoList = lectureService.selectLectureSearchName(page, condition, name);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(lectureDtoList);	
+		
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(lectureDtoList.getContent());
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+		
+	}
+			
 	
 	
 	
