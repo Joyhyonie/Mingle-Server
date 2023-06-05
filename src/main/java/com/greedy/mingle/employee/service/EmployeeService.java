@@ -20,7 +20,9 @@ import com.greedy.mingle.employee.dto.EmployeeDTO;
 import com.greedy.mingle.employee.dto.EmployeeRoleDTO;
 import com.greedy.mingle.employee.entity.Employee;
 import com.greedy.mingle.employee.repository.EmployeeRepository;
+import com.greedy.mingle.subject.dto.SubjectDTO;
 import com.greedy.mingle.subject.entity.Department;
+import com.greedy.mingle.subject.entity.Subject;
 import com.greedy.mingle.subject.repository.DepartmentRepository;
 import com.greedy.mingle.util.FileUploadUtils;
 
@@ -90,7 +92,7 @@ public class EmployeeService {
 	public Page<EmployeeDTO> selectEmployeeListByDeptName(int page, String condition, String name) {
 		if(condition.equals("deptName")) {
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
-		Page<Employee> employeeList = employeeRepository.findByDepartmentDeptNameContaining(pageable, name);		
+		Page<Employee> employeeList = employeeRepository.findByDepartmentDeptName(pageable, name);		
 		Page<EmployeeDTO> employeeDtoDeptList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
 		return employeeDtoDeptList;
 		} else {
@@ -131,7 +133,8 @@ public class EmployeeService {
 	/* 6. 교직원 신규 등록 */
 	@Transactional
 	public void insertEmployee(EmployeeDTO employeeDto) {
-
+		
+		// 중복 없으면 교직원 저장 완
 		employeeRepository.save(modelMapper.map(employeeDto, Employee.class));
 
 	}
@@ -201,38 +204,6 @@ public class EmployeeService {
 
 	}
 
-
-	/* 11. 조직도 교직원 조회 - 소속 기준 */
-
-	/* 12. 조직도 교직원 조회 - 교직원명 검색 기준 */
-	public Page<EmployeeDTO> selectOrgListByEmpName(int page, String empName) {
-
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
-
-		Page<Employee> employeeList = employeeRepository.findByEmpName(pageable, empName);
-		Page<EmployeeDTO> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
-		
-		/* 클라이언트 측에서 서버에 저장 된 이미지 요청 시 필요한 주소로 가공 */
-//		employeeDtoList.forEach(employee -> employee.setEmpProfile(IMAGE_URL + employee.getEmpProfile()));
-		
-		return employeeDtoList;
-	}
-	
-	/* 13. 조직도 목록 조회 - 소속 기준, 페이징 */
-	public Page<EmployeeDTO> selectOrgListByDeptName(int page, String condition, String name) {
-		if(condition.equals("deptName")) {
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
-		Page<Employee> employeeList = employeeRepository.findByDepartmentDeptName(pageable, name);		
-		Page<EmployeeDTO> employeeDtoDeptList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
-		return employeeDtoDeptList;
-		} else {
-			Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
-			Page<Employee> employeeList = employeeRepository.findByEmpName(pageable, name);
-			Page<EmployeeDTO> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
-			return employeeDtoList;
-		}
-	}
-
 	/* 14. 마이페이지 이미지 변경 */
 	@Transactional
 	public void updateEmp(EmployeeDTO employeeDTO) {
@@ -275,6 +246,6 @@ public class EmployeeService {
 		log.info("[ProductService] insertProduct end ============================== ");
 		log.info("[ProductService] insertProduct end ============================== ");
 	}
-
+	
 
 }

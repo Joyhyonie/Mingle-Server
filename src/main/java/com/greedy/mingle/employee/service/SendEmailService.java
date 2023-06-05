@@ -9,9 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.context.Context;
-import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import com.greedy.mingle.employee.dto.MailDTO;
 import com.greedy.mingle.employee.entity.Employee;
@@ -30,7 +28,7 @@ public class SendEmailService {
    private final TemplateEngine templateEngine;
 
    public SendEmailService(EmployeeRepository employeeRepository, JavaMailSender mailSender,
-                           PasswordEncoder passwordEncoder, SpringTemplateEngine templateEngine) {
+                           PasswordEncoder passwordEncoder, TemplateEngine templateEngine) {
       this.employeeRepository = employeeRepository;
       this.mailSender = mailSender;
       this.passwordEncoder = passwordEncoder;
@@ -45,7 +43,6 @@ public class SendEmailService {
       MailDTO dto = new MailDTO();
       dto.setAddress(empEmail);
       dto.setTitle(empName + "님의 Mingle 임시비밀번호 안내 이메일 입니다.");
-      dto.setMessage("안녕하세요. Mingle 임시비밀번호 안내 관련 이메일 입니다. [" + empName + "] 님의 임시 비밀번호는 " + str + " 입니다.");
       
       String pwd = passwordEncoder.encode(str);
       Employee employee = employeeRepository.findByEmpId(empId)
