@@ -93,22 +93,7 @@ public class Employee {
 	@JoinColumn(name="EMP_CODE")
 	private List<EmployeeRole> empRole;
 
-	/*
-	 * EMP_CODE	NUMBER
-		EMP_NAME	VARCHAR2(100 BYTE)
-		EMP_NAME_EN	VARCHAR2(100 BYTE)
-		EMP_EMAIL	VARCHAR2(255 BYTE)
-		EMP_PHONE	VARCHAR2(100 BYTE)
-		EMP_ADDRESS	VARCHAR2(255 BYTE)
-		EMP_PROFILE	VARCHAR2(255 BYTE)
-		EMP_ENT_DATE	DATE
-		EMP_AB_DATE	DATE
-		EMP_LEAVE_DATE	DATE
-		EMP_STATUS	VARCHAR2(100 BYTE)
-		DEPT_CODE	NUMBER
-		EMP_PWD	VARCHAR2(255 BYTE)
-		EMP_SSN	VARCHAR2(100 BYTE)
-		EMP_ANNUAL	NUMBER */
+
 
 
 	public void update(String empName, String empNameEn, String empEmail, String empPhone, String empAddress, String empProfile, Date empEntDate, 

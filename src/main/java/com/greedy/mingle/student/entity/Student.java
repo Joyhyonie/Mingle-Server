@@ -99,5 +99,4 @@ public class Student {
 		this.department = department;
 	}
 
-
 }

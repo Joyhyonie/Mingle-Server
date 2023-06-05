@@ -50,9 +50,6 @@ public class StdAttendanceService {
 		this.subjectRepository=subjectRepository;
 		this.stdAttendanceRepository=stdAttendanceRepository;
 	}
-
-	
-	/*1. 출석정보 조회하기 */
 	
 	public List<StdAttendanceDTO> getAttendanceInfo(Long stdAtdDate, Long lecCode){
 	

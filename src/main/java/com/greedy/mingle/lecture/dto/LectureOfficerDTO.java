@@ -40,9 +40,5 @@ public class LectureOfficerDTO {
 
 
 
-//	LEC_PER_FINAL	NUMBER	Yes	40	16	평가기준_기말
-//	LEC_PER_ATD	NUMBER	Yes	10	17	평가기준_출석
-//	LEC_PER_TASK	NUMBER	Yes	"10
-//	"	18	평가기준_과제
 
 }
