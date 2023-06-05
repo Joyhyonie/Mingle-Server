@@ -179,7 +179,7 @@ public class LectureController {
 		
 	}
 	
-	/*empname,lecName으로 조회해오기(검색 서치바)*/
+	/*empName,lecName으로 검색해오기(출석 및 성적 검색 서치바)*/
 	@GetMapping("/listSearch")
 	public ResponseEntity<ResponseDTO> selectMyLectureSearchName(
 			@RequestParam(name="page", defaultValue="1") int page,	
@@ -195,7 +195,26 @@ public class LectureController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 		
 	}
+	
+	/*empName,sbjName으로 검색해오기(강의 개설)*/
+	@GetMapping("/OpenListSearch")
+	public ResponseEntity<ResponseDTO> selectMyOpenLectureSearchName(
+			@RequestParam(name="page", defaultValue="1") int page,	
+			@RequestParam(name="condition")String condition,
+			@RequestParam(name="search") String name)                  {
 			
+		Page<LectureOfficerDTO> lectureDtoList = lectureService.selectOpenLectureSearchName(page, condition, name);
+		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(lectureDtoList);	
+		
+		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
+		responseDtoWithPaging.setPageInfo(pageInfo);
+		responseDtoWithPaging.setData(lectureDtoList.getContent());
+		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
+		
+	}
+	
+	
+	
 	
 	
 	

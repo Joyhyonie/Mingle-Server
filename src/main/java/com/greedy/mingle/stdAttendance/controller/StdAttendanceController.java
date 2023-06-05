@@ -34,11 +34,7 @@ public class StdAttendanceController {
  @GetMapping("/list/{lecCode}")
  public ResponseEntity<ResponseDTO> getattendanceList(@PathVariable("lecCode") Long lecCode,
 		 @RequestParam(name="stdAtdDate",defaultValue="1")Long stdAtdDate){
-	/* 
-	 Course course = new Course();
-	 Lecture lecture= new Lecture();
-	 lecture.setLecCode(lecCode);
-	 course.setLecture(lecture);*/
+
 	 
 	 return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", stdAttendanceService.getAttendanceInfo(stdAtdDate, lecCode)));
 
@@ -50,9 +46,8 @@ public class StdAttendanceController {
  @PatchMapping("/modify/{stdAtdCode}")
  public ResponseEntity<ResponseDTO> updateStudent(@ModelAttribute StdAttendanceDTO stdAttendanceDto) {
 	 
-	 	log.info("출석 정보 넘어왔나{}",stdAttendanceDto);
-	 	stdAttendanceService.updateAttendance(stdAttendanceDto);  //stdAttendanceDto 이게 맞나? stdAtdCode인가? 
-
+	 
+	 	stdAttendanceService.updateAttendance(stdAttendanceDto);  
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록 성공"));
 	}
  

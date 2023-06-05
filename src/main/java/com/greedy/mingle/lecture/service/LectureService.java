@@ -186,12 +186,12 @@ public class LectureService {
 	public Page<LectureOfficerDTO> selectLectureSearchName(int page, String condition, String name){
 	if(condition.equals("empName")) {
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("lecCode").descending());
-		Page<Lecture> lectureList = lectureRepository.findByEmployeeEmpName(pageable,name);
+		Page<Lecture> lectureList = lectureRepository.findByEmployeeEmpNameContainingAndLecNameNotNull(pageable,name);
 		Page<LectureOfficerDTO> lectureOfficerDtoList= lectureList.map(lecture-> modelMapper.map(lecture, LectureOfficerDTO.class));
 		return lectureOfficerDtoList;
 	}else {
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("lecCode").descending());
-		Page<Lecture> lectureList = lectureRepository.findByLecName(pageable, name);
+		Page<Lecture> lectureList = lectureRepository.findByLecNameContaining(pageable, name);
 		Page<LectureOfficerDTO> lectureOfficerDTO= lectureList.map(lecture-> modelMapper.map(lecture, LectureOfficerDTO.class));
 		return lectureOfficerDTO;
 	}
@@ -199,6 +199,23 @@ public class LectureService {
 		
 		
 	}
+	/*(강의 개설페이지) 담당교수, 교과목명으로 검색하기*/
+	public Page<LectureOfficerDTO> selectOpenLectureSearchName(int page, String condition, String name){
+		if(condition.equals("empName")) {
+			Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("lecCode").descending());
+			Page<Lecture> lectureList = lectureRepository.findByEmployeeEmpNameContaining(pageable,name);
+			Page<LectureOfficerDTO> lectureOfficerDtoList= lectureList.map(lecture-> modelMapper.map(lecture, LectureOfficerDTO.class));
+			return lectureOfficerDtoList;
+		}else {
+			Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("lecCode").descending());
+			Page<Lecture> lectureList = lectureRepository.findBySubjectSbjNameContaining(pageable, name);
+			Page<LectureOfficerDTO> lectureOfficerDTO= lectureList.map(lecture-> modelMapper.map(lecture, LectureOfficerDTO.class));
+			return lectureOfficerDTO;
+		}
+			
+			
+			
+		}
 	
 	
 	

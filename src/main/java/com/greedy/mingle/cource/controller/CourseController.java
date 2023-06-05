@@ -64,7 +64,7 @@ public class CourseController {
 		List<LectureOfficerDTO> lectureDTO =lectureService.lectureCount(lecCode);
 		
 		log.info("Coursestdlist:{}",Coursestdlist);
-		Map<String, Object> resultMap = new HashMap<>(); //맵으로 두르면 한번 키값으로 뺴낸다. count정보만 가져와서 , select 박스에 넣을 lecCOunt정보 가져오기 
+		Map<String, Object> resultMap = new HashMap<>(); //맵으로 한번 키값으로 뺴낸다. count정보만 가져와서 , select 박스에 넣을 lecCOunt정보 가져오기 
 		resultMap.put("courseStudentList", Coursestdlist);
 		resultMap.put("lectureDTO",lectureDTO);
 		

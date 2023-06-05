@@ -134,27 +134,6 @@ public class AttendanceController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
 	
-	/* 교직원의 이름으로 검색 */
-	/*
-	 * @GetMapping("/search") public ResponseEntity<ResponseDTO>
-	 * selectEmployeeListByEmpName(
-	 * 
-	 * @RequestParam(name="page", defaultValue="1") int
-	 * page, @RequestParam(name="search") String empName) {
-	 * 
-	 * Page<EmployeeDTO> employeeDtoList =
-	 * employeeService.selectEmployeeListByEmpName(page, empName); PagingButtonInfo
-	 * pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
-	 * 
-	 * ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
-	 * responseDtoWithPaging.setPageInfo(pageInfo);
-	 * responseDtoWithPaging.setData(employeeDtoList.getContent());
-	 * 
-	 * return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",
-	 * responseDtoWithPaging));
-	 * 
-	 * }
-	 */
 	
 	/* 상세조회 */
 	@GetMapping("/list-management/{empCode}")
