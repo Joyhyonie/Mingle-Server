@@ -49,8 +49,7 @@ public class CourceService {
 		List<Course> courseList= courseRepository.findByLecture(findLecture);
 		List<CourseDTO> courseDtoList= courseList.stream().map(course->modelMapper.map(course,CourseDTO.class)) .collect(Collectors.toList());
 				
-		
-		
+
 		
 		return courseDtoList;
 		

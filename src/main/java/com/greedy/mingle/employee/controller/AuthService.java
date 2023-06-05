@@ -40,21 +40,7 @@ public class AuthService {
 		   
 		   	this.modelMapper = modelMapper;
 	}
-	/*
-	 * @Transactional public void signup(EmployeeDto employeeDto) {
-	 * 
-	 * log.info("[AuthService] sign start ==========================");
-	 * log.info("[AuthService] memberDto : {}", employeeDto);
-	 * 
-	 * 이메일 중복 시 가입 불가 처리
-	 * if(employeeRepository.findByEmpEmail(employeeDto.getEmpEmail()) !=null) {
-	 * log.info("[AuthService] 이메일이 중복 됩니다. =========================="); throw new
-	 * DuplicatedUserEmailException("이메일이 중복 됩니다."); }
-	 * 
-	 * log.info("[AuthService] sign end ==========================");
-	 * 
-	 * }
-	 */
+
 	
 	public Object login(EmployeeDTO employeeDto) {
 	  log.info("[AuthService] login start ==========================");
@@ -83,9 +69,6 @@ public class AuthService {
 	  return tokenDto;
 	
 	  }
-
-
-	
 
 	   /* 아이디 찾기 */
 	   public EmployeeDTO idSearch(EmployeeDTO employeeDTO) {

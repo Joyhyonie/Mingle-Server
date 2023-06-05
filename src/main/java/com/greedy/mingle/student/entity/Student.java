@@ -98,6 +98,5 @@ public class Student {
 		this.stdSsn = stdSsn;
 		this.department = department;
 	}
-	
 
 }

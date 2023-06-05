@@ -24,7 +24,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	Page<Employee> findByDepartment(Pageable pageable, Department findDepartment);
 	
 	/* 3. 교직원 목록 조회 - 교직원명 검색 기준, 페이징 */
-	Page<Employee> findByEmpName(Pageable pageable, String name);
+	Page<Employee> findByEmpNameContaining(Pageable pageable, String name);
 	
 	Page<Employee> findByDepartmentDeptNameContaining(Pageable pageable, String name);
 
@@ -35,31 +35,14 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	@EntityGraph(attributePaths= {"department","empRole", "empRole.auth"})
 	Optional<Employee> findByEmpCode(@Param("empCode") Long empCode);
 	
-	
-	
-	/* 5. 교직원 신규 등록 */
-
-	/* 6. 교직원 정보 수정 */
-	
-	/* 7. 교직원 정보 삭제 */
-	
-	/* 8. 조직도 교직원 조회 - 스크롤 */
-
-	/* 9. 조직도 교직원 조회 - 소속 기준 */
-
-	/* 10. 조직도 교직원 조회 - 교직원명 검색 기준 */
-	
-	/* 11. 특정 학과의 교수인 교직원 조회 - 소속코드 기준 deptCode로 교직원 조회 */
+	/* 5. 특정 학과의 교수인 교직원 조회 - 소속코드 기준 deptCode로 교직원 조회 */
 	List<Employee> findByDepartmentDeptCode(Long deptCode);
 
 	Optional<Employee> findByEmpNameAndEmpPhone(String empName, String empPhone);
 	
-	 Employee findByEmpIdAndEmpEmail(String empId, String empEmail);
+	Employee findByEmpIdAndEmpEmail(String empId, String empEmail);
 	
-	   List<Employee> findByEmpNameContains(String searchKeyword);
-
-
-	
+	List<Employee> findByEmpNameContains(String searchKeyword);
 
 	Optional<Employee> findByEmpNameAndEmpEmail(String empName, String empEmail);
 
@@ -69,8 +52,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 	Employee findByEmpPwd(Long empCode);
 
 	Optional<Employee> findByEmpPwd(String empPwd);
-
-	Page<Employee> findByDepartmentDeptName(Pageable pageable, String name);
 
 	
 

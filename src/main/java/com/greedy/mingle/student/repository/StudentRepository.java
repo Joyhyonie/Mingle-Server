@@ -32,9 +32,4 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 			"WHERE s.stdCode = :stdCode ")
 	Optional<Student> findByStdCode(@Param("stdCode") Long stdCode);
 	
-	/* 5. 학생 신규 등록 */
-	
-	/* 6. 학생 정보 수정 */
-	
-	/* 7. 학생 정보 삭제 */
 }

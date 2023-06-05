@@ -12,8 +12,4 @@ public class TokenDTO {
 	private String accessToken;
 	private Long accessTokenExpiresIn;
 
-		
-		
-	}
-	
-
+}

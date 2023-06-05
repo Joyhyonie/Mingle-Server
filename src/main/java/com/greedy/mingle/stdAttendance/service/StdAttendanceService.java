@@ -51,15 +51,13 @@ public class StdAttendanceService {
 		this.stdAttendanceRepository=stdAttendanceRepository;
 	}
 	
-
-	
 	public List<StdAttendanceDTO> getAttendanceInfo(Long stdAtdDate, Long lecCode){
 	
-	List<StdAttendance> stdAttendanceList= stdAttendanceRepository.findByStdAtdDateAndCourseLectureLecCode(stdAtdDate, lecCode);
-	List<StdAttendanceDTO> stdAttendanceDtoList =stdAttendanceList.stream().map(attendance->modelMapper.map(attendance,StdAttendanceDTO.class)).collect(Collectors.toList());
-	
-	return stdAttendanceDtoList;
-}
+		List<StdAttendance> stdAttendanceList= stdAttendanceRepository.findByStdAtdDateAndCourseLectureLecCode(stdAtdDate, lecCode);
+		List<StdAttendanceDTO> stdAttendanceDtoList =stdAttendanceList.stream().map(attendance->modelMapper.map(attendance,StdAttendanceDTO.class)).collect(Collectors.toList());
+		
+		return stdAttendanceDtoList;
+	}
 
 
 	@Transactional
@@ -71,7 +69,6 @@ public class StdAttendanceService {
 	    
 	    stdAttendanceRepository.save(findAttendance);
 	   
-		
 	    
 	}
 
