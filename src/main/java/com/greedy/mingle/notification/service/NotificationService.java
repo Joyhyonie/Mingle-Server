@@ -93,7 +93,7 @@ public class NotificationService {
 				
 		log.info("[NotificationService] notifyReceivedMsg 호출!!");
 		log.info("[NotificationService] receiverId : {}", receiverId);
-		log.info("[NotificationService] sseEmitters : {}", sseEmitters); // => 클라이언트가 새로고침 직후에는 잘 담겨서 넘어오는데 시간이 조금만 지나도 빈 객체로 출력...
+		log.info("[NotificationService] sseEmitters : {}", sseEmitters);
 		
 		if(sseEmitters.containsKey(receiverId)) {
 			SseEmitter sseEmitter = sseEmitters.get(receiverId);
@@ -130,21 +130,6 @@ public class NotificationService {
 		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
-	
 	
 }

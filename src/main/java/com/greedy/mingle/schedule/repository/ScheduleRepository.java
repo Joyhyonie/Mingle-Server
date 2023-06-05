@@ -3,6 +3,7 @@ package com.greedy.mingle.schedule.repository;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -36,7 +37,7 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 	// deleteById() 메소드 활용
 	
 	/* 7. 학사 일정 전체 조회 */
-	List<Schedule> findByScheType(String scheType);
+	List<Schedule> findByScheType(String scheType, Sort sort);
 	
 	/* 8. 선택한 날짜의 학사 일정 조회 */
 	@Query("SELECT s "
