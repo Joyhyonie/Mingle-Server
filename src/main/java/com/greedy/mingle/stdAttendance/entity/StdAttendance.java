@@ -40,7 +40,7 @@ public class StdAttendance {
 	@ManyToOne
 	@JoinColumn(name="COURSE_CODE")
 	private Course course;
-	
+
 		
 	
 	}

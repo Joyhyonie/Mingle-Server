@@ -203,6 +203,7 @@ public class LectureController {
 			@RequestParam(name="condition")String condition,
 			@RequestParam(name="search") String name)                  {
 			
+
 		Page<LectureOfficerDTO> lectureDtoList = lectureService.selectOpenLectureSearchName(page, condition, name);
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(lectureDtoList);	
 		
@@ -211,11 +212,5 @@ public class LectureController {
 		responseDtoWithPaging.setData(lectureDtoList.getContent());
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 		
-	}
-	
-	
-	
-	
-	
-	
+
 }

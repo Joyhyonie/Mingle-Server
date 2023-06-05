@@ -18,9 +18,11 @@ import com.greedy.mingle.employee.repository.EmployeeRepository;
 import com.greedy.mingle.lecture.dto.LectureOfficerDTO;
 import com.greedy.mingle.lecture.entity.Lecture;
 import com.greedy.mingle.lecture.repository.LectureRepository;
+import com.greedy.mingle.message.dto.MessageDTO;
 import com.greedy.mingle.stdAttendance.dto.StdAttendanceDTO;
 import com.greedy.mingle.stdAttendance.entity.StdAttendance;
 import com.greedy.mingle.stdAttendance.repository.StdAttendanceRepository;
+import com.greedy.mingle.subject.dto.DepartmentDTO;
 import com.greedy.mingle.subject.dto.DeptNameDTO;
 import com.greedy.mingle.subject.dto.SubjectNameDTO;
 import com.greedy.mingle.subject.entity.Department;
@@ -70,6 +72,29 @@ public class StdAttendanceService {
 	    stdAttendanceRepository.save(findAttendance);
 	   
 		
+	    
+	}
+
+	/* 수강코드로 해당 강의를 수강하는 학생들의 출결 조회 (성적표 조회를 위함) */
+	public StdAttendanceDTO selectStdAttendanceByLecCode(Long courseCode) {
+		
+		List<Object[]> result = stdAttendanceRepository.findStdAttendanceByCourseCode(courseCode);
+		
+		StdAttendanceDTO stdAttendanceDTO = new StdAttendanceDTO();
+		
+		for (Object[] row : result) {
+		    Long attendanceCount = (Long) row[0];
+		    Long lateCount = (Long) row[1];
+		    Long absenceCount = (Long) row[2];
+		    log.info("[attendanceCount] {}", attendanceCount);
+		    log.info("[lateCount] {}", lateCount);
+		    log.info("[absenceCount] {}", absenceCount);
+		    stdAttendanceDTO.setAttendanceCount(attendanceCount);
+		    stdAttendanceDTO.setLateCount(lateCount);
+		    stdAttendanceDTO.setAbsenceCount(absenceCount);
+		}
+	    
+	    return stdAttendanceDTO;
 	    
 	}
 	
