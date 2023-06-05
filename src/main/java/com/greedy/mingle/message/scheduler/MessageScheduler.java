@@ -24,17 +24,13 @@ public class MessageScheduler {
 	@Scheduled(cron = "0 0 0 * * *")
 	public void autoDeleteMessage() {
 		
-		log.info("스케줄러는 실행됨!");
-		
 		List<MessageDTO> messgeList = messageService.selectAllRemovedMessage();
 		
 		for(MessageDTO message : messgeList) {
 			
 			if(message.getMsgDelReceiver().equals("Y")) {
-				log.info("if문 실행됨!");
 				messageService.deleteMessage(message.getMsgCode(), "receiver");
 			} else if(message.getMsgDelSender().equals("Y")) {
-				log.info("else if문 실행됨!");
 				messageService.deleteMessage(message.getMsgCode(), "sender");
 			}
 			

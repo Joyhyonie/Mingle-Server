@@ -102,14 +102,6 @@ public class SubjectController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록 성공"));
 	}
 	
-	/*
-	 * @DeleteMapping("/delete/{sbjCode}") public ResponseEntity<ResponseDTO>
-	 * deleteSubject(@PathVariable Long sbjCode){
-	 * 
-	 * subjectService.deleteSubject(sbjCode);
-	 * 
-	 * return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "삭제 성공")); }
-	 */
 	
 	@DeleteMapping("/delete")
 	public ResponseEntity<ResponseDTO> deleteSubjects(@RequestBody List<Long> sbjCodes) {

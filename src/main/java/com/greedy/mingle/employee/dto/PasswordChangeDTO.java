@@ -6,16 +6,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PasswordChangeDTO {
-
 	
 	 private String newPassword;
-	    private String confirmPassword;
-	    
-	    private String existingPassword;
+	 private String confirmPassword;
+	 private String existingPassword;
 		
-	    public CharSequence getExistingPassword() {
+	 public CharSequence getExistingPassword() {
 			
-			return existingPassword;
-		}
+		return existingPassword;
+	 }
 
 }

@@ -50,26 +50,17 @@ public class StdAttendanceService {
 		this.subjectRepository=subjectRepository;
 		this.stdAttendanceRepository=stdAttendanceRepository;
 	}
-	
-	/*1. 출석정보 조회하기 */
-/*	public List<StdAttendanceDTO> getAttendanceInfo(){
-		
-		List<StdAttendance> stdAttendanceList= stdAttendanceRepository.findAll();
-		List<StdAttendanceDTO> stdAttendanceDtoList =stdAttendanceList.stream().map(attendance->modelMapper.map(attendance,StdAttendanceDTO.class)) .collect(Collectors.toList());
-		return stdAttendanceDtoList;
-	}*/
-	
 
 	
 	/*1. 출석정보 조회하기 */
 	
 	public List<StdAttendanceDTO> getAttendanceInfo(Long stdAtdDate, Long lecCode){
 	
-	List<StdAttendance> stdAttendanceList= stdAttendanceRepository.findByStdAtdDateAndCourseLectureLecCode(stdAtdDate, lecCode);
-	List<StdAttendanceDTO> stdAttendanceDtoList =stdAttendanceList.stream().map(attendance->modelMapper.map(attendance,StdAttendanceDTO.class)).collect(Collectors.toList());
-	
-	return stdAttendanceDtoList;
-}
+		List<StdAttendance> stdAttendanceList= stdAttendanceRepository.findByStdAtdDateAndCourseLectureLecCode(stdAtdDate, lecCode);
+		List<StdAttendanceDTO> stdAttendanceDtoList =stdAttendanceList.stream().map(attendance->modelMapper.map(attendance,StdAttendanceDTO.class)).collect(Collectors.toList());
+		
+		return stdAttendanceDtoList;
+	}
 
 
 	@Transactional
@@ -81,7 +72,6 @@ public class StdAttendanceService {
 	    
 	    stdAttendanceRepository.save(findAttendance);
 	   
-		
 	    
 	}
 
