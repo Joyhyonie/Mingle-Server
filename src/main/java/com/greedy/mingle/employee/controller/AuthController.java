@@ -35,23 +35,6 @@ public class AuthController {
 			
 	}
 
-	
-	/*
-	 * //1. 회원 가입
-	 * 
-	 * @PostMapping("/signup") public ResponseEntity<ResponseDTO>
-	 * signup(@RequestBody EmployeeDto employeeDto){
-	 * 
-	 * authService.signup(employeeDto);
-	 * 
-	 * return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "회원 가입 완료"));
-	 * 
-	 * }
-	 */
-	 
-	
-	
-		
 		  // 2. 로그인
 		  
 		  @PostMapping("/login") 
