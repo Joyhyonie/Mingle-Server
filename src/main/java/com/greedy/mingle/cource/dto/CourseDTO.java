@@ -1,9 +1,4 @@
 package com.greedy.mingle.cource.dto;
-
-
-
-
-
 import com.greedy.mingle.lecture.dto.LectureOfficerDTO;
 import com.greedy.mingle.student.dto.StudentDTO;
 
