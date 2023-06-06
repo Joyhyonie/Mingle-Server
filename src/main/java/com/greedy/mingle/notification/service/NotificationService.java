@@ -90,14 +90,9 @@ public class NotificationService {
 	public void notifyReceivedMsg(MessageDTO messageDTO) {
 		
 		String receiverId = messageDTO.getReceiver().getEmpId();
-				
-		log.info("[NotificationService] notifyReceivedMsg 호출!!");
-		log.info("[NotificationService] receiverId : {}", receiverId);
-		log.info("[NotificationService] sseEmitters : {}", sseEmitters);
 		
 		if(sseEmitters.containsKey(receiverId)) {
 			SseEmitter sseEmitter = sseEmitters.get(receiverId);
-			log.info("[NotificationService] sseEmitter: {}", sseEmitter);
 
 			try {
 				sseEmitter.send(SseEmitter.event()
@@ -113,10 +108,7 @@ public class NotificationService {
 
 	/* 2. 학사일정 시작일&종료일 및 공지사항 알림 등록과 동시에 실시간 알림 */
 	public void notifyCommonNoti(NotificationDTO notiDTO) {
-		
-		log.info("[NotificationService] notifyAcScheduleNoti 호출!");
-		log.info("[NotificationService] allSseEmitters : {}", allSseEmitters);
-		
+
 		for(SseEmitter sseEmitter : allSseEmitters) {
 			try {
 				sseEmitter.send(SseEmitter.event()

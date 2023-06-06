@@ -1,10 +1,6 @@
 # port config
 server:
   port: 8001
-#  tomcat:
-#    connection-timeout: 30s
-#    max-keep-alive-requests: 100
-#    keep-alive-timeout: 3600000 # 1시간
   
 # datasource config
 spring:
