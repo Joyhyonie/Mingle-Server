@@ -55,11 +55,9 @@ public class ScheduleController {
 		
 		Date date = null;
 		String scheType = "개인";
-		log.info("이것은 포맷되지않은 선택된 날짜 : {}", selectedDate);
 		
 		try {
 			date = dateFormat.parse(selectedDate);
-			log.info("이것은 포맷된 선택된 날짜 : {}", date);
 		} catch (java.text.ParseException e) {
 			return ResponseEntity.badRequest().body(new ResponseDTO(HttpStatus.BAD_REQUEST, "잘못된 날짜 형식입니다."));
 		}

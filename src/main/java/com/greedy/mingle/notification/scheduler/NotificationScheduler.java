@@ -33,7 +33,6 @@ public class NotificationScheduler {
     	
         // 현재 날짜
         LocalDate today = LocalDate.now();
-        log.info("[NotificationScheduler] today : {}", today);
         
         // 전체 학사일정의 시작일/종료일 조회
         String scheType = "학사";

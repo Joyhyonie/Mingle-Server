@@ -56,10 +56,6 @@ public class BoardService {
 
 	/* 3. 분류 및 검색기준별 공지사항 조회(페이징) */
 	public Page<BoardDTO> selectSearchedBoard(int page, String type, String condition, String word) {
-		
-		log.info("[BoardService] type : {}", type);
-		log.info("[BoardService] condition : {}", condition);
-		log.info("[BoardService] word : {}", word);
 
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("boardCode").descending()); // PageRequest.of(몇 번째 페이지?, 몇 개씩?, 정렬기준)
 		
