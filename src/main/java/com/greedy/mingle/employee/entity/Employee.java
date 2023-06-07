@@ -30,16 +30,14 @@ import lombok.ToString;
 @Entity
 @ToString
 @Table(name="TBL_EMPLOYEE")
-@SequenceGenerator(name="EMP_SEQ_GENERATOR", sequenceName="SEQ_EMP_CODE", initialValue=1, allocationSize=1)
 @DynamicInsert
-
 public class Employee {
 	
 	
 	
 	@Id
 	@Column(name="EMP_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="EMP_SEQ_GENERATOR")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long empCode;
 	
 	@Column(name="EMP_ID")

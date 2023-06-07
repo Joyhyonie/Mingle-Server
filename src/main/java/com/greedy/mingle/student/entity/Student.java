@@ -28,8 +28,7 @@ public class Student {
 	
 	@Id
 	@Column(name="STD_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_STD_CODE")
-	@SequenceGenerator(name="SEQ_STD_CODE", sequenceName="SEQ_STD_CODE", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long stdCode;
 	
 	@Column(name="STD_NAME_EN")

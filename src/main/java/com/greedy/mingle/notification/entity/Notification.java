@@ -21,15 +21,12 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="TBL_NOTI")
-@SequenceGenerator(name="NOTI_SEQ_GENERATOR",
-				   sequenceName="SEQ_NOTI_CODE",
-				   initialValue=1, allocationSize=1)
 @DynamicInsert
 public class Notification {
 
 	@Id
 	@Column(name="NOTI_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="NOTI_SEQ_GENERATOR")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long notiCode;
 	
 	@Column(name="NOTI_CONTENT")

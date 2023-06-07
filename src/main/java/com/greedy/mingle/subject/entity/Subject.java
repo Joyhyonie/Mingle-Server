@@ -22,8 +22,7 @@ public class Subject {
 	
 	@Id
 	@Column(name="SBJ_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_SBJ_CODE")
-	@SequenceGenerator(name="SEQ_SBJ_CODE", sequenceName="SEQ_SBJ_CODE", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long sbjCode;
 	
 	@Column(name="SBJ_NAME")

@@ -26,12 +26,11 @@ import lombok.Setter;
 @DynamicInsert
 @Getter
 @Setter
-@SequenceGenerator(name="SEQ_LEC_CODE", sequenceName="SEQ_LEC_CODE", allocationSize=1)
 public class Lecture {
 	
 	@Id
 	@Column(name="LEC_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_LEC_CODE")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long lecCode;		//강의코드
 	
 	@Column(name="LEC_SUMMARY")
