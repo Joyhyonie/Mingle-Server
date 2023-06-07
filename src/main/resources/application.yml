@@ -10,9 +10,9 @@ server:
 spring:
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@localhost:1521:xe
-    username: C##MINGLE
-    password: MINGLE
+    url: jdbc:mysql://mingle.cryn78yi94il.ap-northeast-2.rds.amazonaws.com:3306/Mingle
+    username: Mingle
+    password: aldrmfaldrmf^^
   mail:
     host: smtp.naver.com
     port: 465
@@ -26,7 +26,7 @@ spring:
   jpa:
     generate-ddl: false
     show-sql: true
-    database: oracle
+    database: mysql
     properties:
       hibernate:
         '[format_sql]' : true
@@ -45,6 +45,10 @@ spring:
         
 # image 관련 값 설정
 image:
+  # WebConfig에 세팅
+  add-resource-locations: file:////profileImgs/
+  add-resource-handler: /profileImgs/**
+  
   image-url: http://localhost:8001/profileImgs/ # 찾고자 하는 이미지들의 경로
   image-dir: src/main/resources/static/profileImgs # 이미지들을 저장할 상대 경로 설정
   
