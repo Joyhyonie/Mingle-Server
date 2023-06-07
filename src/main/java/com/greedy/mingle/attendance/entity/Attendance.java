@@ -26,8 +26,7 @@ public class Attendance {
 	
 	@Id
 	@Column(name="EMP_ATD_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_EMP_ATD_CODE")
-	@SequenceGenerator(name="SEQ_EMP_ATD_CODE", sequenceName="SEQ_EMP_ATD_CODE", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long atdCode;
 	
 	@Column(name="EMP_ATD_DATE")

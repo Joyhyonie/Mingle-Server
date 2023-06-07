@@ -23,12 +23,11 @@ import lombok.Setter;
 @Entity
 @Table(name="TBL_STD_ATTENDANCE")
 @DynamicInsert
-@SequenceGenerator(name="SEQ_STD_ATD_CODE", sequenceName="SEQ_STD_ATD_CODE", allocationSize=1)
 public class StdAttendance {
 	
 	@Id
 	@Column(name="STD_ATD_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_STD_ATD_CODE")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long stdAtdCode;				
 	
 	@Column(name="STD_ATD_STATUS")
@@ -41,10 +40,4 @@ public class StdAttendance {
 	@JoinColumn(name="COURSE_CODE")
 	private Course course;
 
-		
-	
-	}
-	
-
-
-
+}

@@ -23,15 +23,12 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name="TBL_SCHEDULE")
-@SequenceGenerator(name="SCHEDULE_SEQ_GENERATOR",
-				   sequenceName="SEQ_SCHE_CODE",
-				   initialValue=1, allocationSize=1)
 @DynamicInsert
 public class Schedule {
 	
 	@Id
 	@Column(name="SCHE_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SCHEDULE_SEQ_GENERATOR")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long scheCode;
 	
 	@Column(name="SCHE_NAME")

@@ -23,16 +23,13 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="TBL_MESSAGE")
-@SequenceGenerator(name="MESSAGE_SEQ_GENERATOR",
-				   sequenceName="SEQ_MSG_CODE",
-				   initialValue=1, allocationSize=1)
 @DynamicInsert
 public class Message {
 	
 	
 	@Id
 	@Column(name="MSG_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="MESSAGE_SEQ_GENERATOR")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long msgCode;
 	
 	@Column(name="MSG_CONTENT")

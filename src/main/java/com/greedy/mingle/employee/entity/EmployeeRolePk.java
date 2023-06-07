@@ -10,10 +10,10 @@ import lombok.ToString;
 @Embeddable
 public class EmployeeRolePk implements Serializable {
 	
-		@Column(name = "EMP_CODE")
-	    private Long empCode;
+	@Column(name = "EMP_CODE")
+	private Long empCode;
 	 
-	    @Column(name = "AUTH_CODE")
-	    private Long authCode;
+	@Column(name = "AUTH_CODE")
+	private Long authCode;
 	 
 }

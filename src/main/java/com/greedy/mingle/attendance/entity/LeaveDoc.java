@@ -26,8 +26,7 @@ public class LeaveDoc {
 	
 	@Id
 	@Column(name="LEAVE_DOC_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_LEAVE_DOC_CODE")
-	@SequenceGenerator(name="SEQ_LEAVE_DOC_CODE", sequenceName="SEQ_LEAVE_DOC_CODE", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long leaveDocCode;
 	
 	@Column(name="LEAVE_APPLY_DATE")
