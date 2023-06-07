@@ -5,10 +5,10 @@ server:
 # datasource config
 spring:
   datasource:
-    driver-class-name: oracle.jdbc.OracleDriver
-    url: jdbc:oracle:thin:@localhost:1521:xe
-    username: C##MINGLE
-    password: MINGLE
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mingle.cryn78yi94il.ap-northeast-2.rds.amazonaws.com:3306/Mingle_backend
+    username: Mingler
+    password: aldrmfaldrmf^^
   mail:
     host: smtp.naver.com
     port: 465
@@ -22,7 +22,7 @@ spring:
   jpa:
     generate-ddl: false
     show-sql: true
-    database: oracle
+    database: MYSQL
     properties:
       hibernate:
         '[format_sql]' : true
@@ -44,7 +44,7 @@ image:
   add-resource-handler: /profileImgs/**
   # ProductService에 세팅
   image-dir: /profileImgs # 이미지들을 저장할 상대 경로 설정
-  image-url: http://localhost:8001/profileImgs/ # 찾고자 하는 이미지들의 경로
+  image-url: http://3.35.186.184:8001/profileImgs/ # 찾고자 하는 이미지들의 경로
 #  image-url: http://**아이피주소또는도메인**:8001/profileImgs/
   
 # HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
