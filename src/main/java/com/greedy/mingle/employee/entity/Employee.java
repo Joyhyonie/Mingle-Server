@@ -30,16 +30,14 @@ import lombok.ToString;
 @Entity
 @ToString
 @Table(name="TBL_EMPLOYEE")
-@SequenceGenerator(name="EMP_SEQ_GENERATOR", sequenceName="SEQ_EMP_CODE", initialValue=1, allocationSize=1)
 @DynamicInsert
-
 public class Employee {
 	
 	
 	
 	@Id
 	@Column(name="EMP_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="EMP_SEQ_GENERATOR")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long empCode;
 	
 	@Column(name="EMP_ID")
@@ -93,22 +91,7 @@ public class Employee {
 	@JoinColumn(name="EMP_CODE")
 	private List<EmployeeRole> empRole;
 
-	/*
-	 * EMP_CODE	NUMBER
-		EMP_NAME	VARCHAR2(100 BYTE)
-		EMP_NAME_EN	VARCHAR2(100 BYTE)
-		EMP_EMAIL	VARCHAR2(255 BYTE)
-		EMP_PHONE	VARCHAR2(100 BYTE)
-		EMP_ADDRESS	VARCHAR2(255 BYTE)
-		EMP_PROFILE	VARCHAR2(255 BYTE)
-		EMP_ENT_DATE	DATE
-		EMP_AB_DATE	DATE
-		EMP_LEAVE_DATE	DATE
-		EMP_STATUS	VARCHAR2(100 BYTE)
-		DEPT_CODE	NUMBER
-		EMP_PWD	VARCHAR2(255 BYTE)
-		EMP_SSN	VARCHAR2(100 BYTE)
-		EMP_ANNUAL	NUMBER */
+
 
 
 	public void update(String empName, String empNameEn, String empEmail, String empPhone, String empAddress, String empProfile, Date empEntDate, 

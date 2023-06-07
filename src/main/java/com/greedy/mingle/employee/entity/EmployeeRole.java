@@ -27,10 +27,4 @@ public class EmployeeRole {
 	@JoinColumn(name="AUTH_CODE" , insertable = false, updatable = false)
 	private Auth auth;
 
-	
-	
-
-	
-
-	
 }

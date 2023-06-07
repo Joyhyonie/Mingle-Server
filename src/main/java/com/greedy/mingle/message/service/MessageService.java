@@ -298,7 +298,6 @@ public class MessageService {
 	public List<MessageDTO> selectAllRemovedMessage() {
 		
 		List<Message> messageList = messageRepository.findByMsgDelSenderOrMsgDelReceiver("Y", "Y");
-		log.info("[MessageService] selectAllRemovedMessage의 messageList : {}", messageList);
 	
 		List<MessageDTO> messageDTOList = messageList.stream().map(message -> modelMapper.map(message, MessageDTO.class)).collect(Collectors.toList());
 		
@@ -307,15 +306,13 @@ public class MessageService {
 
 	/* 17. 쪽지 영구 삭제 */
 	public void deleteMessage(Long msgCode, String empType) {
-		
-		log.info("쪽지 영구 삭제 실행!");
 			
 		Message message = messageRepository.findById(msgCode)
 				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 쪽지가 없습니다 🥲 msgCode : " + msgCode));
 			
 		switch(empType) {
-			case "receiver" : message.setMsgDelReceiver("F"); messageRepository.save(message); log.info("receiver 실행!"); break;
-			case "sender" : message.setMsgDelSender("F"); messageRepository.save(message); log.info("sender 실행!"); break;
+			case "receiver" : message.setMsgDelReceiver("X"); messageRepository.save(message); break;
+			case "sender" : message.setMsgDelSender("X"); messageRepository.save(message); break;
 			default : return;
 		}
 	

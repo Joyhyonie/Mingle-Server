@@ -19,7 +19,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 			   + "AND m.msgReadYn = 'N' ")
 	int countUnreadMessage(@Param("empCode")Long empCode);
 
-	/* 2. 받은 쪽지함 조회 (최근 20개) */
+	/* 2. 받은 쪽지함 조회 */
 	@Query(value="SELECT m " +
 				 "FROM Message m " + 
 				 "WHERE m.receiver.empCode = :empCode " + 

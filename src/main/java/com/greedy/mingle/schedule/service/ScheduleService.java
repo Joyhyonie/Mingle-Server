@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.greedy.mingle.schedule.dto.ScheduleDTO;
@@ -111,7 +112,7 @@ public class ScheduleService {
 	/* 7. 학사 일정 전체 조회 */
 	public List<ScheduleDTO> selectAllAcSchedule(String scheType) {
 		
-		List<Schedule> scheduleList = scheduleRepository.findByScheType(scheType);
+		List<Schedule> scheduleList = scheduleRepository.findByScheType(scheType, Sort.by("scheStartDate"));
 		
 		List<ScheduleDTO> scheduleDTOList = scheduleList.stream()
 		            .map(schedule -> modelMapper.map(schedule, ScheduleDTO.class))

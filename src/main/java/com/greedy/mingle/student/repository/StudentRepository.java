@@ -22,9 +22,9 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 	Page<Student> findByDepartment(Pageable pageable, Department department);
 	
 	/* 3. 학생 목록 조회 - 학생명 검색 기준, 페이징 */
-	Page<Student> findByStdName(Pageable pageable, String stdName);
+	Page<Student> findByStdNameContaining(Pageable pageable, String stdName);
 	
-	Page<Student> findByDepartmentDeptName(Pageable pageable, String name);
+	Page<Student> findByDepartmentDeptNameContaining(Pageable pageable, String name);
 
 	/* 4. 학생 상세 조회 - stdCode로 학생 1명 조회 */
 	@Query("SELECT s" +
@@ -32,9 +32,4 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 			"WHERE s.stdCode = :stdCode ")
 	Optional<Student> findByStdCode(@Param("stdCode") Long stdCode);
 	
-	/* 5. 학생 신규 등록 */
-	
-	/* 6. 학생 정보 수정 */
-	
-	/* 7. 학생 정보 삭제 */
 }

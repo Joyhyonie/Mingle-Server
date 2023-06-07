@@ -23,12 +23,11 @@ import lombok.Setter;
 @Entity
 @Table(name="TBL_STD_ATTENDANCE")
 @DynamicInsert
-@SequenceGenerator(name="SEQ_STD_ATD_CODE", sequenceName="SEQ_STD_ATD_CODE", allocationSize=1)
 public class StdAttendance {
 	
 	@Id
 	@Column(name="STD_ATD_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_STD_ATD_CODE")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long stdAtdCode;				
 	
 	@Column(name="STD_ATD_STATUS")
@@ -40,30 +39,5 @@ public class StdAttendance {
 	@ManyToOne
 	@JoinColumn(name="COURSE_CODE")
 	private Course course;
-	
-	/*  UPDATE 하는 무언가 인듯. 
 
-	public void update(String stdNameEn, String stdPwd, String stdName, String stdEmail,
-			String stdPhone, String stdAddress, String stdProfile, Date stdEntDate, Date stdAbDate,
-			Date stdDropDate, Date stdLeaveDate, String stdStatus, Long stdLevel, String stdSsn, Department department) {
-		
-		this.stdNameEn = stdNameEn;
-		this.stdPwd = stdPwd;
-		this.stdName = stdName;
-		this.stdEmail = stdEmail;
-		this.stdPhone = stdPhone;
-		this.stdAddress = stdAddress;
-		this.stdProfile = stdProfile;
-		this.stdEntDate = stdEntDate;
-		this.stdAbDate = stdAbDate;
-		this.stdDropDate = stdDropDate;
-		this.stdLeaveDate = stdLeaveDate;
-		this.stdStatus = stdStatus;
-		this.stdLevel = stdLevel;
-		this.stdSsn = stdSsn;
-		this.department = department;*/
-	}
-	
-
-
-
+}

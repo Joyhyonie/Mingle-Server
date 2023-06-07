@@ -62,8 +62,6 @@ public class AttendanceController {
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(employeeDtoList.getContent());
 		
-		log.info("[EmployeeController] : selectEmployeeList end ============================== ");
-		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 
 		
@@ -134,27 +132,6 @@ public class AttendanceController {
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
 	
-	/* 교직원의 이름으로 검색 */
-	/*
-	 * @GetMapping("/search") public ResponseEntity<ResponseDTO>
-	 * selectEmployeeListByEmpName(
-	 * 
-	 * @RequestParam(name="page", defaultValue="1") int
-	 * page, @RequestParam(name="search") String empName) {
-	 * 
-	 * Page<EmployeeDTO> employeeDtoList =
-	 * employeeService.selectEmployeeListByEmpName(page, empName); PagingButtonInfo
-	 * pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
-	 * 
-	 * ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
-	 * responseDtoWithPaging.setPageInfo(pageInfo);
-	 * responseDtoWithPaging.setData(employeeDtoList.getContent());
-	 * 
-	 * return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",
-	 * responseDtoWithPaging));
-	 * 
-	 * }
-	 */
 	
 	/* 상세조회 */
 	@GetMapping("/list-management/{empCode}")
@@ -182,8 +159,6 @@ public class AttendanceController {
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(leaveDocDtoList.getContent());
-		
-		log.info("[SubjectController : responseDtoWithPaging : {}",responseDtoWithPaging);
 		
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공",responseDtoWithPaging));
 	}
@@ -277,7 +252,6 @@ public class AttendanceController {
 		LocalDateTime now = LocalDateTime.now();
 		DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String todaysDate = now.format(timeFormat);
-		log.info("[AttendanceController] 현재 날짜 : {}", todaysDate);
 		
 		return ResponseEntity
 				.ok()
@@ -312,9 +286,6 @@ public class AttendanceController {
 		Timestamp timestamp = Timestamp.valueOf(now);
 		SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String formattedTime = timeFormat.format(timestamp);
-		
-		log.info("[AttendanceController] 클라이언트에서 요청한 현재 시간 : {}", formattedTime);
-		log.info("[AttendanceController] 클라이언트가 요청한 날짜 : {}", formattedDate);
 		
 		attendanceService.recordEndTime(employee.getEmpCode(), formattedDate, formattedTime);
 		

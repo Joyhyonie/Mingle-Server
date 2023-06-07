@@ -19,14 +19,11 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="TBL_NOTI_DELETE")
-@SequenceGenerator(name="NOTI_DEL_SEQ_GENERATOR",
-				   sequenceName="SEQ_NOTI_DEL_CODE",
-				   initialValue=1, allocationSize=1)
 public class DeletedNotification {
 
 	@Id
 	@Column(name="NOTI_DEL_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="NOTI_DEL_SEQ_GENERATOR")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long notiDelCode;
 	
 	@ManyToOne

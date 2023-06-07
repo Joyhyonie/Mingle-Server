@@ -26,8 +26,7 @@ public class CertiDoc {
 
 	@Id
 	@Column(name="CERTI_DOC_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_CERTI_DOC_CODE")
-	@SequenceGenerator(name="SEQ_CERTI_DOC_CODE", sequenceName="SEQ_CERTI_DOC_CODE", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long certiDocCode;
 	
 	@Column(name="CERTI_APPLY_DATE")

@@ -28,8 +28,7 @@ public class Student {
 	
 	@Id
 	@Column(name="STD_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="SEQ_STD_CODE")
-	@SequenceGenerator(name="SEQ_STD_CODE", sequenceName="SEQ_STD_CODE", allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long stdCode;
 	
 	@Column(name="STD_NAME_EN")
@@ -98,23 +97,5 @@ public class Student {
 		this.stdSsn = stdSsn;
 		this.department = department;
 	}
-	
-	/* STD_CODE	NUMBER
-	STD_NAME_EN	VARCHAR2(100 BYTE)
-	STD_PWD	VARCHAR2(255 BYTE)
-	STD_NAME	VARCHAR2(100 BYTE)
-	STD_EMAIL	VARCHAR2(255 BYTE)
-	STD_PHONE	VARCHAR2(100 BYTE)
-	STD_ADDRESS	VARCHAR2(255 BYTE)
-	STD_PROFILE	VARCHAR2(255 BYTE)
-	STD_ENT_DATE	DATE
-	STD_AB_DATE	DATE
-	STD_DROP_DATE	DATE
-	STD_LEAVE_DATE	DATE
-	STD_STATUS	VARCHAR2(100 BYTE)
-	STD_LEVEL	NUMBER(20,0)
-	STD_SSN	VARCHAR2(100 BYTE)
-	DEPT_CODE	NUMBER 
-	*/
 
 }

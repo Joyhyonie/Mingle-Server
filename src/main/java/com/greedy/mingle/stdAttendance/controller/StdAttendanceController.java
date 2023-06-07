@@ -30,29 +30,18 @@ public class StdAttendanceController {
 	}
 	
 	
-/*lecCode를 통해서      course 클래스의 조회기능이 필요없는게 아닐까? */	
- @GetMapping("/list/{lecCode}")
- public ResponseEntity<ResponseDTO> getattendanceList(@PathVariable("lecCode") Long lecCode,
-		 @RequestParam(name="stdAtdDate",defaultValue="1")Long stdAtdDate){
-	/* 
-	 Course course = new Course();
-	 Lecture lecture= new Lecture();
-	 lecture.setLecCode(lecCode);
-	 course.setLecture(lecture);*/
-	 
-	 return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", stdAttendanceService.getAttendanceInfo(stdAtdDate, lecCode)));
+	 @GetMapping("/list/{lecCode}")
+	 public ResponseEntity<ResponseDTO> getattendanceList(@PathVariable("lecCode") Long lecCode,
+			 @RequestParam(name="stdAtdDate",defaultValue="1")Long stdAtdDate){
+	
+		 return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", stdAttendanceService.getAttendanceInfo(stdAtdDate, lecCode)));
+	 }
 
+	 /* 출석입력 */
+	 @PatchMapping("/modify/{stdAtdCode}")
+	 public ResponseEntity<ResponseDTO> updateStudent(@ModelAttribute StdAttendanceDTO stdAttendanceDto) {
 	 
- }
-
- /*출석입력*/
- 
- @PatchMapping("/modify/{stdAtdCode}")
- public ResponseEntity<ResponseDTO> updateStudent(@ModelAttribute StdAttendanceDTO stdAttendanceDto) {
-	 
-	 	log.info("출석 정보 넘어왔나{}",stdAttendanceDto);
-	 	stdAttendanceService.updateAttendance(stdAttendanceDto);  //stdAttendanceDto 이게 맞나? stdAtdCode인가? 
-
+	 	stdAttendanceService.updateAttendance(stdAttendanceDto);  
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "등록 성공"));
 	}
  

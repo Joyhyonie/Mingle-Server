@@ -84,13 +84,13 @@ public class StudentService {
 	/* 3. 학생 목록 조회 - 학생명 검색 기준, 페이징 */
 	public Page<StudentDTO> selectStudentListByDeptName(int page, String condition, String name) {
 		if(condition.equals("deptName")) {
-		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
-		Page<Student> studentList = studentRepository.findByDepartmentDeptName(pageable, name);		
+		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("stdCode").descending());
+		Page<Student> studentList = studentRepository.findByDepartmentDeptNameContaining(pageable, name);		
 		Page<StudentDTO> stduentDtoDeptList = studentList.map(student -> modelMapper.map(student, StudentDTO.class));
 		return stduentDtoDeptList;
 		} else {
 			Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("stdCode").descending());
-			Page<Student> studentList = studentRepository.findByStdName(pageable, name);
+			Page<Student> studentList = studentRepository.findByStdNameContaining(pageable, name);
 			Page<StudentDTO> studentDtoList = studentList.map(student -> modelMapper.map(student, StudentDTO.class));
 			return studentDtoList;
 		}
@@ -148,24 +148,5 @@ public class StudentService {
 		studentRepository.deleteById(stdCode);
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

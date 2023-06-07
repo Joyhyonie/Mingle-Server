@@ -97,7 +97,7 @@ public class EmployeeService {
 		return employeeDtoDeptList;
 		} else {
 			Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
-			Page<Employee> employeeList = employeeRepository.findByEmpName(pageable, name);
+			Page<Employee> employeeList = employeeRepository.findByEmpNameContaining(pageable, name);
 			Page<EmployeeDTO> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
 			return employeeDtoList;
 		}
@@ -108,7 +108,7 @@ public class EmployeeService {
 
 		Pageable pageable = PageRequest.of(page - 1, 10, Sort.by("empCode").descending());
 
-		Page<Employee> employeeList = employeeRepository.findByEmpName(pageable, empName);
+		Page<Employee> employeeList = employeeRepository.findByEmpNameContaining(pageable, empName);
 		Page<EmployeeDTO> employeeDtoList = employeeList.map(employee -> modelMapper.map(employee, EmployeeDTO.class));
 		
 		/* 클라이언트 측에서 서버에 저장 된 이미지 요청 시 필요한 주소로 가공 */

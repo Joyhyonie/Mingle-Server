@@ -23,15 +23,12 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name="TBL_BOARD")
-@SequenceGenerator(name="BOARD_SEQ_GENERATOR",
-				   sequenceName="SEQ_BOARD_CODE",
-				   initialValue=1, allocationSize=1)
 @DynamicInsert
 public class Board {
 	
 	@Id
 	@Column(name="BOARD_CODE")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="BOARD_SEQ_GENERATOR")
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long boardCode;
 	
 	@Column(name="BOARD_TYPE")
