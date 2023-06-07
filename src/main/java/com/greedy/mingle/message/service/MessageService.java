@@ -311,8 +311,8 @@ public class MessageService {
 				.orElseThrow(() -> new IllegalArgumentException("해당 코드의 쪽지가 없습니다 🥲 msgCode : " + msgCode));
 			
 		switch(empType) {
-			case "receiver" : message.setMsgDelReceiver("F"); messageRepository.save(message); break;
-			case "sender" : message.setMsgDelSender("F"); messageRepository.save(message); break;
+			case "receiver" : message.setMsgDelReceiver("X"); messageRepository.save(message); break;
+			case "sender" : message.setMsgDelSender("X"); messageRepository.save(message); break;
 			default : return;
 		}
 	
