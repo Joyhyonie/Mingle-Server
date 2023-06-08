@@ -19,12 +19,19 @@ public interface AttendanceRepository extends JpaRepository<Attendance,Long>{
 	Attendance findByEmployeeAndAtdDate(Employee employee, String string);
 
 	/* 오늘의 출퇴근 기록 조회 */
+// ORACLE SYNTAX
+//	@Query(value="SELECT * " + 
+//				 "FROM TBL_EMP_ATTENDANCE " +
+//				 "WHERE EMP_CODE = :empCode " +
+//				 "AND EMP_ATD_DATE >= TO_DATE(:date, 'YYYY-MM-DD') " +
+//				 "AND EMP_ATD_DATE < TO_DATE(:date, 'YYYY-MM-DD') + 1",
+//				 nativeQuery = true)
 	@Query(value="SELECT * " + 
-				 "FROM TBL_EMP_ATTENDANCE " +
-				 "WHERE EMP_CODE = :empCode " +
-				 "AND EMP_ATD_DATE >= TO_DATE(:date, 'YYYY-MM-DD') " +
-				 "AND EMP_ATD_DATE < TO_DATE(:date, 'YYYY-MM-DD') + 1",
-				 nativeQuery = true)
+            "FROM TBL_EMP_ATTENDANCE " +
+            "WHERE EMP_CODE = :empCode " +
+            "AND EMP_ATD_DATE >= DATE(:date) " +
+            "AND EMP_ATD_DATE < DATE(:date) + INTERVAL 1 DAY",
+            nativeQuery = true)
 	Attendance findByAtdDateAndEmpCode(@Param("date")String todaysDate, @Param("empCode")Long empCode);
 	
 	/* 출근 시각 등록 */
@@ -33,12 +40,19 @@ public interface AttendanceRepository extends JpaRepository<Attendance,Long>{
 	/* 퇴근 시각 등록 */
 	@Transactional
     @Modifying
+// ORACLE SYNTAX
+//    @Query(value="UPDATE TBL_EMP_ATTENDANCE " +
+//    			 "SET EMP_ATD_END_TIME = TO_DATE(:endTime, 'YYYY-MM-DD HH24:MI:SS') " +
+//    			 "WHERE EMP_CODE = :empCode " + 
+//    			 "AND EMP_ATD_DATE >= TO_DATE(:date, 'YYYY-MM-DD') " +
+//				 "AND EMP_ATD_DATE < TO_DATE(:date, 'YYYY-MM-DD') + 1",
+//				 nativeQuery = true)
     @Query(value="UPDATE TBL_EMP_ATTENDANCE " +
-    			 "SET EMP_ATD_END_TIME = TO_DATE(:endTime, 'YYYY-MM-DD HH24:MI:SS') " +
-    			 "WHERE EMP_CODE = :empCode " + 
-    			 "AND EMP_ATD_DATE >= TO_DATE(:date, 'YYYY-MM-DD') " +
-				 "AND EMP_ATD_DATE < TO_DATE(:date, 'YYYY-MM-DD') + 1",
-				 nativeQuery = true)
+			 "SET EMP_ATD_END_TIME = DATE(:endTime) " +
+			 "WHERE EMP_CODE = :empCode " + 
+			 "AND EMP_ATD_DATE >= DATE(:date) " +
+			 "AND EMP_ATD_DATE < DATE(:date) + 1",
+			 nativeQuery = true)
 	void updateEndTime(@Param("empCode")Long empCode, @Param("date")String formattedDate, @Param("endTime")String formattedTime);
 
 	
