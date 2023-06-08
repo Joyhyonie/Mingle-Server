@@ -23,6 +23,7 @@ public class DeletedNotification {
 
 	@Id
 	@Column(name="NOTI_DEL_CODE")
+
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long notiDelCode;
 	
