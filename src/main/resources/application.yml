@@ -6,9 +6,10 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://mingle.cryn78yi94il.ap-northeast-2.rds.amazonaws.com:3306/Mingle_backend
-    username: Mingler
-    password: aldrmfaldrmf^^
+#    url: jdbc:mysql://mingle.cryn78yi94il.ap-northeast-2.rds.amazonaws.com:3306/Mingle_backen
+    url: jdbc:mysql://localhost:3306/mingle?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: gyslWhRhals:3
   mail:
     host: smtp.naver.com
     port: 465
@@ -26,8 +27,8 @@ spring:
     properties:
       hibernate:
         '[format_sql]' : true
-  # SSE 통신 사용 시, DB connection을 닫기 위한 설정
-    open-in-view: false
+  # SSE 통신 사용 시, DB connection을 닫기 위한 설정 (false)
+    open-in-view: true
     
 # maximum upload size
   servlet:
@@ -44,8 +45,8 @@ image:
   add-resource-handler: /profileImgs/**
   # ProductService에 세팅
   image-dir: /profileImgs # 이미지들을 저장할 상대 경로 설정
-  image-url: http://3.35.186.184:8001/profileImgs/ # 찾고자 하는 이미지들의 경로
-#  image-url: http://**아이피주소또는도메인**:8001/profileImgs/
+#  image-url: http://3.35.186.184:8001/profileImgs/ # 찾고자 하는 이미지들의 경로
+  image-url: http://localhost:8001/profileImgs/
   
 # HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
 # Secret 값은 특정 문자열을 Base64 로 인코딩한 값 사용

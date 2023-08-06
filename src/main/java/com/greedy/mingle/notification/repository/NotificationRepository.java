@@ -14,7 +14,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 	@Query(value="SELECT n, nt "
 	         + "FROM Notification n "
 	         + "JOIN fetch n.notiType nt "
-	         + "WHERE n.notiEndDate >= SYSDATE "
+	         + "WHERE n.notiEndDate >= NOW() "
 	         + "AND (n.notiCode NOT IN (SELECT dn.notification.notiCode FROM DeletedNotification dn) OR "
 	         + "    (n.notiCode IN (SELECT dn.notification.notiCode FROM DeletedNotification dn) AND n.notiCode NOT IN "
 	         + "        (SELECT dn.notification.notiCode FROM DeletedNotification dn WHERE dn.employee.empCode = :empCode ) "
