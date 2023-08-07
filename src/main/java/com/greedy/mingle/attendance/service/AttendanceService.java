@@ -104,10 +104,6 @@ public class AttendanceService {
 	@Transactional
 	public void recordEndTime(Long empCode, String formattedDate, String formattedTime) {
 		
-		log.info("empCode => {}", empCode);
-		log.info("formattedDate => {}", formattedDate);
-		log.info("formattedTime => {}", formattedTime);
-		
 		attendanceRepository.updateEndTime(empCode, formattedDate, formattedTime);
 		
 	}

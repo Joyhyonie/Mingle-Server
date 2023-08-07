@@ -20,7 +20,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance,Long>{
 
 	/* 오늘의 출퇴근 기록 조회 */
 	@Query(value="SELECT * " + 
-            "FROM TBL_EMP_ATTENDANCE " +
+            "FROM tbl_emp_attendance " +
             "WHERE EMP_CODE = :empCode " +
             "AND EMP_ATD_DATE >= DATE(:date) " +
             "AND EMP_ATD_DATE < DATE(:date) + INTERVAL 1 DAY",
@@ -33,7 +33,7 @@ public interface AttendanceRepository extends JpaRepository<Attendance,Long>{
 	/* 퇴근 시각 등록 */
 	@Transactional
     @Modifying
-    @Query(value="UPDATE TBL_EMP_ATTENDANCE " +
+    @Query(value="UPDATE tbl_emp_attendance " +
 			 "SET EMP_ATD_END_TIME = :endTime " +
 			 "WHERE EMP_CODE = :empCode " + 
 			 "AND EMP_ATD_DATE >= DATE(:date) " +

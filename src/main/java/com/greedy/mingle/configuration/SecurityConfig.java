@@ -93,7 +93,6 @@ public class SecurityConfig {
 		             .antMatchers("/lecture-student-prof/**",
 		            		 	  "/lecture-regist-prof/**").hasRole("PROF")
 		             .antMatchers(HttpMethod.GET, "/employee/putmypage/**").permitAll()
-//		             .antMatchers("/**").hasAnyRole("PROF", "ADMIN")  // 나머지 API 는 전부 인증 필요
 		         .and()
 		         	.cors()
 		         .and()
@@ -114,7 +113,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
         // 로컬 React에서 오는 요청은 CORS 허용해준다.
-//        configuration.setAllowedOrigins(Arrays.asList("http://3.35.186.184"));
+//        configuration.setAllowedOrigins(Arrays.asList("http://3.39.60.205"));
         configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "PUT", "POST", "DELETE", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Content-Type", "Access-Control-Allow-Headers", "Authorization", "X-Requested-With"));
