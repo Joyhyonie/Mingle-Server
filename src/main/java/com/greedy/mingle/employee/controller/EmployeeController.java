@@ -46,9 +46,6 @@ public class EmployeeController {
 	@GetMapping("/employees")
 	public ResponseEntity<ResponseDTO> selectEmployeeList(@RequestParam(name = "page", defaultValue = "1") int page) {
 
-		log.info("[EmployeeController] : selectEmployeeList start ==================================== ");
-		log.info("[EmployeeController] : page : {}", page);
-
 		Page<EmployeeDTO> employeeDtoList = employeeService.selectEmployeeList(page);
 
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
@@ -59,8 +56,6 @@ public class EmployeeController {
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(employeeDtoList.getContent());
 
-		log.info("[EmployeeController] : selectEmployeeList end ==================================== ");
-
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 
 	}
@@ -70,20 +65,13 @@ public class EmployeeController {
 	public ResponseEntity<ResponseDTO> selectEmployeeListByDepartment(
 			@RequestParam(name = "page", defaultValue = "1") int page, @PathVariable Long deptCode) {
 
-		log.info("[EmployeeController] : selectEmployeeListByDepartment start ==================================== ");
-		log.info("[EmployeeController] : page : {}", page);
-
 		Page<EmployeeDTO> employeeDtoList = employeeService.selectEmployeeListByDepartment(page, deptCode);
 
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
 
-		log.info("[ProductController] : pageInfo : {}", pageInfo);
-
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(employeeDtoList.getContent());
-
-		log.info("[EmployeeController] : selectEmployeeListByDepartment end ==================================== ");
 
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 	}
@@ -125,9 +113,6 @@ public class EmployeeController {
 	@PutMapping("/modify")
 	public ResponseEntity<ResponseDTO> updateEmployee(@ModelAttribute EmployeeDTO employeeDTO, 
 			@AuthenticationPrincipal EmployeeDTO loggedInEmployee) {
-		
-//		employeeDTO.setEmpCode(loggedInEmployee.getEmpCode()); // 로그인한 사용자의 코드를 설정
-//	    employeeDTO.setEmpId(loggedInEmployee.getEmpId()); // 로그인한 사용자의 아이디를 설정
 	    
 	    log.info("교직원 정보 수정 : ", employeeDTO);
 		employeeService.updateEmployee(employeeDTO);
@@ -150,11 +135,6 @@ public class EmployeeController {
 	                .body(new ResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR, "삭제 실패"));
 	    }
 	}
-	 
-
-	/* 8. 조직도 교직원 조회 - 스크롤 */
-
-	/* 9. 조직도 교직원 조회 - 소속 기준 */
 
 	/* 10. 자신의 마이페이지 조회 */
 	@GetMapping("/myemployees")
@@ -177,11 +157,8 @@ public class EmployeeController {
 		employeeDTO.setEmpCode(loggedInEmployee.getEmpCode()); // 로그인한 사용자의 코드를 설정
 	    employeeDTO.setEmpId(loggedInEmployee.getEmpId()); // 로그인한 사용자의 아이디를 설정
 		
-		log.info("[확인용] {}", employeeDTO);
 	    employeeService.updateEmp(employeeDTO);
-	
-	    
-	    
+
 	    return ResponseEntity.ok()
 	            .body(new ResponseDTO(HttpStatus.OK, "정보 수정 성공"));
 	}

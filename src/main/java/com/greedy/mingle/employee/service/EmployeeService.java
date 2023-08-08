@@ -154,8 +154,7 @@ public class EmployeeService {
 	}
 
 	
-	 /* 8. 교직원 정보 삭제 */
-	 
+	/* 8. 교직원 정보 삭제 */
 	@Transactional
 	public void deleteEmployee(Long empCode) {
 		
@@ -164,7 +163,6 @@ public class EmployeeService {
 	 
 
 	/* 9. 자신의 마이페이지 조회 */
-
 	public EmployeeDTO selectInfo(Long empCode) {
 
 		Employee employee = employeeRepository.findByEmpCode(empCode)
@@ -207,13 +205,9 @@ public class EmployeeService {
 	/* 14. 마이페이지 이미지 변경 */
 	@Transactional
 	public void updateEmp(EmployeeDTO employeeDTO) {
-		log.info("[EmployeeService] insertProduct start ============================== ");
-		log.info("[EmployeeService] empCode : {}", employeeDTO.getEmpId());
 
 		Employee originMypage = employeeRepository.findById(employeeDTO.getEmpCode())
 				.orElseThrow(() -> new IllegalArgumentException("해당 번호의 직원이 없습니다. EmpCode=" + employeeDTO.getEmpCode()));
-
-		log.info("[EmployeeService] getEmpCode : {}", originMypage);
 
 		try {
 			/* 이미지를 변경하는 경우 */
@@ -230,22 +224,16 @@ public class EmployeeService {
 				originMypage.setEmpProfile(replaceFileName);
 			}
 
-		/* 조회했던 기존 엔티티의 내용을 수정 -> 별도의 수정 메소드를 정의해서 사용하면 다른 방식의 수정을 막을 수 있다. */
-		
-		originMypage.setEmpName(employeeDTO.getEmpName());
-		originMypage.setEmpNameEn(employeeDTO.getEmpNameEn());
-		originMypage.setEmpPhone(employeeDTO.getEmpPhone());
-		originMypage.setEmpEmail(employeeDTO.getEmpEmail());
-		originMypage.setEmpAddress(employeeDTO.getEmpAddress());
+			originMypage.setEmpName(employeeDTO.getEmpName());
+			originMypage.setEmpNameEn(employeeDTO.getEmpNameEn());
+			originMypage.setEmpPhone(employeeDTO.getEmpPhone());
+			originMypage.setEmpEmail(employeeDTO.getEmpEmail());
+			originMypage.setEmpAddress(employeeDTO.getEmpAddress());
 
-		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		log.info("[ProductService] insertProduct end ============================== ");
-		log.info("[ProductService] insertProduct end ============================== ");
+
 	}
 	
-
 }

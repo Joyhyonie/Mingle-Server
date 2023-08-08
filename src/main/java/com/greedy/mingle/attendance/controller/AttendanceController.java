@@ -281,11 +281,13 @@ public class AttendanceController {
 		// 현재 날짜 포맷 (String)
 		DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String formattedDate = now.format(dateFormat);
+		log.info("formattedDate => {}", formattedDate);
 		
 		// 현재 시간 포맷 (String)
 		Timestamp timestamp = Timestamp.valueOf(now);
 		SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String formattedTime = timeFormat.format(timestamp);
+		log.info("formattedTime => {}", formattedTime);
 		
 		attendanceService.recordEndTime(employee.getEmpCode(), formattedDate, formattedTime);
 		

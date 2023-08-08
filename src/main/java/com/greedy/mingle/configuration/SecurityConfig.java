@@ -42,10 +42,10 @@ public class SecurityConfig {
 	
 	
 	// 외부에서 이미지 파일에 접근 가능 하도록 설정
-		@Bean
-		public WebSecurityCustomizer configure() {
-			return (web) -> web.ignoring().antMatchers("/profileImgs/**");
-		}
+	@Bean
+	public WebSecurityCustomizer configure() {
+		return (web) -> web.ignoring().antMatchers("/profileImgs/**");
+	}
 	
 	// 비밀번호 암호화를 위한 빈 등록
 	@Bean
@@ -112,9 +112,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        // 로컬 React에서 오는 요청은 CORS 허용해준다.
-//        configuration.setAllowedOrigins(Arrays.asList("http://3.39.60.205"));
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://3.39.60.205"));
         configuration.setAllowedMethods(Arrays.asList("GET", "PUT", "POST", "DELETE", "PATCH"));
         configuration.setAllowedHeaders(Arrays.asList("Access-Control-Allow-Origin", "Content-Type", "Access-Control-Allow-Headers", "Authorization", "X-Requested-With"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
