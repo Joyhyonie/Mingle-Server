@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,10 @@ public class NotificationService {
 		this.delNotiRepository = delNotiRepository;
 		this.modelMapper = modelMapper;
 	}
+	
+	/* 쪽지 알림 시, 프로필 사진을 띄우기 위해 설정 파일에서 URL 가져오기 */
+	@Value("${image.image-url}")
+	private String IMAGE_URL;
 
 	/* 1. 유효한 알림 전체 조회 */
 	public List<NotificationDTO> selectMyNoti(Long empCode) {
@@ -90,6 +95,7 @@ public class NotificationService {
 	public void notifyReceivedMsg(MessageDTO messageDTO) {
 		
 		String receiverId = messageDTO.getReceiver().getEmpId();
+		messageDTO.getSender().setEmpProfile(IMAGE_URL + messageDTO.getSender().getEmpProfile());
 		
 		if(sseEmitters.containsKey(receiverId)) {
 			SseEmitter sseEmitter = sseEmitters.get(receiverId);

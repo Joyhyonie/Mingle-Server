@@ -168,20 +168,13 @@ public class EmployeeController {
 	@GetMapping("/organization")
 	public ResponseEntity<ResponseDTO> selectOrganizationList(@RequestParam(name = "page", defaultValue = "1") int page) {
 
-		log.info("[EmployeeController] : selectOrganizationList start ==================================== ");
-		log.info("[EmployeeController] : page : {}", page);
-
 		Page<EmployeeDTO> employeeDtoList = employeeService.selectOrganizationList(page);
 
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
 
-		log.info("[EmployeeController] : pageInfo : {}", pageInfo);
-
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(employeeDtoList.getContent());
-
-		log.info("[EmployeeController] : selectOrganizationList end ==================================== ");
 
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 
@@ -194,21 +187,13 @@ public class EmployeeController {
 			@RequestParam(name = "search") String name,
 			@RequestParam(name = "condition") String condition) {
 
-		log.info("[EmployeeController] : selectOrgListByEmpName start ==================================== ");
-		log.info("[EmployeeController] : page : {}", page);
-		log.info("[EmployeeController] : employeeName : {}", name);
-
 		Page<EmployeeDTO> employeeDtoList = employeeService.selectEmployeeListByDeptName(page, condition, name);
 
 		PagingButtonInfo pageInfo = Pagenation.getPagingButtonInfo(employeeDtoList);
 
-		log.info("[EmployeeController] : pageInfo : {}", pageInfo);
-
 		ResponseDTOWithPaging responseDtoWithPaging = new ResponseDTOWithPaging();
 		responseDtoWithPaging.setPageInfo(pageInfo);
 		responseDtoWithPaging.setData(employeeDtoList.getContent());
-
-		log.info("[EmployeeController] : selectOrgListByEmpName end ==================================== ");
 
 		return ResponseEntity.ok().body(new ResponseDTO(HttpStatus.OK, "조회 성공", responseDtoWithPaging));
 
