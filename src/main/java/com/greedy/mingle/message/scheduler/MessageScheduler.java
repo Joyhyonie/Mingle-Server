@@ -21,7 +21,7 @@ public class MessageScheduler {
 	}
 	
 	// 매일 오전 12시마다 휴지통 속 쪽지를 영구 삭제하는 스케줄러
-	@Scheduled(cron = "0 10 1 * * *")
+	@Scheduled(cron = "0 0 0 * * *")
 	public void autoDeleteMessage() {
 		
 		List<MessageDTO> messgeList = messageService.selectAllRemovedMessage();
